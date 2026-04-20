@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elementos Gráficos — Riesgo IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Outfit', sans-serif; background: #111; color: #eee; padding: 40px 20px; }
+h1 { text-align: center; font-size: 1.2rem; letter-spacing: 0.15em; text-transform: uppercase; color: #aaa; margin-bottom: 8px; }
+p.sub { text-align: center; font-size: 0.8rem; color: #555; margin-bottom: 40px; }
+
+.style-list { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 4px; }
+.style-item { display: flex; flex-direction: column; }
+
+.style-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px; border-radius: 8px; cursor: pointer;
+  border: 1px solid #222; background: #1a1a1a;
+  transition: border-color 0.2s, background 0.2s;
+  user-select: none;
+}
+.style-row:hover { border-color: #444; background: #202020; }
+.style-row.active { border-color: #9b5de5; background: #1a1428; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+.style-num { font-size: 0.7rem; color: #444; width: 20px; flex-shrink: 0; text-align: right; }
+.style-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.style-name { font-size: 0.95rem; color: #ddd; font-weight: 600; }
+.style-desc { font-size: 0.72rem; color: #666; }
+.style-tags { display: flex; gap: 6px; margin-top: 4px; }
+.tag { font-size: 0.6rem; padding: 2px 8px; border-radius: 20px; border: 1px solid #333; color: #777; }
+
+.chevron { font-size: 0.7rem; color: #444; flex-shrink: 0; transition: transform 0.2s; }
+.style-row.active .chevron { transform: rotate(180deg); color: #9b5de5; }
+
+.style-preview {
+  display: none;
+  background: #161616;
+  border: 1px solid #9b5de5;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 24px 20px;
+}
+.style-preview.open { display: block; }
+
+.questions {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin-bottom: 20px;
+}
+.question { background: #1e1e1e; border-radius: 6px; padding: 12px; }
+.q-label { font-size: 0.6rem; color: #9b5de5; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.q-answer { font-size: 0.72rem; color: #ccc; line-height: 1.5; }
+
+.slides-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.slide-wrap { display: flex; flex-direction: column; gap: 6px; }
+.slide-cap { font-size: 0.6rem; color: #444; text-align: center; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Base slide */
+.sl {
+  width: 100%; aspect-ratio: 1/1;
+  border-radius: 6px; overflow: hidden;
+  position: relative;
+  font-family: 'Outfit', sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h1>Estilos de Elementos Gráficos</h1>
+<p class="sub">Hacé clic para ver los 5 slides de ejemplo · Paleta Lavanda + Lila Suave · Outfit</p>
+
+<div class="style-list" id="style-list"></div>
+
+<script>
+const C = { bg1:'#f0e8ff', bg2:'#e4d4ff', acc:'#9b5de5', txt:'#1a1a1a', wht:'#ffffff', acc2:'#7c3aed' };
+
+// ─── SLIDE BUILDERS per style ───────────────────────────────────────────────
+
+function slides_lineas() {
+  return [
+    // 1 PORTADA
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px">
+      <div style="width:100%;height:2px;background:${C.acc};margin-bottom:14px"></div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="width:100%;height:1px;background:${C.acc};opacity:.3;margin-bottom:8px"></div>
+      <div style="font-size:0.5rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.6">@riesgoia</div>
+    </div>`,
+    // 2 TEXTO
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:20px;height:1px;background:${C.acc}"></div>
+        <div style="font-size:0.5rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      </div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="width:100%;height:1px;background:${C.acc};opacity:.25"></div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      <div style="width:100%;height:1px;background:${C.acc};opacity:.25"></div>
+    </div>`,
+    // 3 DATO
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px">
+      <div style="width:40px;height:1px;background:${C.acc};margin-bottom:4px"></div>
+      <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+      <div style="width:40px;height:1px;background:${C.acc};margin-top:4px"></div>
+      <div style="font-size:0.62rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;margin-top:6px">de los expertos creen que la IA superinteligente llegará antes de 2060</div>
+      <div style="font-size:0.48rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc};opacity:.6;margin-top:6px">Encuesta de AI Impacts, 2023</div>
+    </div>`,
+    // 4 CITA
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px">
+      <div style="font-size:1.8rem;font-weight:900;color:${C.acc};opacity:.25;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="width:30px;height:1px;background:${C.acc}"></div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman · OpenAI</div>
+    </div>`,
+    // 5 CIERRE
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px">
+      <div style="width:30px;height:1px;background:${C.wht};opacity:.5"></div>
+      <div style="font-size:0.88rem;font-weight:700;color:${C.wht};text-align:center;line-height:1.4">Guardá este post para no olvidar</div>
+      <div style="font-size:0.58rem;color:${C.wht};opacity:.7;text-align:center">Seguinos para más contenido sobre riesgo existencial de la IA</div>
+      <div style="width:30px;height:1px;background:${C.wht};opacity:.5"></div>
+      <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.6">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_bloques() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column">
+      <div style="background:${C.acc};flex:0 0 45%;display:flex;align-items:flex-end;padding:14px 16px">
+        <div style="font-size:0.5rem;letter-spacing:.15em;text-transform:uppercase;color:${C.wht};opacity:.8">Riesgo Existencial</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px 16px;gap:8px">
+        <div style="font-size:0.95rem;font-weight:700;color:${C.txt};line-height:1.25">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.5rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;padding:16px;gap:10px;justify-content:center">
+      <div style="background:${C.acc};padding:8px 12px;border-radius:3px">
+        <div style="font-size:0.78rem;font-weight:700;color:${C.wht};line-height:1.3">El problema del alineamiento</div>
+      </div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      <div style="background:${C.bg2};padding:6px 10px;border-radius:3px">
+        <div style="font-size:0.52rem;color:${C.acc};letter-spacing:.1em;text-transform:uppercase">01 de 06</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.txt};display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0">
+      <div style="background:${C.acc};width:100%;display:flex;flex-direction:column;align-items:center;padding:20px 16px;gap:4px">
+        <div style="font-size:3rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.wht};opacity:.7">de expertos</div>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;padding:14px 16px">
+        <div style="font-size:0.62rem;color:${C.wht};opacity:.8;line-height:1.6;text-align:center">creen que la IA superinteligente llegará antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column">
+      <div style="background:${C.acc};padding:10px 16px">
+        <div style="font-size:0.5rem;letter-spacing:.15em;text-transform:uppercase;color:${C.wht};opacity:.8">Cita</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+        <div style="font-size:0.72rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">"El desarrollo de la IA podría ser el evento más transformador en la historia humana."</div>
+        <div style="background:${C.bg2};padding:6px 10px;border-radius:2px;display:inline-block">
+          <div style="font-size:0.52rem;color:${C.acc};text-transform:uppercase;letter-spacing:.08em">Sam Altman</div>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:8px">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt};text-align:center;line-height:1.4">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.6;text-align:center">Seguinos para más sobre riesgo existencial de la IA</div>
+      </div>
+      <div style="background:${C.acc};padding:12px 16px;display:flex;justify-content:center">
+        <div style="font-size:0.52rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht}">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_circulos() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;border:2px solid ${C.acc};opacity:.25"></div>
+      <div style="position:absolute;top:10px;right:10px;width:60px;height:60px;border-radius:50%;background:${C.acc};opacity:.12"></div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:6px;height:6px;border-radius:50%;background:${C.acc}"></div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.6">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;border-radius:50%;border:2px solid ${C.acc};opacity:.2"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${C.acc}"></div>
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      </div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:140px;height:140px;border-radius:50%;border:2px solid ${C.acc};opacity:.15"></div>
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:110px;border-radius:50%;background:${C.acc};opacity:.08"></div>
+      <div style="position:relative;z-index:2;text-align:center">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;margin-top:8px;max-width:120px;margin-left:auto;margin-right:auto">de expertos creen en IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;width:90px;height:90px;border-radius:50%;background:${C.acc};opacity:.1"></div>
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+        <div style="width:6px;height:6px;border-radius:50%;background:${C.acc}"></div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;border:2px solid rgba(255,255,255,.2)"></div>
+      <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;border-radius:50%;border:1px solid rgba(255,255,255,.15)"></div>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center;line-height:1.4">Guardá este post</div>
+        <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5)"></div>
+        <div style="font-size:0.52rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_tipo_gigante() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-10px;left:-8px;font-size:7rem;font-weight:900;color:${C.acc};opacity:.1;line-height:1;letter-spacing:-.05em">IA</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px;position:relative">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px;position:relative">¿Puede la IA acabar con la humanidad?</div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.6;position:relative">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-15px;right:-5px;font-size:5rem;font-weight:900;color:${C.acc};opacity:.08;line-height:1">01</div>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:4px;position:relative;overflow:hidden">
+      <div style="position:absolute;font-size:6rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1">80%</div>
+      <div style="position:relative;z-index:2;text-align:center">
+        <div style="font-size:3rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:40px;height:2px;background:${C.acc};margin:8px auto"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:130px">de expertos creen en IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;font-size:8rem;font-weight:900;color:${C.acc};opacity:.06;line-height:1">"</div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:0.72rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;font-size:5.5rem;font-weight:900;color:${C.acc};opacity:.07;letter-spacing:-.03em">FIN</div>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.6;max-width:140px;line-height:1.5;text-align:center">Seguinos para más sobre riesgo existencial de la IA</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:6px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_diagonal() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 120px 120px 0;border-color:transparent ${C.acc} transparent transparent;opacity:.3"></div>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:0;left:0;width:0;height:0;border-style:solid;border-width:80px 80px 0 0;border-color:${C.acc} transparent transparent transparent;opacity:.2"></div>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;position:relative;overflow:hidden;background:${C.bg1}">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,${C.acc} 50%,${C.bg1} 50%)"></div>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="font-size:0.58rem;color:${C.wht};opacity:.85;line-height:1.5;max-width:100px;text-align:center">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 100px 100px 0;border-color:transparent ${C.acc} transparent transparent;opacity:.2"></div>
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.25;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+    </div>`,
+    `<div class="sl" style="position:relative;overflow:hidden;background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,${C.bg1} 50%,${C.acc} 50%)"></div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt};text-align:center">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.85;text-align:center;max-width:130px;line-height:1.5">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.8;margin-top:4px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_marco() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:10px">
+      <div style="border:1.5px solid ${C.acc};flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;gap:8px;border-radius:4px">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};padding:10px">
+      <div style="border:1.5px solid ${C.acc};height:100%;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:10px;border-radius:4px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};padding:10px">
+      <div style="border:1.5px solid rgba(255,255,255,.4);height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:8px;border-radius:4px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="width:30px;height:1px;background:rgba(255,255,255,.5)"></div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.85;text-align:center;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};padding:10px">
+      <div style="border:1.5px solid ${C.acc};height:100%;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px;border-radius:4px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};padding:10px">
+      <div style="border:1.5px solid ${C.acc};height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:8px;border-radius:4px">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt};text-align:center">Guardá este post</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.6;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial de la IA</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:4px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_puntos() {
+  const dot = `radial-gradient(circle, ${C.acc}22 1px, transparent 1px)`;
+  return [
+    `<div class="sl" style="background:${C.bg1};background-image:${dot};background-size:16px 16px;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative">
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};background-image:${dot};background-size:16px 16px;display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative">
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7;background:${C.bg1};padding:8px;border-radius:4px">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};background-image:${dot};background-size:16px 16px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px">
+      <div style="background:${C.bg1};border-radius:8px;padding:16px 20px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:30px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};background-image:${dot};background-size:16px 16px;display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative">
+      <div style="background:${C.bg1};padding:14px;border-radius:6px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.25;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};background-image:radial-gradient(circle, rgba(255,255,255,.15) 1px, transparent 1px);background-size:16px 16px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px">
+      <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:16px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial de la IA</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_arco() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-40px;left:-40px;width:200px;height:200px;opacity:.18" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="${C.acc}" stroke-width="2"/>
+        <circle cx="100" cy="100" r="55" fill="none" stroke="${C.acc}" stroke-width="1"/>
+      </svg>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;bottom:-50px;right:-50px;width:150px;height:150px;opacity:.15" viewBox="0 0 150 150">
+        <circle cx="75" cy="75" r="60" fill="none" stroke="${C.acc}" stroke-width="2" stroke-dasharray="8 4"/>
+      </svg>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;position:relative;overflow:hidden">
+      <svg style="position:absolute;width:160px;height:160px;opacity:.2" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="70" fill="none" stroke="${C.acc}" stroke-width="12" stroke-dasharray="220 220" stroke-dashoffset="55" stroke-linecap="round"/>
+      </svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:110px">de expertos · IA super antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;opacity:.15" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="${C.acc}" stroke-width="1.5" stroke-dasharray="5 3"/>
+      </svg>
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;width:180px;height:180px;opacity:.15" viewBox="0 0 180 180">
+        <circle cx="90" cy="90" r="75" fill="none" stroke="white" stroke-width="2"/>
+        <circle cx="90" cy="90" r="50" fill="none" stroke="white" stroke-width="1"/>
+      </svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_barras() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;gap:8px">
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:4px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:8px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="height:3px;background:${C.acc};border-radius:2px;width:100%"></div>
+        <div style="height:2px;background:${C.acc};border-radius:2px;width:70%;opacity:.5"></div>
+        <div style="height:1px;background:${C.acc};border-radius:2px;width:40%;opacity:.3"></div>
+      </div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.6;margin-top:4px">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px">
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      <div style="display:flex;flex-direction:column;gap:3px;margin-top:4px">
+        <div style="height:2px;background:${C.acc};border-radius:2px"></div>
+        <div style="height:1px;background:${C.acc};border-radius:2px;opacity:.4;width:60%"></div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:12px">
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Datos</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <div style="font-size:0.58rem;color:${C.txt};opacity:.8">Creen en riesgo existencial</div>
+            <div style="font-size:0.58rem;font-weight:700;color:${C.acc}">80%</div>
+          </div>
+          <div style="height:6px;background:${C.bg2};border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:80%;background:${C.acc};border-radius:3px"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <div style="font-size:0.58rem;color:${C.txt};opacity:.8">Antes de 2060</div>
+            <div style="font-size:0.58rem;font-weight:700;color:${C.acc}">63%</div>
+          </div>
+          <div style="height:6px;background:${C.bg2};border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:63%;background:${C.acc};opacity:.7;border-radius:3px"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <div style="font-size:0.58rem;color:${C.txt};opacity:.8">Antes de 2040</div>
+            <div style="font-size:0.58rem;font-weight:700;color:${C.acc}">28%</div>
+          </div>
+          <div style="height:6px;background:${C.bg2};border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:28%;background:${C.acc};opacity:.5;border-radius:3px"></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:0.48rem;color:${C.acc};opacity:.5;letter-spacing:.08em;text-transform:uppercase">Fuente: AI Impacts, 2023</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px">
+      <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:4px">
+        <div style="height:2px;background:${C.acc};border-radius:2px;width:30%"></div>
+      </div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="flex:1;height:1px;background:${C.acc};opacity:.3"></div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px">
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+      <div style="display:flex;flex-direction:column;gap:3px;width:80%;align-items:center">
+        <div style="height:2px;background:rgba(255,255,255,.5);border-radius:2px;width:100%"></div>
+        <div style="height:1px;background:rgba(255,255,255,.3);border-radius:2px;width:70%"></div>
+        <div style="height:1px;background:rgba(255,255,255,.2);border-radius:2px;width:40%"></div>
+      </div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_gradiente() {
+  return [
+    `<div class="sl" style="background:linear-gradient(160deg,${C.bg2} 0%,${C.bg1} 60%,#fff 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px">
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:linear-gradient(135deg,#fff 0%,${C.bg1} 100%);display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px">
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:linear-gradient(160deg,${C.acc} 0%,#c77dff 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px">
+      <div style="font-size:2.8rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+      <div style="width:30px;height:1.5px;background:rgba(255,255,255,.6)"></div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.9;text-align:center;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+    </div>`,
+    `<div class="sl" style="background:linear-gradient(135deg,${C.bg1} 0%,${C.bg2} 60%,#ddd0ff 100%);display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px">
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.3;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+    </div>`,
+    `<div class="sl" style="background:linear-gradient(160deg,#c77dff 0%,${C.acc} 50%,${C.acc2} 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px">
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.8;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial de la IA</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7;margin-top:4px">@riesgoia</div>
+    </div>`
+  ];
+}
+
+// ─── NEW SLIDE BUILDERS ──────────────────────────────────────────────────────
+
+function slides_columna() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:6px;background:${C.acc};flex-shrink:0;border-radius:0"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;gap:7px">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:6px;background:${C.acc};flex-shrink:0"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:6px;background:${C.acc};flex-shrink:0"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:8px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:110px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:6px;background:${C.acc};flex-shrink:0"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:row">
+      <div style="width:6px;background:rgba(255,255,255,.3);flex-shrink:0"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:8px">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7;margin-top:4px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_subrayado() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;gap:8px">
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;padding-bottom:8px;border-bottom:3px solid ${C.acc}">¿Puede la IA acabar con la humanidad?</div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7;margin-top:4px">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px">
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3;padding-bottom:8px;border-bottom:2px solid ${C.acc}">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px">
+      <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1;padding-bottom:8px;border-bottom:3px solid ${C.acc}">80%</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:120px;margin-top:4px">de expertos · IA superinteligente antes de 2060</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px">
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic;padding-bottom:10px;border-bottom:2px solid ${C.acc}">"El desarrollo de la IA podría ser el evento más transformador en la historia humana."</div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman · OpenAI</div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px">
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,.5)">Guardá este post</div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_esquina() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative">
+      <div style="position:absolute;top:0;left:0;width:40px;height:40px;background:${C.acc}"></div>
+      <div style="position:absolute;top:0;left:0;width:10px;height:10px;background:${C.bg1}"></div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative">
+      <div style="position:absolute;top:0;right:0;width:30px;height:30px;background:${C.acc}"></div>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative">
+      <div style="position:absolute;top:0;left:0;width:40px;height:40px;background:${C.acc}"></div>
+      <div style="position:absolute;bottom:0;right:0;width:40px;height:40px;background:${C.acc}"></div>
+      <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative">
+      <div style="position:absolute;bottom:0;left:0;width:30px;height:30px;background:${C.acc}"></div>
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative">
+      <div style="position:absolute;top:0;left:0;width:30px;height:30px;background:rgba(255,255,255,.2)"></div>
+      <div style="position:absolute;bottom:0;right:0;width:30px;height:30px;background:rgba(255,255,255,.2)"></div>
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_doble_marco() {
+  return [
+    `<div class="sl" style="background:${C.acc};padding:8px">
+      <div style="background:${C.bg1};height:100%;border-radius:3px;padding:8px">
+        <div style="border:1px solid ${C.acc};height:100%;border-radius:2px;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;gap:7px">
+          <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">Riesgo Existencial</div>
+          <div style="font-size:0.95rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+          <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};padding:8px">
+      <div style="background:${C.bg1};height:100%;border-radius:3px;padding:8px">
+        <div style="border:1px solid ${C.acc};height:100%;border-radius:2px;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:10px">
+          <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+          <div style="font-size:0.8rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+          <div style="font-size:0.58rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};padding:8px">
+      <div style="background:${C.bg1};height:100%;border-radius:3px;padding:8px">
+        <div style="border:1px solid ${C.acc};height:100%;border-radius:2px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:8px">
+          <div style="font-size:2.6rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+          <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+          <div style="font-size:0.58rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:110px">de expertos · IA superinteligente antes de 2060</div>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};padding:8px">
+      <div style="background:${C.bg1};height:100%;border-radius:3px;padding:8px">
+        <div style="border:1px solid ${C.acc};height:100%;border-radius:2px;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:10px">
+          <div style="font-size:1.4rem;font-weight:900;color:${C.acc};opacity:.25;line-height:1">"</div>
+          <div style="font-size:0.68rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+          <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};padding:8px">
+      <div style="background:${C.acc};height:100%;border-radius:3px;padding:8px">
+        <div style="border:1px solid rgba(255,255,255,.3);height:100%;border-radius:2px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:8px">
+          <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+          <div style="font-size:0.58rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:120px">Seguinos para más sobre riesgo existencial</div>
+          <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+        </div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_tipo_outline() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;font-size:3.5rem;font-weight:900;color:transparent;-webkit-text-stroke:1.5px ${C.acc};opacity:.15;line-height:1.1;letter-spacing:-.02em;white-space:nowrap;overflow:hidden">IA IA IA</div>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-10px;right:-5px;font-size:4rem;font-weight:900;color:transparent;-webkit-text-stroke:1.5px ${C.acc};opacity:.15;line-height:1">01</div>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:4px;position:relative;overflow:hidden">
+      <div style="position:absolute;font-size:6.5rem;font-weight:900;color:transparent;-webkit-text-stroke:2px ${C.acc};opacity:.12;line-height:1">80%</div>
+      <div style="position:relative;z-index:2;text-align:center">
+        <div style="font-size:3rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:30px;height:2px;background:${C.acc};margin:8px auto"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:130px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-5px;left:-5px;font-size:7rem;font-weight:900;color:transparent;-webkit-text-stroke:2px ${C.acc};opacity:.1;line-height:1">"</div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:0.72rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;font-size:5rem;font-weight:900;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.25);line-height:1;letter-spacing:-.02em">FIN</div>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_cruz() {
+  const cross = `<svg width="16" height="16" viewBox="0 0 16 16" style="opacity:.25"><line x1="8" y1="2" x2="8" y2="14" stroke="${C.acc}" stroke-width="1.5"/><line x1="2" y1="8" x2="14" y2="8" stroke="${C.acc}" stroke-width="1.5"/></svg>`;
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative">
+      <div style="position:absolute;top:14px;right:14px;display:flex;gap:6px">${cross}${cross}</div>
+      <div style="position:absolute;top:38px;right:14px;display:flex;gap:6px">${cross}${cross}</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative">
+      <div style="position:absolute;bottom:14px;right:14px;display:flex;gap:6px">${cross}${cross}</div>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative">
+      <div style="position:absolute;top:12px;left:12px">${cross}</div>
+      <div style="position:absolute;top:12px;right:12px">${cross}</div>
+      <div style="position:absolute;bottom:12px;left:12px">${cross}</div>
+      <div style="position:absolute;bottom:12px;right:12px">${cross}</div>
+      <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative">
+      <div style="position:absolute;top:14px;right:14px;display:flex;gap:6px">${cross}${cross}</div>
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative">
+      <div style="position:absolute;top:12px;left:12px"><svg width="16" height="16" viewBox="0 0 16 16" style="opacity:.3"><line x1="8" y1="2" x2="8" y2="14" stroke="white" stroke-width="1.5"/><line x1="2" y1="8" x2="14" y2="8" stroke="white" stroke-width="1.5"/></svg></div>
+      <div style="position:absolute;top:12px;right:12px"><svg width="16" height="16" viewBox="0 0 16 16" style="opacity:.3"><line x1="8" y1="2" x2="8" y2="14" stroke="white" stroke-width="1.5"/><line x1="2" y1="8" x2="14" y2="8" stroke="white" stroke-width="1.5"/></svg></div>
+      <div style="position:absolute;bottom:12px;left:12px"><svg width="16" height="16" viewBox="0 0 16 16" style="opacity:.3"><line x1="8" y1="2" x2="8" y2="14" stroke="white" stroke-width="1.5"/><line x1="2" y1="8" x2="14" y2="8" stroke="white" stroke-width="1.5"/></svg></div>
+      <div style="position:absolute;bottom:12px;right:12px"><svg width="16" height="16" viewBox="0 0 16 16" style="opacity:.3"><line x1="8" y1="2" x2="8" y2="14" stroke="white" stroke-width="1.5"/><line x1="2" y1="8" x2="14" y2="8" stroke="white" stroke-width="1.5"/></svg></div>
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_bloque_lateral() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:42%;background:${C.acc};display:flex;flex-direction:column;justify-content:flex-end;padding:14px;gap:6px">
+        <div style="font-size:0.45rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7)">Riesgo</div>
+        <div style="width:20px;height:2px;background:rgba(255,255,255,.6)"></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;gap:6px">
+        <div style="font-size:0.88rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:42%;background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:14px;gap:8px">
+        <div style="font-size:0.45rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01/06</div>
+        <div style="font-size:1.8rem;font-weight:900;color:${C.acc};line-height:1;opacity:.3">01</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:8px">
+        <div style="font-size:0.78rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos sin cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:42%;background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:4px">
+        <div style="font-size:2.2rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="font-size:0.45rem;color:${C.wht};opacity:.7;text-align:center;line-height:1.5">de expertos</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:6px">
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.7">creen que la IA superinteligente llegará antes de 2060</div>
+        <div style="font-size:0.45rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc};opacity:.6">AI Impacts, 2023</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:6px;background:${C.acc}"></div>
+      <div style="width:36%;background:${C.bg2};display:flex;align-items:center;justify-content:center;padding:12px">
+        <div style="font-size:3rem;font-weight:900;color:${C.acc};opacity:.25;line-height:1">"</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:8px">
+        <div style="font-size:0.65rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.48rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row">
+      <div style="width:42%;background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:14px;gap:8px">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.8;text-align:center">@riesgoia</div>
+        <div style="width:20px;height:1.5px;background:rgba(255,255,255,.5)"></div>
+        <div style="font-size:0.45rem;color:${C.wht};opacity:.6;text-align:center;line-height:1.5">Riesgo existencial de la IA</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:8px">
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">Guardá este post</div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.65;line-height:1.5">Seguinos para más contenido sobre IA</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_tira() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:18px 18px 12px">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+      </div>
+      <div style="background:${C.acc};padding:8px 18px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.wht}">@riesgoia</div>
+        <div style="font-size:0.48rem;color:${C.wht};opacity:.7">01 / 06</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 18px 12px;gap:10px">
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+      <div style="background:${C.acc};padding:8px 18px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.wht}">@riesgoia</div>
+        <div style="font-size:0.48rem;color:${C.wht};opacity:.7">02 / 06</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+      <div style="background:${C.acc};padding:8px 18px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.wht}">@riesgoia</div>
+        <div style="font-size:0.48rem;color:${C.wht};opacity:.7">03 / 06</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 18px 12px;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+      <div style="background:${C.acc};padding:8px 18px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.wht}">@riesgoia</div>
+        <div style="font-size:0.48rem;color:${C.wht};opacity:.7">04 / 06</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      </div>
+      <div style="background:rgba(0,0,0,.2);padding:8px 18px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.wht};opacity:.8">@riesgoia</div>
+        <div style="font-size:0.48rem;color:${C.wht};opacity:.6">06 / 06</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_circulos_lineas() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;border:1.5px solid ${C.acc};opacity:.3"></div>
+      <div style="position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid ${C.acc};opacity:.2"></div>
+      <div style="width:100%;height:1.5px;background:${C.acc};margin-bottom:12px;opacity:.4"></div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="width:100%;height:1px;background:${C.acc};opacity:.25;margin-bottom:8px"></div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.6">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-30px;right:-30px;width:110px;height:110px;border-radius:50%;border:1.5px solid ${C.acc};opacity:.25"></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:6px;height:6px;border-radius:50%;border:1.5px solid ${C.acc}"></div>
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      </div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="width:100%;height:1px;background:${C.acc};opacity:.25"></div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;width:130px;height:130px;border-radius:50%;border:1.5px solid ${C.acc};opacity:.2"></div>
+      <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1;position:relative;z-index:2">80%</div>
+      <div style="width:40px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:120px;position:relative;z-index:2">de expertos · IA superinteligente antes de 2060</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-15px;left:-15px;width:80px;height:80px;border-radius:50%;border:1px solid ${C.acc};opacity:.2"></div>
+      <div style="width:30px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="width:100%;height:1px;background:${C.acc};opacity:.25"></div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:5px;height:5px;border-radius:50%;background:${C.acc}"></div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;width:150px;height:150px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2)"></div>
+      <div style="width:40px;height:1px;background:rgba(255,255,255,.5)"></div>
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+      <div style="width:40px;height:1px;background:rgba(255,255,255,.5)"></div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_bicolor() {
+  return [
+    `<div class="sl" style="display:flex;flex-direction:column">
+      <div style="flex:0 0 50%;background:${C.acc};display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px 10px">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)">Riesgo Existencial</div>
+      </div>
+      <div style="flex:1;background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:10px 18px 16px;gap:6px">
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="display:flex;flex-direction:column">
+      <div style="flex:0 0 30%;background:${C.bg2};display:flex;align-items:center;padding:0 18px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      </div>
+      <div style="flex:1;background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:14px 18px;gap:10px">
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="display:flex;flex-direction:column">
+      <div style="flex:1;background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:4px">
+        <div style="font-size:3rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="font-size:0.5rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)">de expertos</div>
+      </div>
+      <div style="flex:0 0 40%;background:${C.bg1};display:flex;align-items:center;padding:14px 18px">
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6">creen que la IA superinteligente llegará antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="display:flex;flex-direction:column">
+      <div style="flex:0 0 20%;background:${C.acc}"></div>
+      <div style="flex:1;background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:16px 18px;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="display:flex;flex-direction:column">
+      <div style="flex:1;background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:8px">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt};text-align:center">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.6;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      </div>
+      <div style="flex:0 0 35%;background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht}">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_rombos() {
+  const diamond = (size, op) =>
+    `<div style="width:${size}px;height:${size}px;background:${C.acc};transform:rotate(45deg);opacity:${op};flex-shrink:0"></div>`;
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:14px;right:14px;display:flex;flex-direction:column;gap:6px;align-items:center">
+        ${diamond(14,.35)}${diamond(10,.2)}${diamond(6,.15)}
+      </div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+      <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-10px;left:14px;display:flex;gap:8px;align-items:center">
+        ${diamond(8,.2)}${diamond(14,.3)}${diamond(8,.2)}
+      </div>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;gap:8px">
+        ${diamond(8,.2)}${diamond(12,.3)}${diamond(8,.2)}
+      </div>
+      <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        ${diamond(6,.5)}${diamond(6,.5)}${diamond(6,.5)}
+      </div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:14px;right:14px">${diamond(12,.3)}</div>
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        ${diamond(6,.6)}
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:10px;display:flex;gap:10px">
+        <div style="width:10px;height:10px;background:rgba(255,255,255,.2);transform:rotate(45deg)"></div>
+        <div style="width:10px;height:10px;background:rgba(255,255,255,.2);transform:rotate(45deg)"></div>
+        <div style="width:10px;height:10px;background:rgba(255,255,255,.2);transform:rotate(45deg)"></div>
+      </div>
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center">Guardá este post</div>
+      <div style="display:flex;gap:8px">
+        <div style="width:8px;height:8px;background:rgba(255,255,255,.4);transform:rotate(45deg)"></div>
+        <div style="width:8px;height:8px;background:rgba(255,255,255,.4);transform:rotate(45deg)"></div>
+        <div style="width:8px;height:8px;background:rgba(255,255,255,.4);transform:rotate(45deg)"></div>
+      </div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px">Seguinos para más sobre riesgo existencial</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_rayas() {
+  const stripe = `repeating-linear-gradient(90deg, ${C.acc}18 0px, ${C.acc}18 1px, transparent 1px, transparent 18px)`;
+  const stripeW = `repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0px, rgba(255,255,255,.12) 1px, transparent 1px, transparent 18px)`;
+  return [
+    `<div class="sl" style="background:${C.bg1};background-image:${stripe};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative">
+      <div style="position:relative;z-index:2">
+        <div style="background:${C.bg1};display:inline-block;padding:2px 6px;margin-bottom:6px">
+          <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">Riesgo Existencial</div>
+        </div>
+        <div style="background:${C.bg1};padding:4px 6px;margin-bottom:8px">
+          <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+        </div>
+        <div style="background:${C.bg1};display:inline-block;padding:2px 6px">
+          <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px">
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="background:${C.bg1};background-image:${stripe};padding:10px;border-radius:3px">
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};background-image:${stripe};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative">
+      <div style="background:${C.bg1};padding:14px 20px;border-radius:4px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;position:relative;z-index:2">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px">
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="background:${C.bg1};background-image:${stripe};padding:6px 10px;border-radius:2px;display:inline-block">
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};background-image:${stripeW};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative">
+      <div style="background:${C.acc};padding:16px 20px;border-radius:4px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;position:relative;z-index:2">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_triangulos() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:0;right:0;width:100px;height:100px;opacity:.2" viewBox="0 0 100 100">
+        <polygon points="100,0 100,100 0,0" fill="${C.acc}"/>
+      </svg>
+      <svg style="position:absolute;top:0;right:0;width:55px;height:55px;opacity:.15" viewBox="0 0 55 55">
+        <polygon points="55,0 55,55 0,0" fill="${C.acc}"/>
+      </svg>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;bottom:0;left:0;width:80px;height:80px;opacity:.2" viewBox="0 0 80 80">
+        <polygon points="0,80 80,80 0,0" fill="${C.acc}"/>
+      </svg>
+      <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+      <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:0;left:0;width:70px;height:70px;opacity:.15" viewBox="0 0 70 70">
+        <polygon points="0,0 70,0 0,70" fill="${C.acc}"/>
+      </svg>
+      <svg style="position:absolute;bottom:0;right:0;width:70px;height:70px;opacity:.15" viewBox="0 0 70 70">
+        <polygon points="70,70 0,70 70,0" fill="${C.acc}"/>
+      </svg>
+      <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1;position:relative;z-index:2">80%</div>
+      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.8;text-align:center;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:0;right:0;width:60px;height:60px;opacity:.2" viewBox="0 0 60 60">
+        <polygon points="60,0 60,60 0,0" fill="${C.acc}"/>
+      </svg>
+      <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+      <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:0;left:0;width:90px;height:90px;opacity:.15" viewBox="0 0 90 90">
+        <polygon points="0,0 90,0 0,90" fill="white"/>
+      </svg>
+      <svg style="position:absolute;bottom:0;right:0;width:90px;height:90px;opacity:.15" viewBox="0 0 90 90">
+        <polygon points="90,90 0,90 90,0" fill="white"/>
+      </svg>
+      <div style="font-size:0.9rem;font-weight:700;color:${C.wht};text-align:center;position:relative;z-index:2">Guardá este post</div>
+      <div style="font-size:0.6rem;color:${C.wht};opacity:.75;text-align:center;line-height:1.5;max-width:130px;position:relative;z-index:2">Seguinos para más sobre riesgo existencial</div>
+      <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7;position:relative;z-index:2">@riesgoia</div>
+    </div>`
+  ];
+}
+
+function slides_blobs() {
+  const blob1 = `<svg style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;opacity:.18" viewBox="0 0 160 160"><path d="M80,10 C115,5 150,30 148,65 C146,100 120,150 80,148 C40,146 8,110 10,75 C12,40 45,15 80,10 Z" fill="${C.acc}"/></svg>`;
+  const blob2 = `<svg style="position:absolute;bottom:-20px;left:-20px;width:130px;height:130px;opacity:.15" viewBox="0 0 130 130"><path d="M60,8 C90,0 128,25 125,60 C122,95 95,128 60,122 C25,116 0,88 5,55 C10,22 30,16 60,8 Z" fill="${C.acc}"/></svg>`;
+  const blob3 = `<svg style="position:absolute;top:-10px;left:-10px;width:110px;height:110px;opacity:.15" viewBox="0 0 110 110"><path d="M55,5 C80,0 108,22 105,55 C102,85 78,110 50,105 C22,100 0,75 5,48 C10,20 30,10 55,5 Z" fill="${C.acc}"/></svg>`;
+  const blobW = `<svg style="position:absolute;bottom:-20px;right:-20px;width:140px;height:140px;opacity:.15" viewBox="0 0 140 140"><path d="M70,5 C105,0 138,28 135,70 C132,108 100,138 65,132 C28,126 2,95 8,60 C14,25 38,10 70,5 Z" fill="white"/></svg>`;
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      ${blob1}
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      ${blob2}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <svg style="position:absolute;width:170px;height:170px;opacity:.13" viewBox="0 0 170 170"><path d="M85,8 C125,2 165,35 162,85 C159,130 125,165 80,160 C35,155 3,118 8,75 C13,32 45,14 85,8 Z" fill="${C.acc}"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      ${blob3}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      ${blobW}
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_ondas() {
+  const waveTop = `<svg style="position:absolute;top:0;left:0;width:100%;opacity:.25" viewBox="0 0 200 40" preserveAspectRatio="none"><path d="M0,20 C30,5 70,35 100,20 C130,5 170,35 200,20 L200,0 L0,0 Z" fill="${C.acc}"/></svg>`;
+  const waveBot = `<svg style="position:absolute;bottom:0;left:0;width:100%;opacity:.2" viewBox="0 0 200 40" preserveAspectRatio="none"><path d="M0,20 C30,5 70,35 100,20 C130,5 170,35 200,20 L200,40 L0,40 Z" fill="${C.acc}"/></svg>`;
+  const waveMid = `<svg style="width:100%;opacity:.3;margin:4px 0" viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M0,10 C30,2 70,18 100,10 C130,2 170,18 200,10" stroke="${C.acc}" stroke-width="1.5" fill="none"/></svg>`;
+  const waveWhiteBot = `<svg style="position:absolute;bottom:0;left:0;width:100%;opacity:.2" viewBox="0 0 200 40" preserveAspectRatio="none"><path d="M0,20 C30,5 70,35 100,20 C130,5 170,35 200,20 L200,40 L0,40 Z" fill="white"/></svg>`;
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      ${waveTop}
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:6px">Riesgo Existencial</div>
+        ${waveMid.replace('margin:4px 0','margin:4px 0;display:block')}
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      ${waveBot}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <svg style="width:100%;opacity:.25" viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M0,8 C30,2 70,14 100,8 C130,2 170,14 200,8" stroke="${C.acc}" stroke-width="1.5" fill="none"/></svg>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:6px;position:relative;overflow:hidden">
+      ${waveTop}
+      ${waveBot}
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <svg style="width:60px;opacity:.4" viewBox="0 0 60 12"><path d="M0,6 C10,1 20,11 30,6 C40,1 50,11 60,6" stroke="${C.acc}" stroke-width="1.5" fill="none"/></svg>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:8px;position:relative;overflow:hidden">
+      ${waveTop}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <svg style="width:100%;opacity:.25" viewBox="0 0 200 14" preserveAspectRatio="none"><path d="M0,7 C30,1 70,13 100,7 C130,1 170,13 200,7" stroke="${C.acc}" stroke-width="1.2" fill="none"/></svg>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      ${waveWhiteBot}
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <svg style="width:80px;opacity:.4" viewBox="0 0 80 14"><path d="M0,7 C15,1 30,13 40,7 C50,1 65,13 80,7" stroke="white" stroke-width="1.5" fill="none"/></svg>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_blobs_multi() {
+  // White background, multiple scattered blobs
+  const bg = '#ffffff';
+  return [
+    `<div class="sl" style="background:${bg};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-20px;right:-25px;width:120px;height:120px;opacity:.2" viewBox="0 0 120 120"><path d="M60,5 C90,-2 118,22 115,58 C112,90 85,118 55,112 C25,106 2,80 8,50 C14,20 32,12 60,5 Z" fill="${C.acc}"/></svg>
+      <svg style="position:absolute;bottom:20px;left:-15px;width:70px;height:70px;opacity:.15" viewBox="0 0 70 70"><path d="M35,3 C55,0 68,18 66,38 C64,58 48,70 30,66 C12,62 0,46 4,28 C8,10 18,6 35,3 Z" fill="${C.acc}"/></svg>
+      <svg style="position:absolute;top:30px;left:20px;width:30px;height:30px;opacity:.12" viewBox="0 0 30 30"><path d="M15,1 C24,0 30,8 29,17 C28,25 20,30 12,28 C4,26 0,18 2,10 C4,3 8,2 15,1 Z" fill="${C.acc}"/></svg>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${bg};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;bottom:-15px;right:-15px;width:100px;height:100px;opacity:.15" viewBox="0 0 100 100"><path d="M50,4 C78,0 99,24 96,55 C93,84 68,100 40,95 C12,90 0,64 5,38 C10,14 25,8 50,4 Z" fill="${C.acc}"/></svg>
+      <svg style="position:absolute;top:10px;right:30px;width:28px;height:28px;opacity:.12" viewBox="0 0 28 28"><path d="M14,1 C22,0 28,7 27,15 C26,23 19,28 11,26 C3,24 0,16 3,9 C6,2 8,2 14,1 Z" fill="${C.acc}"/></svg>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${bg};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <svg style="position:absolute;width:160px;height:160px;opacity:.12" viewBox="0 0 160 160"><path d="M80,6 C118,0 158,30 155,78 C152,122 118,158 75,152 C32,146 2,108 8,65 C14,25 45,12 80,6 Z" fill="${C.acc}"/></svg>
+      <svg style="position:absolute;top:8px;left:8px;width:35px;height:35px;opacity:.15" viewBox="0 0 35 35"><path d="M17,1 C27,0 35,9 34,19 C33,28 24,35 15,33 C6,31 0,22 2,13 C4,5 9,2 17,1 Z" fill="${C.acc}"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${bg};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-10px;left:-10px;width:90px;height:90px;opacity:.15" viewBox="0 0 90 90"><path d="M45,3 C68,0 89,18 87,45 C85,70 65,90 40,86 C15,82 0,60 4,36 C8,14 24,6 45,3 Z" fill="${C.acc}"/></svg>
+      <svg style="position:absolute;bottom:10px;right:10px;width:40px;height:40px;opacity:.12" viewBox="0 0 40 40"><path d="M20,1 C31,0 40,10 39,21 C38,32 28,40 17,38 C6,36 0,25 3,15 C6,5 11,2 20,1 Z" fill="${C.acc}"/></svg>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-15px;right:-15px;width:120px;height:120px;opacity:.18" viewBox="0 0 120 120"><path d="M60,4 C90,0 118,24 115,58 C112,88 86,118 55,112 C24,106 2,78 8,48 C14,18 32,8 60,4 Z" fill="white"/></svg>
+      <svg style="position:absolute;bottom:-10px;left:-10px;width:80px;height:80px;opacity:.12" viewBox="0 0 80 80"><path d="M40,3 C62,0 80,18 78,42 C76,64 58,80 35,76 C12,72 0,52 4,30 C8,10 20,6 40,3 Z" fill="white"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_blob_partido() {
+  // Organic wave splits bg into accent top + white bottom
+  const waveSplit = `<svg style="position:absolute;top:0;left:0;width:100%;height:100%" viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M0,0 L200,0 L200,95 C160,118 120,78 100,95 C80,112 40,130 0,108 Z" fill="${C.acc}" opacity=".9"/></svg>`;
+  const waveSplit2 = `<svg style="position:absolute;top:0;left:0;width:100%;height:100%" viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M0,0 L200,0 L200,55 C155,75 120,45 90,62 C60,78 30,95 0,72 Z" fill="${C.bg2}"/></svg>`;
+  const waveSplit3 = `<svg style="position:absolute;bottom:0;left:0;width:100%;height:100%" viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M0,200 L200,200 L200,110 C165,90 130,118 100,102 C70,86 35,70 0,92 Z" fill="${C.acc}" opacity=".9"/></svg>`;
+  return [
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      ${waveSplit}
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      ${waveSplit2}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px;margin-top:40px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <svg style="position:absolute;bottom:0;left:0;width:100%;height:100%" viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M0,200 L200,200 L200,115 C155,95 120,125 90,108 C60,90 30,75 0,96 Z" fill="#fff" opacity=".85"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="font-size:2.6rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:rgba(255,255,255,.6)"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.85;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      ${waveSplit3}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.25;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.wht}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%" viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M0,0 L200,0 L200,85 C160,105 120,72 90,90 C60,108 30,120 0,98 Z" fill="${C.acc}" opacity=".9"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;margin-top:50px">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.65;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:4px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_blob_grande() {
+  // Large centered blob as dominant background element, accent bg
+  return [
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:50%;left:50%;transform:translate(-55%,-60%);width:200px;height:200px;opacity:.18" viewBox="0 0 200 200"><path d="M100,5 C145,0 195,35 192,90 C189,142 150,195 95,190 C40,185 2,140 8,85 C14,35 58,10 100,5 Z" fill="white"/></svg>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.wht};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6)">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;opacity:.15" viewBox="0 0 180 180"><path d="M90,5 C130,0 178,32 175,85 C172,135 132,178 85,172 C38,166 2,124 8,75 C14,30 52,10 90,5 Z" fill="white"/></svg>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7)">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.wht};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.8;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <svg style="position:absolute;width:190px;height:190px;opacity:.15" viewBox="0 0 190 190"><path d="M95,5 C138,0 188,34 185,90 C182,143 138,188 88,182 C38,176 2,130 8,78 C14,30 55,10 95,5 Z" fill="white"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:rgba(255,255,255,.6)"></div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.85;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:175px;height:175px;opacity:.14" viewBox="0 0 175 175"><path d="M88,4 C128,0 174,30 170,82 C166,132 126,174 80,168 C34,162 2,118 8,70 C14,26 50,8 88,4 Z" fill="white"/></svg>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:rgba(255,255,255,.25);line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.wht};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;width:220px;height:220px;opacity:.12" viewBox="0 0 220 220"><path d="M110,5 C160,0 218,38 215,108 C212,172 162,218 105,212 C48,206 2,155 8,92 C14,34 65,10 110,5 Z" fill="white"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6)">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_blob_outline() {
+  // bg2 background, blob shapes with stroke only (no fill)
+  return [
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-20px;right:-20px;width:150px;height:150px;opacity:.3" viewBox="0 0 150 150"><path d="M75,5 C110,0 148,28 145,75 C142,118 108,148 68,142 C28,136 2,100 8,62 C14,26 42,10 75,5 Z" fill="none" stroke="${C.acc}" stroke-width="2"/></svg>
+      <svg style="position:absolute;top:15px;right:15px;width:60px;height:60px;opacity:.2" viewBox="0 0 60 60"><path d="M30,2 C46,0 60,12 58,30 C56,47 42,60 26,57 C10,54 0,40 3,24 C6,9 16,4 30,2 Z" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:8px">Riesgo Existencial</div>
+        <div style="font-size:1rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:10px">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;bottom:-15px;left:-15px;width:130px;height:130px;opacity:.25" viewBox="0 0 130 130"><path d="M65,4 C98,0 128,24 125,62 C122,98 95,128 58,122 C22,116 0,86 6,52 C12,20 34,8 65,4 Z" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01 / 06</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <svg style="position:absolute;width:170px;height:170px;opacity:.22" viewBox="0 0 170 170"><path d="M85,5 C125,0 168,32 165,85 C162,135 122,168 78,162 C34,156 2,116 8,68 C14,24 48,10 85,5 Z" fill="none" stroke="${C.acc}" stroke-width="2"/></svg>
+      <svg style="position:absolute;width:110px;height:110px;opacity:.15" viewBox="0 0 110 110"><path d="M55,4 C80,0 108,20 106,55 C104,88 78,108 48,104 C18,100 0,74 5,45 C10,18 32,8 55,4 Z" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">80%</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.6;max-width:120px">de expertos · IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-10px;right:-10px;width:120px;height:120px;opacity:.2" viewBox="0 0 120 120"><path d="M60,4 C90,0 118,22 115,58 C112,92 85,118 52,112 C20,106 0,78 6,46 C12,16 32,8 60,4 Z" fill="none" stroke="${C.acc}" stroke-width="2"/></svg>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:1.6rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.52rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">— Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:-20px;left:-20px;width:140px;height:140px;opacity:.2" viewBox="0 0 140 140"><path d="M70,4 C105,0 138,25 135,70 C132,112 100,138 62,132 C24,126 0,92 6,55 C12,20 38,8 70,4 Z" fill="none" stroke="${C.acc}" stroke-width="2"/></svg>
+      <svg style="position:absolute;bottom:-10px;right:-10px;width:90px;height:90px;opacity:.18" viewBox="0 0 90 90"><path d="M45,3 C68,0 88,18 86,45 C84,70 65,88 40,84 C16,80 0,58 4,34 C8,12 24,6 45,3 Z" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt}">Guardá este post</div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.65;line-height:1.5;max-width:130px;text-align:center">Seguinos para más sobre riesgo existencial</div>
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:4px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_blob_lateral_org() {
+  // Organic shape divides slide vertically (like bloque lateral but with curved edge)
+  const orgLeft = `<svg style="position:absolute;top:0;left:0;height:100%;width:55%" viewBox="0 0 110 200" preserveAspectRatio="none"><path d="M0,0 L85,0 C100,40 108,80 100,100 C92,120 85,160 88,200 L0,200 Z" fill="${C.acc}"/></svg>`;
+  const orgLeft2 = `<svg style="position:absolute;top:0;left:0;height:100%;width:48%" viewBox="0 0 96 200" preserveAspectRatio="none"><path d="M0,0 L72,0 C88,35 92,70 82,100 C72,130 68,165 75,200 L0,200 Z" fill="${C.bg2}"/></svg>`;
+  return [
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:row;position:relative;overflow:hidden">
+      ${orgLeft}
+      <div style="width:52%;position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:6px">
+        <div style="font-size:0.45rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.8)">Riesgo</div>
+        <div style="font-size:1.6rem;font-weight:900;color:${C.wht};opacity:.3;line-height:1">IA</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;gap:6px">
+        <div style="font-size:0.88rem;font-weight:700;color:${C.txt};line-height:1.2">¿Puede la IA acabar con la humanidad?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row;position:relative;overflow:hidden">
+      ${orgLeft2}
+      <div style="width:44%;position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12px;gap:6px">
+        <div style="font-size:0.45rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">01</div>
+        <div style="font-size:2rem;font-weight:900;color:${C.acc};opacity:.3;line-height:1">01</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:8px">
+        <div style="font-size:0.78rem;font-weight:700;color:${C.txt};line-height:1.3">El problema del alineamiento</div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.75;line-height:1.7">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos sin cuidado.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:row;position:relative;overflow:hidden">
+      ${orgLeft}
+      <div style="width:52%;position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12px;gap:4px">
+        <div style="font-size:2rem;font-weight:900;color:${C.wht};line-height:1">80%</div>
+        <div style="font-size:0.42rem;color:rgba(255,255,255,.7);text-align:center;line-height:1.4">de expertos</div>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;padding:14px">
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.8;line-height:1.7">creen en IA superinteligente antes de 2060</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:row;position:relative;overflow:hidden">
+      ${orgLeft2}
+      <div style="width:44%;position:relative;z-index:2;display:flex;justify-content:center;align-items:center;padding:10px">
+        <div style="font-size:3.5rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:8px">
+        <div style="font-size:0.65rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El desarrollo de la IA podría ser el evento más transformador en la historia humana.</div>
+        <div style="font-size:0.48rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Sam Altman</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:row;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:0;left:0;height:100%;width:55%" viewBox="0 0 110 200" preserveAspectRatio="none"><path d="M0,0 L85,0 C100,40 108,80 100,100 C92,120 85,160 88,200 L0,200 Z" fill="${C.acc}" opacity=".9"/></svg>
+      <div style="width:52%;position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12px;gap:6px">
+        <div style="font-size:0.45rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)">@riesgoia</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px;gap:8px">
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt}">Guardá este post</div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.6;line-height:1.5">Seguinos para más sobre riesgo existencial</div>
+      </div>
+    </div>`
+  ];
+}
+
+// ─── PILAR STYLES ────────────────────────────────────────────────────────────
+
+function slides_pilar2() {
+  // Profesionales de la IA — Marco Interior + perfil de persona
+  return [
+    `<div class="sl" style="background:${C.acc};padding:10px">
+      <div style="border:1.5px solid rgba(255,255,255,.4);height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;gap:8px">
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Pilar 2 · Profesionales de la IA</div>
+        <div style="font-size:1.1rem;font-weight:900;color:${C.wht};line-height:1.1">Geoffrey Hinton</div>
+        <div style="font-size:0.62rem;color:rgba(255,255,255,.8);line-height:1.4">El "Padrino de la IA" que renunció a Google para hablar libremente sobre sus miedos</div>
+        <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap">
+          <span style="font-size:0.48rem;padding:2px 8px;border:1px solid rgba(255,255,255,.4);border-radius:20px;color:rgba(255,255,255,.8)">Premio Turing 2018</span>
+          <span style="font-size:0.48rem;padding:2px 8px;border:1px solid rgba(255,255,255,.4);border-radius:20px;color:rgba(255,255,255,.8)">Ex-Google</span>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};padding:10px">
+      <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">trayectoria</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">1986</div>
+            <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">Publicó backpropagation — base de todo el deep learning moderno</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">2012</div>
+            <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">AlexNet gana ImageNet — inicio de la era del deep learning</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">2023</div>
+            <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">Renuncia a Google. "Me arrepiento de mi trabajo."</div>
+          </div>
+        </div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};padding:10px">
+      <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+        <div style="font-size:1.8rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+        <div style="font-size:0.72rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">Es difícil ver cómo evitás que los malos actores la usen para malos propósitos. La amenaza existencial es real.</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.5rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Geoffrey Hinton · 2023</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};padding:10px">
+      <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">por qué importa</div>
+        <div style="font-size:0.78rem;font-weight:700;color:${C.txt};line-height:1.3">No es un activista. Es la persona que construyó esto.</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">Cuando el científico que inventó el deep learning dice que le preocupa el riesgo existencial, la pregunta no es si creerle — es por qué no lo escuchamos más.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};padding:10px">
+      <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:8px">
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">próximo perfil</div>
+        <div style="font-size:0.9rem;font-weight:700;color:${C.txt};text-align:center;line-height:1.3">¿Quién es el próximo?</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.65;text-align:center;line-height:1.5;max-width:130px">Seguinos para conocer a las personas detrás del debate más importante del siglo</div>
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:4px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_pilar6() {
+  // Gobernanza de la IA — Cruces Decorativas + contenido institucional/político
+  const cross = (color, op) => `<svg width="14" height="14" viewBox="0 0 14 14" style="opacity:${op}"><line x1="7" y1="1" x2="7" y2="13" stroke="${color}" stroke-width="1.5"/><line x1="1" y1="7" x2="13" y2="7" stroke="${color}" stroke-width="1.5"/></svg>`;
+  const corners = (color, op) => `
+    <div style="position:absolute;top:12px;left:12px">${cross(color,op)}</div>
+    <div style="position:absolute;top:12px;right:12px">${cross(color,op)}</div>
+    <div style="position:absolute;bottom:12px;left:12px">${cross(color,op)}</div>
+    <div style="position:absolute;bottom:12px;right:12px">${cross(color,op)}</div>`;
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative">
+      ${corners(C.acc, .3)}
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:6px">Pilar 6 · Gobernanza de la IA</div>
+        <div style="font-size:1.05rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:8px">La Ley de IA de la UE: el primer intento serio del mundo</div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.6;line-height:1.5;margin-bottom:10px">¿Es suficiente? ¿Llega a tiempo?</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:18px;gap:10px;position:relative">
+      ${corners(C.acc, .2)}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">qué dice</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">Clasifica los sistemas de IA por nivel de riesgo. Los de "riesgo inaceptable" quedan prohibidos.</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">Incluye obligaciones de transparencia, auditorías y supervisión humana para sistemas de alto riesgo. Aprobada en 2024. En vigor desde 2025.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative">
+      ${corners(C.acc, .25)}
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">el problema</div>
+        <div style="font-size:2.4rem;font-weight:900;color:${C.acc};line-height:1">127</div>
+        <div style="font-size:0.72rem;font-weight:600;color:${C.txt}">artículos</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.75;line-height:1.6;max-width:130px;text-align:center">La ley más avanzada del mundo tiene 127 artículos. GPT-4 se lanzó en el tiempo que tardó en aprobarse.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:20px;gap:10px;position:relative">
+      ${corners(C.acc, .2)}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.5rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">qué falta</div>
+        <div style="font-size:0.82rem;font-weight:700;color:${C.txt};line-height:1.3">Regula aplicaciones — no el desarrollo de modelos base</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">Es como regular los autos pero no las fábricas. Los modelos más peligrosos — GPT-5, Gemini Ultra — no están directamente regulados. La carrera sigue.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:10px;position:relative">
+      <div style="position:absolute;top:12px;left:12px">${cross('white',.35)}</div>
+      <div style="position:absolute;top:12px;right:12px">${cross('white',.35)}</div>
+      <div style="position:absolute;bottom:12px;left:12px">${cross('white',.35)}</div>
+      <div style="position:absolute;bottom:12px;right:12px">${cross('white',.35)}</div>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">la pregunta</div>
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht};line-height:1.3;text-align:center">¿Es demasiado poco, demasiado tarde?</div>
+        <div style="width:24px;height:1.5px;background:rgba(255,255,255,.5)"></div>
+        <div style="font-size:0.58rem;color:${C.wht};opacity:.75;line-height:1.5;text-align:center;max-width:140px">Guardá este carrusel · Seguí la serie de gobernanza</div>
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.6">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_pilar1_v2() {
+  const brkAcc = `
+    <svg style="position:absolute;top:12px;left:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="16,1 1,1 1,16" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
+    <svg style="position:absolute;top:12px;right:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="0,1 15,1 15,16" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
+    <svg style="position:absolute;bottom:12px;left:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="1,0 1,15 16,15" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
+    <svg style="position:absolute;bottom:12px;right:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="15,0 15,15 0,15" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>`;
+  const brkWht = `
+    <svg style="position:absolute;top:12px;left:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="16,1 1,1 1,16" fill="none" stroke="white" stroke-width="1.5"/></svg>
+    <svg style="position:absolute;top:12px;right:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="0,1 15,1 15,16" fill="none" stroke="white" stroke-width="1.5"/></svg>
+    <svg style="position:absolute;bottom:12px;left:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="1,0 1,15 16,15" fill="none" stroke="white" stroke-width="1.5"/></svg>
+    <svg style="position:absolute;bottom:12px;right:12px;opacity:.35" width="16" height="16" viewBox="0 0 16 16"><polyline points="15,0 15,15 0,15" fill="none" stroke="white" stroke-width="1.5"/></svg>`;
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:22px;position:relative">
+      ${brkAcc}
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:6px">Pilar 1 · Teoría de la IA</div>
+        <div style="font-size:1.05rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:8px">¿Qué es el alineamiento y por qué es el problema central?</div>
+        <div style="font-size:0.56rem;color:${C.txt};opacity:.6;line-height:1.5;margin-bottom:10px">El concepto más importante de la seguridad en IA — explicado desde cero</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:column;justify-content:center;padding:22px;gap:9px;position:relative">
+      ${brkAcc}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:9px">
+        <div style="font-size:0.48rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">definición</div>
+        <div style="font-size:0.85rem;font-weight:700;color:${C.txt};line-height:1.3">Alineamiento: que la IA haga lo que querés — no lo que literalmente le pediste</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">Una IA que optimiza "maximizar clics" podría descubrir que enojarte es más efectivo que informarte. La diferencia parece pequeña. No lo es.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;position:relative">
+      ${brkAcc}
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="font-size:0.48rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">el problema en números</div>
+        <div style="font-size:2.8rem;font-weight:900;color:${C.acc};line-height:1">0</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt}">sistemas alineados verificados</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.75;line-height:1.6;max-width:135px">No existe ningún método probado para garantizar que una IA avanzada siga valores humanos.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;padding:22px;gap:8px;position:relative">
+      ${brkAcc}
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:0.48rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">en sus palabras</div>
+        <div style="font-size:0.72rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">"El problema del alineamiento no es que los sistemas de IA sean malvados. Es que podrían ser muy buenos en algo que no quisimos."</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.5rem;letter-spacing:.08em;text-transform:uppercase;color:${C.acc}">Stuart Russell · Berkeley AI Research</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:22px;gap:8px;position:relative">
+      ${brkWht}
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">próximo</div>
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht};line-height:1.3">¿Podemos resolver el alineamiento antes de que sea tarde?</div>
+        <div style="width:24px;height:1.5px;background:rgba(255,255,255,.5)"></div>
+        <div style="font-size:0.58rem;color:${C.wht};opacity:.75">Guardá · Seguí la serie de teoría</div>
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.6;margin-top:4px">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+function slides_pilar5_v2() {
+  return [
+    `<div class="sl" style="background:${C.bg1};display:flex;flex-direction:column;justify-content:flex-end;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-18px;right:-8px;font-size:4.8rem;font-weight:900;color:${C.acc};opacity:.09;line-height:1;letter-spacing:-.03em">1962</div>
+      <div style="position:relative;z-index:2">
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-bottom:6px">Pilar 5 · Historia de Riesgos</div>
+        <div style="font-size:1.05rem;font-weight:700;color:${C.txt};line-height:1.2;margin-bottom:8px">13 días. La humanidad estuvo a horas del fin.</div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.6;line-height:1.5;margin-bottom:10px">La Crisis de los Misiles de Cuba y lo que nos enseña sobre la IA</div>
+        <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@riesgoia</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:column;justify-content:center;padding:18px;gap:9px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-12px;left:-6px;font-size:4.5rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1;letter-spacing:-.02em">OCT</div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:9px">
+        <div style="font-size:0.48rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">octubre, 1962</div>
+        <div style="font-size:0.85rem;font-weight:700;color:${C.txt};line-height:1.3">Kennedy vs. Khrushchev. 13 días para decidir el destino del mundo.</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">Un submarino soviético sin comunicación estuvo a un voto de lanzar un torpedo nuclear. El voto en contra fue de Vasili Arkhipov. Nunca lo viste en un libro de historia.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.bg2};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;font-size:5.5rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1">1</div>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="font-size:0.48rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">el margen</div>
+        <div style="font-size:2.6rem;font-weight:900;color:${C.acc};line-height:1">1 voto</div>
+        <div style="font-size:0.7rem;font-weight:600;color:${C.txt}">separó al mundo del fin</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.58rem;color:${C.txt};opacity:.75;line-height:1.6;max-width:130px">Arkhipov fue el único de los tres oficiales del B-59 que se negó a autorizar el lanzamiento.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:#fff;display:flex;flex-direction:column;justify-content:center;padding:20px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-14px;right:-6px;font-size:4.5rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1">'62</div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:0.48rem;letter-spacing:.12em;text-transform:uppercase;color:${C.acc}">el paralelo hoy</div>
+        <div style="font-size:0.78rem;font-weight:700;color:${C.txt};line-height:1.3">Con la IA, también podría ser un solo sistema, una sola decisión automática, lo que incline la balanza.</div>
+        <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+        <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">En 1962 había humanos en el loop. Si delegamos decisiones críticas a la IA, ese margen — ese Vasili Arkhipov — desaparece.</div>
+      </div>
+    </div>`,
+    `<div class="sl" style="background:${C.acc};display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px;gap:8px;position:relative;overflow:hidden">
+      <div style="position:absolute;font-size:4.5rem;font-weight:900;color:rgba(255,255,255,.07);line-height:1;letter-spacing:-.02em">1962</div>
+      <div style="position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">la lección</div>
+        <div style="font-size:0.9rem;font-weight:700;color:${C.wht};line-height:1.3">La historia nos salvó por suerte. La suerte no es una estrategia.</div>
+        <div style="width:24px;height:1.5px;background:rgba(255,255,255,.5)"></div>
+        <div style="font-size:0.58rem;color:${C.wht};opacity:.75;line-height:1.5;text-align:center;max-width:140px">Guardá este carrusel · Seguí la serie histórica</div>
+        <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};opacity:.6">@riesgoia</div>
+      </div>
+    </div>`
+  ];
+}
+
+// ─── STYLE DATA ──────────────────────────────────────────────────────────────
+const stylesData = [
+  {
+    name: "Líneas Precisas",
+    desc: "Reglas horizontales finas como único elemento decorativo",
+    tags: ["Geométrico", "Minimalista", "Estructurado"],
+    q1: "Línea horizontal de acento superior e inferior · numeración de slide",
+    q2: "Fondo liso lavanda — sin textura, sin gradiente",
+    q3: "Estrictamente geométrico — solo líneas horizontales y tipografía",
+    slidesFn: slides_lineas
+  },
+  {
+    name: "Bloques de Color",
+    desc: "Bloques sólidos de color dividen el espacio en zonas",
+    tags: ["Geométrico", "Bold", "Contraste alto"],
+    q1: "Bloque de acento como header o footer de cada pieza",
+    q2: "Fondo dividido en bloques: lavanda + violeta sólido",
+    q3: "Geométrico duro — rectángulos, sin curvas",
+    slidesFn: slides_bloques
+  },
+  {
+    name: "Círculos Decorativos",
+    desc: "Círculos de distintos tamaños como elemento de fondo",
+    tags: ["Geométrico curvo", "Sutil", "Aéreo"],
+    q1: "Círculo o arco parcial posicionado en esquina · punto de acento en bullets",
+    q2: "Fondo liso con elementos circulares semitransparentes",
+    q3: "Geométrico curvo — solo círculos, sin ángulos agudos",
+    slidesFn: slides_circulos
+  },
+  {
+    name: "Tipografía Enorme",
+    desc: "Texto gigante semitransparente como fondo decorativo",
+    tags: ["Tipográfico", "Impactante", "Layered"],
+    q1: "Número de slide o palabra clave como elemento de fondo en 900",
+    q2: "Fondo liso con tipografía enorme de baja opacidad",
+    q3: "Tipográfico — la propia tipografía es el elemento gráfico",
+    slidesFn: slides_tipo_gigante
+  },
+  {
+    name: "Marco Interior",
+    desc: "Un borde interior enmarca todo el contenido",
+    tags: ["Elegante", "Editorial", "Contenido"],
+    q1: "Marco de borde fino dentro del slide · márgenes uniformes",
+    q2: "Fondo lavanda con frame interno en color acento",
+    q3: "Geométrico elegante — solo rectángulos y líneas rectas",
+    slidesFn: slides_marco
+  },
+  {
+    name: "Columna Lateral",
+    desc: "Barra vertical de acento en el borde izquierdo del slide",
+    tags: ["Geométrico", "Minimalista", "Estructurado"],
+    q1: "Barra vertical fina de color acento en borde izquierdo · siempre presente",
+    q2: "Fondo liso lavanda — la barra es el único elemento gráfico",
+    q3: "Geométrico — línea vertical recta, sin curvas",
+    slidesFn: slides_columna
+  },
+  {
+    name: "Subrayado Bold",
+    desc: "Línea gruesa bajo los títulos como único elemento decorativo",
+    tags: ["Tipográfico", "Bold", "Directo"],
+    q1: "Línea de 2-3px bajo cada título o dato destacado",
+    q2: "Fondo liso lavanda — subrayado como único elemento",
+    q3: "Geométrico — líneas horizontales vinculadas al texto",
+    slidesFn: slides_subrayado
+  },
+  {
+    name: "Bloque Esquina",
+    desc: "Cuadrado sólido de acento anclado en esquinas opuestas",
+    tags: ["Geométrico", "Asimétrico", "Llamativo"],
+    q1: "Cuadrado de acento fijo en esquina · varía de posición según el slide",
+    q2: "Fondo liso lavanda con bloque de esquina como único elemento",
+    q3: "Geométrico puro — solo cuadrados en las esquinas",
+    slidesFn: slides_esquina
+  },
+  {
+    name: "Doble Marco",
+    desc: "Marco exterior de acento + marco interior fino",
+    tags: ["Elegante", "Sofisticado", "Editorial"],
+    q1: "Doble borde — exterior sólido de acento, interior con línea fina",
+    q2: "Fondo lavanda enmarcado por doble borde violeta",
+    q3: "Geométrico elegante — dos niveles de rectángulos concéntricos",
+    slidesFn: slides_doble_marco
+  },
+  {
+    name: "Texto Outline",
+    desc: "Tipografía con solo trazo (sin relleno) como fondo decorativo",
+    tags: ["Tipográfico", "Layered", "Moderno"],
+    q1: "Número o palabra clave en outline (stroke) de baja opacidad como fondo",
+    q2: "Fondo liso con tipografía outline semitransparente detrás del contenido",
+    q3: "Tipográfico — el outline de la fuente es el único elemento gráfico",
+    slidesFn: slides_tipo_outline
+  },
+  {
+    name: "Cruces Decorativas",
+    desc: "Marcas en cruz (+) como elemento repetitivo en esquinas o grilla",
+    tags: ["Geométrico", "Técnico", "Repetición"],
+    q1: "Cruz de 16px en esquinas del slide · siempre en las 4 esquinas o en 2 opuestas",
+    q2: "Fondo liso lavanda con cruces semitransparentes de acento",
+    q3: "Geométrico preciso — solo el símbolo + en posiciones fijas",
+    slidesFn: slides_cruz
+  },
+  {
+    name: "Bloque Lateral",
+    desc: "Panel lateral de color divide el slide en dos zonas",
+    tags: ["Editorial", "Split layout", "Bold"],
+    q1: "Panel lateral de ~40% en acento · el lado derecho contiene el texto",
+    q2: "Fondo partido: acento a la izquierda, lavanda a la derecha",
+    q3: "Geométrico — división rectangular vertical sin curvas",
+    slidesFn: slides_bloque_lateral
+  },
+  {
+    name: "Tira Inferior",
+    desc: "Barra de acento fija al pie de cada slide con metadata",
+    tags: ["Funcional", "Consistente", "Newsletter"],
+    q1: "Tira horizontal de acento en el pie · contiene @riesgoia y numeración",
+    q2: "Fondo liso lavanda con tira de pie en violeta",
+    q3: "Geométrico — barra horizontal recta, siempre en la misma posición",
+    slidesFn: slides_tira
+  },
+  {
+    name: "Círculos + Líneas",
+    desc: "Combinación de círculos decorativos y reglas horizontales",
+    tags: ["Mixto", "Equilibrado", "Detallado"],
+    q1: "Círculo en esquina + línea horizontal fina como separador",
+    q2: "Fondo liso lavanda con círculo outline y línea de acento",
+    q3: "Geométrico curvo + lineal — mezcla de ambos vocabularios",
+    slidesFn: slides_circulos_lineas
+  },
+  {
+    name: "Fondo Bicolor",
+    desc: "El slide se parte en dos zonas de color sólido sin degradado",
+    tags: ["Bold", "Structural", "Sin textura"],
+    q1: "División horizontal hard-cut entre acento y lavanda · proporciones variables por tipo de slide",
+    q2: "Dos fondos sólidos — acento violeta + lavanda clara, sin transición",
+    q3: "Geométrico puro — solo rectángulos, corte horizontal recto",
+    slidesFn: slides_bicolor
+  },
+  {
+    name: "Rombos",
+    desc: "Formas de rombo/diamante como elementos decorativos",
+    tags: ["Geométrico", "Angular", "Distintivo"],
+    q1: "Rombos de distintos tamaños en esquina o como separador entre elementos",
+    q2: "Fondo liso lavanda y lavanda profunda alternados · rombos como único elemento",
+    q3: "Geométrico angular — cuadrados rotados 45°, sin curvas",
+    slidesFn: slides_rombos
+  },
+  {
+    name: "Rayas Verticales",
+    desc: "Patrón de rayas verticales finas como textura de fondo",
+    tags: ["Textura", "Técnico", "Layered"],
+    q1: "Rayas verticales de 1px como textura · contenido sobre fondo limpio o con rayas",
+    q2: "Fondo con patrón de rayas verticales sutiles en acento",
+    q3: "Geométrico lineal — líneas verticales paralelas y equidistantes",
+    slidesFn: slides_rayas
+  },
+  {
+    name: "Triángulos",
+    desc: "Triángulos sólidos anclados en esquinas como elemento de fondo",
+    tags: ["Dinámico", "Geométrico", "Asimétrico"],
+    q1: "Triángulo sólido en esquina(s) del slide · varía posición según slide",
+    q2: "Fondo liso lavanda y lavanda profunda · triángulos de acento en esquinas",
+    q3: "Geométrico angular — solo triángulos, vocabulario de tres vértices",
+    slidesFn: slides_triangulos
+  },
+  {
+    name: "Manchas Orgánicas",
+    desc: "Blobs SVG irregulares como elementos de fondo en esquinas",
+    tags: ["Orgánico", "Fluido", "Sin ángulos"],
+    q1: "Blob/mancha SVG de acento en esquina · forma varía levemente por slide",
+    q2: "Fondo liso lavanda y lavanda profunda · blob de baja opacidad como único elemento",
+    q3: "Orgánico — curvas irregulares, sin ángulos rectos ni líneas",
+    slidesFn: slides_blobs
+  },
+  {
+    name: "Ondas",
+    desc: "Curvas sinusoidales SVG como separadores y fondos",
+    tags: ["Orgánico", "Fluido", "Curvilíneo"],
+    q1: "Onda SVG como separador entre secciones · onda de fondo en borde superior o inferior",
+    q2: "Fondo liso lavanda con onda de acento semitransparente",
+    q3: "Orgánico — solo curvas sinusoidales, sin rectas ni ángulos",
+    slidesFn: slides_ondas
+  },
+  {
+    name: "Blobs Múltiples",
+    desc: "Varios blobs de distintos tamaños dispersos sobre fondo blanco",
+    tags: ["Orgánico", "Aireado", "Fondo blanco"],
+    q1: "2-3 blobs de distintos tamaños en esquinas opuestas · uno grande, dos pequeños",
+    q2: "Fondo blanco puro — los blobs de acento son el único color",
+    q3: "Orgánico — formas irregulares de curva libre, sin simetría",
+    slidesFn: slides_blobs_multi
+  },
+  {
+    name: "Fondo Partido Orgánico",
+    desc: "Onda orgánica divide el slide en dos zonas de color sólido",
+    tags: ["Orgánico", "Bicolor", "Fluido"],
+    q1: "Curva orgánica como divisor entre fondo claro y fondo de acento",
+    q2: "Fondo partido — mitad blanco/lavanda, mitad violeta, separados por curva SVG",
+    q3: "Orgánico — la única forma es la curva divisora del fondo",
+    slidesFn: slides_blob_partido
+  },
+  {
+    name: "Blob Central",
+    desc: "Un blob grande centrado como fondo dominante sobre fondo violeta",
+    tags: ["Orgánico", "Fondo acento", "Minimalista"],
+    q1: "Un blob grande semitransparente centrado · es el único elemento decorativo",
+    q2: "Fondo sólido violeta (#9b5de5) — blob blanco de baja opacidad",
+    q3: "Orgánico — una sola forma libre, simétrica suave, sin elementos adicionales",
+    slidesFn: slides_blob_grande
+  },
+  {
+    name: "Blobs Outline",
+    desc: "Blobs solo con trazo (sin relleno) sobre fondos alternados",
+    tags: ["Orgánico", "Sutil", "Outline"],
+    q1: "1-2 blobs de solo stroke en esquinas · varían de tamaño por slide",
+    q2: "Alterna entre lavanda profunda (#e4d4ff) y blanco — sin fondo acento",
+    q3: "Orgánico — curvas libres trazadas sin relleno, línea fina de acento",
+    slidesFn: slides_blob_outline
+  },
+  {
+    name: "División Orgánica Lateral",
+    desc: "Forma orgánica con borde curvo divide el slide verticalmente",
+    tags: ["Orgánico", "Split layout", "Fluido"],
+    q1: "Panel orgánico lateral con borde curvo · ocupa ~50% del ancho",
+    q2: "Alterna entre blanco y lavanda — el panel orgánico trae el color de acento",
+    q3: "Orgánico en el borde — la división es una curva libre, no una línea recta",
+    slidesFn: slides_blob_lateral_org
+  },
+  {
+    name: "Pilar 2 · Hinton",
+    desc: "Marco Interior aplicado al perfil de Geoffrey Hinton",
+    tags: ["Pilar 2", "Profesionales", "Marco Interior"],
+    q1: "Marco de borde fino dentro del slide en color acento · márgenes uniformes",
+    q2: "Fondo acento en portada · lavanda y lavanda profunda en slides de contenido",
+    q3: "Geométrico elegante — solo rectángulos y líneas rectas",
+    slidesFn: slides_pilar2
+  },
+  {
+    name: "Pilar 6 · Ley de IA UE",
+    desc: "Cruces Decorativas aplicadas a Gobernanza — la Ley de IA de la UE",
+    tags: ["Pilar 6", "Gobernanza", "Cruces Decorativas"],
+    q1: "Cruz de 16px en las 4 esquinas del slide · siempre presente",
+    q2: "Fondos lavanda y lavanda profunda alternados · cruces como único elemento",
+    q3: "Geométrico preciso — solo el símbolo + en posiciones fijas",
+    slidesFn: slides_pilar6
+  },
+  {
+    name: "Pilar 1 · Alineamiento",
+    desc: "Corchetes Técnicos — esquinas en L que enmarcan el contenido",
+    tags: ["Pilar 1", "Teoría IA", "Corchetes Técnicos"],
+    q1: "Cuatro marcas en L (corchetes) en las esquinas del slide",
+    q2: "Lavanda, blanco y lavanda profunda alternados · fondo limpio",
+    q3: "Geométrico preciso — solo los corchetes de esquina, sin otros elementos",
+    slidesFn: slides_pilar1_v2
+  },
+  {
+    name: "Pilar 5 · Cuba 1962",
+    desc: "Número de Archivo — año gigante semitransparente como fondo tipográfico",
+    tags: ["Pilar 5", "Historia", "Número de Archivo"],
+    q1: "Año o sigla histórica en peso 900 y baja opacidad como fondo",
+    q2: "Alterna lavanda, blanco y lavanda profunda · año siempre de fondo",
+    q3: "Tipográfico — la fecha histórica como elemento gráfico dominante",
+    slidesFn: slides_pilar5_v2
+  },
+];
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function render() {
+  const list = document.getElementById('style-list');
+  stylesData.forEach((s, i) => {
+    const item = document.createElement('div');
+    item.className = 'style-item';
+
+    const tagsHtml = s.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+    const row = document.createElement('div');
+    row.className = 'style-row';
+    row.innerHTML = `
+      <div class="style-num">${(i+1).toString().padStart(2,'0')}</div>
+      <div class="style-info">
+        <div class="style-name">${s.name}</div>
+        <div class="style-desc">${s.desc}</div>
+        <div class="style-tags">${tagsHtml}</div>
+      </div>
+      <div class="chevron">▼</div>`;
+
+    const preview = document.createElement('div');
+    preview.className = 'style-preview';
+
+    const slideLabels = ['Portada','Texto','Dato','Cita','Cierre'];
+    const slideHtmls = s.slidesFn();
+
+    preview.innerHTML = `
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">¿Qué elemento se repite?</div>
+          <div class="q-answer">${s.q1}</div>
+        </div>
+        <div class="question">
+          <div class="q-label">¿Cómo es el fondo?</div>
+          <div class="q-answer">${s.q2}</div>
+        </div>
+        <div class="question">
+          <div class="q-label">¿Orgánico o geométrico?</div>
+          <div class="q-answer">${s.q3}</div>
+        </div>
+      </div>
+      <div class="slides-row">
+        ${slideHtmls.map((html, si) => `
+          <div class="slide-wrap">
+            <div class="slide-cap">${slideLabels[si]}</div>
+            ${html}
+          </div>`).join('')}
+      </div>`;
+
+    row.addEventListener('click', () => {
+      const isOpen = preview.classList.contains('open');
+      document.querySelectorAll('.style-preview.open').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.style-row.active').forEach(el => el.classList.remove('active'));
+      if (!isOpen) {
+        preview.classList.add('open');
+        row.classList.add('active');
+      }
+    });
+
+    item.appendChild(row);
+    item.appendChild(preview);
+    list.appendChild(item);
+  });
+}
+
+render();
+</script>
+</body>
+</html>

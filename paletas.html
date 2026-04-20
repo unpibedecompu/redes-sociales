@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paletas de Color — Riesgo IA</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #111; color: #eee; padding: 40px 20px; }
+  h1 { text-align: center; font-size: 1.2rem; letter-spacing: 0.15em; text-transform: uppercase; color: #aaa; margin-bottom: 8px; }
+  p.sub { text-align: center; font-size: 0.8rem; color: #555; margin-bottom: 40px; }
+
+  .palette-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 4px; }
+
+  .palette-item { display: flex; flex-direction: column; }
+
+  .palette-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; border-radius: 8px; cursor: pointer;
+    border: 1px solid #222; background: #1a1a1a;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .palette-row:hover { border-color: #444; background: #202020; }
+  .palette-row.active { border-color: #555; background: #222; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+  .palette-num { font-size: 0.7rem; color: #444; width: 20px; flex-shrink: 0; text-align: right; }
+  .palette-name { font-size: 0.85rem; color: #bbb; width: 180px; flex-shrink: 0; }
+  .swatches { display: flex; gap: 6px; flex: 1; }
+  .swatch { width: 36px; height: 36px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
+  .swatch-label { font-size: 0.6rem; color: #444; margin-top: 3px; text-align: center; }
+  .swatch-wrap { display: flex; flex-direction: column; align-items: center; }
+
+  .chevron { font-size: 0.7rem; color: #444; margin-left: auto; flex-shrink: 0; transition: transform 0.2s; }
+  .palette-row.active .chevron { transform: rotate(180deg); color: #888; }
+
+  /* Expandable preview */
+  .palette-preview {
+    display: none;
+    background: #161616;
+    border: 1px solid #555;
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 20px;
+  }
+  .palette-preview.open { display: block; }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .slide-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .slide-label { font-size: 0.65rem; color: #555; text-align: center; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* Cover slide */
+  .slide {
+    width: 100%; aspect-ratio: 1 / 1;
+    border-radius: 6px; overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .slide-bg { position: absolute; inset: 0; }
+  .slide-overlay { position: absolute; inset: 0; }
+  .slide-content {
+    position: relative; z-index: 2;
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .slide-tag {
+    font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 2px;
+    display: inline-block; width: fit-content;
+  }
+  .slide-title { font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
+  .slide-subtitle { font-size: 0.62rem; letter-spacing: 0.05em; opacity: 0.7; margin-top: 2px; }
+  .slide-marca { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-top: 10px; }
+
+  /* Inner slide */
+  .slide-inner {
+    width: 100%; aspect-ratio: 1 / 1;
+    border-radius: 6px; overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 24px 22px;
+  }
+  .slide-inner-bg { position: absolute; inset: 0; }
+  .slide-inner-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; gap: 12px;
+    width: 100%;
+  }
+  .inner-divider { width: 28px; height: 2px; border-radius: 1px; }
+  .inner-heading { font-size: 0.95rem; font-weight: 700; line-height: 1.3; }
+  .inner-body { font-size: 0.65rem; line-height: 1.7; opacity: 0.82; }
+  .inner-num {
+    font-size: 2.5rem; font-weight: 900; opacity: 0.07;
+    position: absolute; bottom: 14px; right: 18px; line-height: 1;
+  }
+  .inner-marca { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.35; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<h1>Paletas de Color</h1>
+<p class="sub">Hacé clic en una fila para expandir el preview</p>
+
+<div class="palette-list" id="palette-list"></div>
+
+<script>
+const palettes = [
+  { name:"Lila Suave", colors:["#0d0d0d","#c77dff","#f5f0ff","#181818"], labels:["Primario","Acento","Texto","Fondo"], bg:"linear-gradient(135deg,#0d0d0d,#1a0f2e)", overlay:"linear-gradient(to top,rgba(0,0,0,0.92),rgba(0,0,0,0.4) 60%,transparent)", tag_bg:"#c77dff",tag_text:"#000", title:"#f5f0ff", inner_bg:"#0d0d0d", inner_text:"#f5f0ff", inner_accent:"#c77dff" },
+  { name:"Violeta Cuántico", colors:["#0e0e0e","#9b5de5","#f0f0f0","#1a1a1a"], labels:["Primario","Acento","Texto","Fondo"], bg:"linear-gradient(135deg,#0e0e0e,#140a1e)", overlay:"linear-gradient(to top,rgba(0,0,0,0.93),rgba(0,0,0,0.4) 60%,transparent)", tag_bg:"#9b5de5",tag_text:"#fff", title:"#f0f0f0", inner_bg:"#0e0e0e", inner_text:"#f0f0f0", inner_accent:"#9b5de5" },
+  { name:"Blanco y Lila", colors:["#ffffff","#9b5de5","#1a1a1a","#f5f0ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#f5f0ff,#ede0ff)", overlay:"linear-gradient(to top,rgba(245,240,255,0.9),rgba(245,240,255,0.5) 60%,transparent)", tag_bg:"#9b5de5",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#ffffff", inner_text:"#1a1a1a", inner_accent:"#9b5de5" },
+  { name:"Lavanda Pura", colors:["#f0e8ff","#7c3aed","#1a1a1a","#e4d4ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#f0e8ff,#e4d4ff)", overlay:"linear-gradient(to top,rgba(240,232,255,0.92),rgba(240,232,255,0.5) 60%,transparent)", tag_bg:"#7c3aed",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#f0e8ff", inner_text:"#1a1a1a", inner_accent:"#7c3aed" },
+  { name:"Lavanda + Lila Suave", colors:["#f0e8ff","#9b5de5","#1a1a1a","#e4d4ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#f0e8ff,#e4d4ff)", overlay:"linear-gradient(to top,rgba(240,232,255,0.92),rgba(240,232,255,0.5) 60%,transparent)", tag_bg:"#9b5de5",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#f0e8ff", inner_text:"#1a1a1a", inner_accent:"#9b5de5" },
+  { name:"Lila Cremoso", colors:["#faf5ff","#a855f7","#2d1b69","#f3e8ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#faf5ff,#f3e8ff)", overlay:"linear-gradient(to top,rgba(250,245,255,0.92),rgba(250,245,255,0.5) 60%,transparent)", tag_bg:"#a855f7",tag_text:"#fff", title:"#2d1b69", inner_bg:"#faf5ff", inner_text:"#2d1b69", inner_accent:"#a855f7" },
+  { name:"Blanco Violeta Fuerte", colors:["#ffffff","#5b21b6","#0f0f0f","#ede9fe"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#ffffff,#ede9fe)", overlay:"linear-gradient(to top,rgba(255,255,255,0.92),rgba(255,255,255,0.5) 60%,transparent)", tag_bg:"#5b21b6",tag_text:"#fff", title:"#0f0f0f", inner_bg:"#ffffff", inner_text:"#0f0f0f", inner_accent:"#5b21b6" },
+  { name:"Gris Perla Lila", colors:["#f4f0f8","#8b5cf6","#1c1c1c","#e8e0f0"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#f4f0f8,#e8e0f0)", overlay:"linear-gradient(to top,rgba(244,240,248,0.92),rgba(244,240,248,0.5) 60%,transparent)", tag_bg:"#8b5cf6",tag_text:"#fff", title:"#1c1c1c", inner_bg:"#f4f0f8", inner_text:"#1c1c1c", inner_accent:"#8b5cf6" },
+  { name:"Malva Claro", colors:["#fdf4ff","#c026d3","#1a1a1a","#fae8ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#fdf4ff,#fae8ff)", overlay:"linear-gradient(to top,rgba(253,244,255,0.92),rgba(253,244,255,0.5) 60%,transparent)", tag_bg:"#c026d3",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#fdf4ff", inner_text:"#1a1a1a", inner_accent:"#c026d3" },
+  { name:"Lila y Negro", colors:["#f8f0ff","#0f0f0f","#6d28d9","#ede0ff"], labels:["Fondo","Texto","Acento","Secundario"], bg:"linear-gradient(135deg,#f8f0ff,#ede0ff)", overlay:"linear-gradient(to top,rgba(248,240,255,0.92),rgba(248,240,255,0.5) 60%,transparent)", tag_bg:"#0f0f0f",tag_text:"#c77dff", title:"#0f0f0f", inner_bg:"#f8f0ff", inner_text:"#0f0f0f", inner_accent:"#6d28d9" },
+  { name:"Blanco Neón Violeta", colors:["#ffffff","#bf00ff","#111111","#f5e8ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#ffffff,#f5e8ff)", overlay:"linear-gradient(to top,rgba(255,255,255,0.9),rgba(255,255,255,0.5) 60%,transparent)", tag_bg:"#bf00ff",tag_text:"#fff", title:"#111111", inner_bg:"#ffffff", inner_text:"#111111", inner_accent:"#bf00ff" },
+  { name:"Crema Lila", colors:["#fdf8ff","#7e22ce","#2a1a3a","#f0e4ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#fdf8ff,#f0e4ff)", overlay:"linear-gradient(to top,rgba(253,248,255,0.93),rgba(253,248,255,0.5) 60%,transparent)", tag_bg:"#7e22ce",tag_text:"#fff", title:"#2a1a3a", inner_bg:"#fdf8ff", inner_text:"#2a1a3a", inner_accent:"#7e22ce" },
+  { name:"Lila Medio", colors:["#e8d5f5","#4c1d95","#1a1a1a","#d4b8f0"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#e8d5f5,#d4b8f0)", overlay:"linear-gradient(to top,rgba(232,213,245,0.92),rgba(232,213,245,0.5) 60%,transparent)", tag_bg:"#4c1d95",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#e8d5f5", inner_text:"#1a1a1a", inner_accent:"#4c1d95" },
+  { name:"Blanco y Orquídea", colors:["#fff8ff","#da70d6","#1a1a1a","#ffe8ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#fff8ff,#ffe8ff)", overlay:"linear-gradient(to top,rgba(255,248,255,0.92),rgba(255,248,255,0.5) 60%,transparent)", tag_bg:"#da70d6",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#fff8ff", inner_text:"#1a1a1a", inner_accent:"#da70d6" },
+  { name:"Humo Lila", colors:["#f0ecf8","#6d28d9","#1c1c2e","#e4dcf4"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#f0ecf8,#e4dcf4)", overlay:"linear-gradient(to top,rgba(240,236,248,0.93),rgba(240,236,248,0.5) 60%,transparent)", tag_bg:"#6d28d9",tag_text:"#fff", title:"#1c1c2e", inner_bg:"#f0ecf8", inner_text:"#1c1c2e", inner_accent:"#6d28d9" },
+  { name:"Blanco Índigo", colors:["#f8f8ff","#4338ca","#0f0f0f","#e8e8ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#f8f8ff,#e8e8ff)", overlay:"linear-gradient(to top,rgba(248,248,255,0.92),rgba(248,248,255,0.5) 60%,transparent)", tag_bg:"#4338ca",tag_text:"#fff", title:"#0f0f0f", inner_bg:"#f8f8ff", inner_text:"#0f0f0f", inner_accent:"#4338ca" },
+  { name:"Lila y Dorado", colors:["#faf5ff","#d4af37","#2d1b69","#f3e8ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#faf5ff,#f3e8ff)", overlay:"linear-gradient(to top,rgba(250,245,255,0.92),rgba(250,245,255,0.5) 60%,transparent)", tag_bg:"#d4af37",tag_text:"#1a1a1a", title:"#2d1b69", inner_bg:"#faf5ff", inner_text:"#2d1b69", inner_accent:"#d4af37" },
+  { name:"Rosa Lila", colors:["#fff0f8","#9b5de5","#1a1a1a","#ffe0f5"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#fff0f8,#ffe0f5)", overlay:"linear-gradient(to top,rgba(255,240,248,0.92),rgba(255,240,248,0.5) 60%,transparent)", tag_bg:"#9b5de5",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#fff0f8", inner_text:"#1a1a1a", inner_accent:"#9b5de5" },
+  { name:"Blanco Puro Lila", colors:["#ffffff","#c77dff","#111","#f9f0ff"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#ffffff,#f9f0ff)", overlay:"linear-gradient(to top,rgba(255,255,255,0.93),rgba(255,255,255,0.5) 60%,transparent)", tag_bg:"#c77dff",tag_text:"#000", title:"#111", inner_bg:"#ffffff", inner_text:"#111", inner_accent:"#c77dff" },
+  { name:"Lila Profundo Claro", colors:["#ede8f5","#3b0764","#1a1a1a","#ddd0f0"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#ede8f5,#ddd0f0)", overlay:"linear-gradient(to top,rgba(237,232,245,0.93),rgba(237,232,245,0.5) 60%,transparent)", tag_bg:"#3b0764",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#ede8f5", inner_text:"#1a1a1a", inner_accent:"#3b0764" },
+  { name:"Plata y Violeta", colors:["#f5f5f8","#7c3aed","#1a1a1a","#ebebf5"], labels:["Fondo","Acento","Texto","Secundario"], bg:"linear-gradient(135deg,#f5f5f8,#ebebf5)", overlay:"linear-gradient(to top,rgba(245,245,248,0.93),rgba(245,245,248,0.5) 60%,transparent)", tag_bg:"#7c3aed",tag_text:"#fff", title:"#1a1a1a", inner_bg:"#f5f5f8", inner_text:"#1a1a1a", inner_accent:"#7c3aed" }
+];
+
+function buildPreview(p) {
+  return `
+    <div class="preview-grid">
+      <div class="slide-wrap">
+        <div class="slide-label">Slide 1 — Portada</div>
+        <div class="slide">
+          <div class="slide-bg" style="background:${p.bg}"></div>
+          <div class="slide-overlay" style="background:${p.overlay}"></div>
+          <div class="slide-content">
+            <span class="slide-tag" style="background:${p.tag_bg};color:${p.tag_text}">RIESGO EXISTENCIAL</span>
+            <div class="slide-title" style="color:${p.title}">¿Puede la IA acabar con la humanidad?</div>
+            <div class="slide-subtitle" style="color:${p.title}">Lo que los expertos más serios del mundo están discutiendo</div>
+            <div class="slide-marca" style="color:${p.title}">@riesgoia</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-wrap">
+        <div class="slide-label">Slide 2 — Contenido</div>
+        <div class="slide-inner">
+          <div class="slide-inner-bg" style="background:${p.inner_bg}"></div>
+          <div class="slide-inner-content">
+            <div class="inner-divider" style="background:${p.inner_accent}"></div>
+            <div class="inner-heading" style="color:${p.inner_text}">El problema del alineamiento es más difícil de lo que parece</div>
+            <div class="inner-body" style="color:${p.inner_text}">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado — y que podrían ser irreversibles.</div>
+            <div class="inner-marca" style="color:${p.inner_text}">@riesgoia — 02/07</div>
+          </div>
+          <div class="inner-num" style="color:${p.inner_text}">02</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderPalettes() {
+  const list = document.getElementById('palette-list');
+  palettes.forEach((p, i) => {
+    const item = document.createElement('div');
+    item.className = 'palette-item';
+
+    const row = document.createElement('div');
+    row.className = 'palette-row';
+    row.innerHTML = `
+      <div class="palette-num">${(i+1).toString().padStart(2,'0')}</div>
+      <div class="palette-name">${p.name}</div>
+      <div class="swatches">${p.colors.map((c,ci)=>`
+        <div class="swatch-wrap">
+          <div class="swatch" style="background:${c}"></div>
+          <div class="swatch-label">${p.labels[ci]}</div>
+        </div>`).join('')}
+      </div>
+      <div class="chevron">▼</div>`;
+
+    const preview = document.createElement('div');
+    preview.className = 'palette-preview';
+    preview.innerHTML = buildPreview(p);
+
+    row.addEventListener('click', () => {
+      const isOpen = preview.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.palette-preview.open').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.palette-row.active').forEach(el => el.classList.remove('active'));
+      if (!isOpen) {
+        preview.classList.add('open');
+        row.classList.add('active');
+      }
+    });
+
+    item.appendChild(row);
+    item.appendChild(preview);
+    list.appendChild(item);
+  });
+}
+
+renderPalettes();
+</script>
+</body>
+</html>

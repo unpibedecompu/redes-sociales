@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tipografías — Riesgo IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&family=Bebas+Neue&family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400;600&family=Fraunces:wght@700;900&family=Space+Mono:wght@400;700&family=Unbounded:wght@700;900&family=Outfit:wght@300;400;600;700&family=Josefin+Sans:wght@600;700&family=Montserrat:wght@300;400&family=Raleway:wght@700;800&family=Lato:wght@300;400&family=Libre+Baskerville:wght@700&family=Source+Sans+3:wght@300;400&family=Epilogue:wght@700;800&family=Plus+Jakarta+Sans:wght@600;700&family=Manrope:wght@400;600;700;800&family=Archivo+Black&family=Archivo:wght@300;400&family=Crimson+Pro:wght@600;700&family=Inter:wght@300;400;500&family=Big+Shoulders+Display:wght@700;900&family=Kanit:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #111; color: #eee; padding: 40px 20px; }
+  h1 { text-align: center; font-size: 1.2rem; letter-spacing: 0.15em; text-transform: uppercase; color: #aaa; margin-bottom: 8px; }
+  p.sub { text-align: center; font-size: 0.8rem; color: #555; margin-bottom: 40px; }
+
+  .typo-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 4px; }
+  .typo-item { display: flex; flex-direction: column; }
+
+  .typo-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 18px; border-radius: 8px; cursor: pointer;
+    border: 1px solid #222; background: #1a1a1a;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .typo-row:hover { border-color: #444; background: #202020; }
+  .typo-row.active { border-color: #9b5de5; background: #1e1828; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+  .typo-num { font-size: 0.7rem; color: #444; width: 20px; flex-shrink: 0; text-align: right; }
+
+  .typo-names { display: flex; flex-direction: column; gap: 2px; width: 220px; flex-shrink: 0; }
+  .typo-principal { font-size: 0.85rem; color: #ddd; }
+  .typo-secondary { font-size: 0.72rem; color: #666; }
+
+  .typo-sample { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .sample-title { font-size: 1.1rem; color: #eee; line-height: 1.2; }
+  .sample-body { font-size: 0.72rem; color: #888; line-height: 1.5; }
+
+  .chevron { font-size: 0.7rem; color: #444; margin-left: auto; flex-shrink: 0; transition: transform 0.2s; }
+  .typo-row.active .chevron { transform: rotate(180deg); color: #9b5de5; }
+
+  /* Expandable preview */
+  .typo-preview {
+    display: none;
+    background: #161616;
+    border: 1px solid #9b5de5;
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 20px;
+  }
+  .typo-preview.open { display: block; }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .slide-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .slide-label { font-size: 0.65rem; color: #555; text-align: center; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Inter', sans-serif; }
+
+  /* Cover slide */
+  .slide {
+    width: 100%; aspect-ratio: 1 / 1;
+    border-radius: 6px; overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    background: linear-gradient(135deg, #f0e8ff, #e4d4ff);
+  }
+  .slide-content {
+    position: relative; z-index: 2;
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .slide-tag {
+    font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 2px;
+    display: inline-block; width: fit-content;
+    background: #9b5de5; color: #fff;
+  }
+  .slide-title { font-size: 1.15rem; font-weight: 700; line-height: 1.2; color: #1a1a1a; }
+  .slide-subtitle { font-size: 0.62rem; color: #1a1a1a; opacity: 0.6; margin-top: 2px; line-height: 1.5; }
+  .slide-marca { font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: #9b5de5; opacity: 0.8; margin-top: 10px; }
+
+  /* Decorative top bar */
+  .slide-topbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: #9b5de5;
+  }
+
+  /* Inner slide */
+  .slide-inner {
+    width: 100%; aspect-ratio: 1 / 1;
+    border-radius: 6px; overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 26px 22px;
+    background: #f0e8ff;
+  }
+  .slide-inner-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; gap: 12px;
+    width: 100%;
+  }
+  .inner-divider { width: 28px; height: 2px; border-radius: 1px; background: #9b5de5; }
+  .inner-heading { font-size: 0.95rem; font-weight: 700; line-height: 1.3; color: #1a1a1a; }
+  .inner-body { font-size: 0.65rem; line-height: 1.75; color: #1a1a1a; opacity: 0.75; }
+  .inner-num {
+    font-size: 2.5rem; font-weight: 900; color: #9b5de5; opacity: 0.1;
+    position: absolute; bottom: 14px; right: 18px; line-height: 1;
+  }
+  .inner-marca { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: #9b5de5; opacity: 0.5; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<h1>Combinaciones Tipográficas</h1>
+<p class="sub">Hacé clic para expandir el preview · Paleta: Lavanda + Lila Suave</p>
+
+<div class="typo-list" id="typo-list"></div>
+
+<script>
+const combos = [
+  { principal:"Playfair Display", secondary:"Inter", pFont:"'Playfair Display', serif", sFont:"'Inter', sans-serif", pWeight:"700", desc:"Serif editorial + sans neutro" },
+  { principal:"Syne", secondary:"Inter", pFont:"'Syne', sans-serif", sFont:"'Inter', sans-serif", pWeight:"800", desc:"Geométrico expresivo + neutro" },
+  { principal:"Fraunces", secondary:"Inter", pFont:"'Fraunces', serif", sFont:"'Inter', sans-serif", pWeight:"900", desc:"Serif óptico + sans funcional" },
+  { principal:"Cormorant Garamond", secondary:"Jost", pFont:"'Cormorant Garamond', serif", sFont:"'Jost', sans-serif", pWeight:"700", desc:"Clásico elegante + moderno ligero" },
+  { principal:"Space Grotesk", secondary:"DM Sans", pFont:"'Space Grotesk', sans-serif", sFont:"'DM Sans', sans-serif", pWeight:"700", desc:"Tech contemporáneo + limpio" },
+  { principal:"Unbounded", secondary:"Inter", pFont:"'Unbounded', sans-serif", sFont:"'Inter', sans-serif", pWeight:"700", desc:"Fuerte y compacto + neutro" },
+  { principal:"Bebas Neue", secondary:"Inter", pFont:"'Bebas Neue', sans-serif", sFont:"'Inter', sans-serif", pWeight:"400", desc:"Display condensado + sans legible" },
+  { principal:"DM Serif Display", secondary:"DM Sans", pFont:"'DM Serif Display', serif", sFont:"'DM Sans', sans-serif", pWeight:"400", desc:"Familia DM · contraste serif/sans" },
+  { principal:"Epilogue", secondary:"Inter", pFont:"'Epilogue', sans-serif", sFont:"'Inter', sans-serif", pWeight:"800", desc:"Contemporáneo variable + neutro" },
+  { principal:"Space Mono", secondary:"Inter", pFont:"'Space Mono', monospace", sFont:"'Inter', sans-serif", pWeight:"700", desc:"Monoespaciado tech + sans cuerpo" },
+  { principal:"Big Shoulders Display", secondary:"Inter", pFont:"'Big Shoulders Display', sans-serif", sFont:"'Inter', sans-serif", pWeight:"900", desc:"Ultra condensado impactante + neutro" },
+  { principal:"Raleway", secondary:"Lato", pFont:"'Raleway', sans-serif", sFont:"'Lato', sans-serif", pWeight:"800", desc:"Elegante geométrico + humanista" },
+  { principal:"Josefin Sans", secondary:"Montserrat", pFont:"'Josefin Sans', sans-serif", sFont:"'Montserrat', sans-serif", pWeight:"700", desc:"Geométrico art déco + moderno" },
+  { principal:"Libre Baskerville", secondary:"Source Sans 3", pFont:"'Libre Baskerville', serif", sFont:"'Source Sans 3', sans-serif", pWeight:"700", desc:"Serif académico + legible digital" },
+  { principal:"Plus Jakarta Sans", secondary:"Inter", pFont:"'Plus Jakarta Sans', sans-serif", sFont:"'Inter', sans-serif", pWeight:"700", desc:"Moderno humanista + neutro" },
+  { principal:"Manrope", secondary:"Manrope", pFont:"'Manrope', sans-serif", sFont:"'Manrope', sans-serif", pWeight:"800", desc:"Una sola familia · variación de peso" },
+  { principal:"Archivo Black", secondary:"Archivo", pFont:"'Archivo Black', sans-serif", sFont:"'Archivo', sans-serif", pWeight:"400", desc:"Familia Archivo · negro/regular" },
+  { principal:"Crimson Pro", secondary:"Inter", pFont:"'Crimson Pro', serif", sFont:"'Inter', sans-serif", pWeight:"700", desc:"Serif literario + sans funcional" },
+  { principal:"Kanit", secondary:"Inter", pFont:"'Kanit', sans-serif", sFont:"'Inter', sans-serif", pWeight:"700", desc:"Tailandés geométrico + neutro" },
+  { principal:"Outfit", secondary:"Outfit", pFont:"'Outfit', sans-serif", sFont:"'Outfit', sans-serif", pWeight:"700", desc:"Una sola familia · minimalista puro" },
+];
+
+function buildPreview(c) {
+  return `
+    <div class="preview-grid">
+      <div class="slide-wrap">
+        <div class="slide-label">Slide 1 — Portada</div>
+        <div class="slide">
+          <div class="slide-topbar"></div>
+          <div class="slide-content">
+            <span class="slide-tag" style="font-family:${c.sFont};letter-spacing:0.15em">RIESGO EXISTENCIAL</span>
+            <div class="slide-title" style="font-family:${c.pFont};font-weight:${c.pWeight}">¿Puede la IA acabar con la humanidad?</div>
+            <div class="slide-subtitle" style="font-family:${c.sFont}">Lo que los expertos más serios del mundo están discutiendo</div>
+            <div class="slide-marca" style="font-family:${c.sFont}">@riesgoia</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-wrap">
+        <div class="slide-label">Slide 2 — Contenido</div>
+        <div class="slide-inner">
+          <div class="slide-inner-content">
+            <div class="inner-divider"></div>
+            <div class="inner-heading" style="font-family:${c.pFont};font-weight:${c.pWeight}">El problema del alineamiento es más difícil de lo que parece</div>
+            <div class="inner-body" style="font-family:${c.sFont}">No se trata de robots con ojos rojos. Se trata de sistemas que optimizan objetivos que no elegimos con cuidado — y que podrían ser irreversibles.</div>
+            <div class="inner-marca" style="font-family:${c.sFont}">@riesgoia — 02/07</div>
+          </div>
+          <div class="inner-num" style="font-family:${c.pFont}">02</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const list = document.getElementById('typo-list');
+  combos.forEach((c, i) => {
+    const item = document.createElement('div');
+    item.className = 'typo-item';
+
+    const row = document.createElement('div');
+    row.className = 'typo-row';
+    row.innerHTML = `
+      <div class="typo-num">${(i+1).toString().padStart(2,'0')}</div>
+      <div class="typo-names">
+        <div class="typo-principal" style="font-family:${c.pFont};font-weight:${c.pWeight}">${c.principal}</div>
+        <div class="typo-secondary" style="font-family:${c.sFont}">${c.secondary} · ${c.desc}</div>
+      </div>
+      <div class="typo-sample">
+        <div class="sample-title" style="font-family:${c.pFont};font-weight:${c.pWeight}">La IA y el fin del mundo</div>
+        <div class="sample-body" style="font-family:${c.sFont}">Una mirada rigurosa al riesgo existencial de la inteligencia artificial.</div>
+      </div>
+      <div class="chevron">▼</div>`;
+
+    const preview = document.createElement('div');
+    preview.className = 'typo-preview';
+    preview.innerHTML = buildPreview(c);
+
+    row.addEventListener('click', () => {
+      const isOpen = preview.classList.contains('open');
+      document.querySelectorAll('.typo-preview.open').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.typo-row.active').forEach(el => el.classList.remove('active'));
+      if (!isOpen) {
+        preview.classList.add('open');
+        row.classList.add('active');
+      }
+    });
+
+    item.appendChild(row);
+    item.appendChild(preview);
+    list.appendChild(item);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
