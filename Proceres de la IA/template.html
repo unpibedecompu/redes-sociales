@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template — Próceres de la IA · Marco Interior</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #111;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 28px;
+}
+
+header {
+  width: min(540px, 90vw);
+}
+.pilar-label {
+  font-size: 0.7rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #9b5de5;
+  margin-bottom: 8px;
+}
+header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #eee;
+  margin-bottom: 5px;
+}
+header p {
+  font-size: 0.78rem;
+  color: #555;
+}
+
+/* ── Carousel ── */
+.ig-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: min(540px, 90vw);
+}
+
+.ig-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.ig-frame {
+  flex: 1;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 14px;
+  position: relative;
+}
+
+.ig-track {
+  display: flex;
+  width: 500%;
+  height: 100%;
+  transition: transform 0.38s cubic-bezier(.4, 0, .2, 1);
+}
+
+.ig-item {
+  flex: 0 0 20%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* The slide is rendered at 200×200 (matching elementos.html thumbnail size)
+   and scaled up to fill the frame via transform. */
+.sl-scale {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  /* transform: scale(X) applied by JS */
+}
+
+.sl {
+  width: 200px;
+  height: 200px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* ── Arrows ── */
+.arrow {
+  background: none;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: border-color .2s, color .2s;
+  user-select: none;
+}
+.arrow:hover:not(:disabled) { border-color: #9b5de5; color: #9b5de5; }
+.arrow:disabled { opacity: 0.2; cursor: default; }
+
+/* ── Dots ── */
+.ig-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2e2e2e;
+  cursor: pointer;
+  transition: background .22s, transform .22s;
+}
+.dot.active {
+  background: #9b5de5;
+  transform: scale(1.25);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pilar-label">Pilar 2 · Profesionales de la IA</div>
+  <h2>Próceres de la IA — Marco Interior</h2>
+  <p>Template de referencia · Paleta Lavanda + Lila Suave · Outfit · 5 slides</p>
+</header>
+
+<div class="ig-wrap">
+  <div class="ig-row">
+    <button class="arrow" id="prev" disabled>&#8592;</button>
+    <div class="ig-frame" id="frame">
+      <div class="ig-track" id="track"></div>
+    </div>
+    <button class="arrow" id="next">&#8594;</button>
+  </div>
+  <div class="ig-dots" id="dots"></div>
+</div>
+
+<script>
+const C = { bg1:'#f0e8ff', bg2:'#e4d4ff', acc:'#9b5de5', txt:'#1a1a1a', wht:'#ffffff' };
+
+const slides = [
+  `<div class="sl" style="background:${C.acc};padding:10px">
+    <div style="border:1.5px solid rgba(255,255,255,.4);height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;gap:8px">
+      <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Pilar 2 · Profesionales de la IA</div>
+      <div style="font-size:1.1rem;font-weight:900;color:${C.wht};line-height:1.1">Geoffrey Hinton</div>
+      <div style="font-size:0.62rem;color:rgba(255,255,255,.8);line-height:1.4">El "Padrino de la IA" que renunció a Google para hablar libremente sobre sus miedos</div>
+      <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap">
+        <span style="font-size:0.48rem;padding:2px 8px;border:1px solid rgba(255,255,255,.4);border-radius:20px;color:rgba(255,255,255,.8)">Premio Turing 2018</span>
+        <span style="font-size:0.48rem;padding:2px 8px;border:1px solid rgba(255,255,255,.4);border-radius:20px;color:rgba(255,255,255,.8)">Ex-Google</span>
+      </div>
+    </div>
+  </div>`,
+
+  `<div class="sl" style="background:${C.bg1};padding:10px">
+    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">trayectoria</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">1986</div>
+          <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">Publicó backpropagation — base de todo el deep learning moderno</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">2012</div>
+          <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">AlexNet gana ImageNet — inicio de la era del deep learning</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">2023</div>
+          <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">Renuncia a Google. "Me arrepiento de mi trabajo."</div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  `<div class="sl" style="background:${C.bg2};padding:10px">
+    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+      <div style="font-size:1.8rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:0.72rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">Es difícil ver cómo evitás que los malos actores la usen para malos propósitos. La amenaza existencial es real.</div>
+      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.5rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Geoffrey Hinton · 2023</div>
+    </div>
+  </div>`,
+
+  `<div class="sl" style="background:${C.bg1};padding:10px">
+    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
+      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">por qué importa</div>
+      <div style="font-size:0.78rem;font-weight:700;color:${C.txt};line-height:1.3">No es un activista. Es la persona que construyó esto.</div>
+      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">Cuando el científico que inventó el deep learning dice que le preocupa el riesgo existencial, la pregunta no es si creerle — es por qué no lo escuchamos más.</div>
+    </div>
+  </div>`,
+
+  `<div class="sl" style="background:${C.bg1};padding:10px">
+    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:8px">
+      <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">próximo perfil</div>
+      <div style="font-size:0.9rem;font-weight:700;color:${C.txt};text-align:center;line-height:1.3">¿Quién es el próximo?</div>
+      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
+      <div style="font-size:0.58rem;color:${C.txt};opacity:.65;text-align:center;line-height:1.5;max-width:130px">Seguinos para conocer a las personas detrás del debate más importante del siglo</div>
+      <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:4px">@riesgoia</div>
+    </div>
+  </div>`
+];
+
+const frame   = document.getElementById('frame');
+const track   = document.getElementById('track');
+const dotsEl  = document.getElementById('dots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+let current = 0;
+const total = slides.length;
+
+// Build slides
+slides.forEach(html => {
+  const item = document.createElement('div');
+  item.className = 'ig-item';
+  const scaler = document.createElement('div');
+  scaler.className = 'sl-scale';
+  scaler.innerHTML = html;
+  item.appendChild(scaler);
+  track.appendChild(item);
+});
+
+// Build dots
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+}
+
+// Scale each slide to exactly fill the frame
+function applyScale() {
+  const fw = frame.offsetWidth;
+  const scale = fw / 200;
+  document.querySelectorAll('.sl-scale').forEach(el => {
+    el.style.transform = `scale(${scale})`;
+  });
+}
+
+function goTo(index) {
+  current = Math.max(0, Math.min(index, total - 1));
+  track.style.transform = `translateX(-${current * 20}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === total - 1;
+}
+
+prevBtn.addEventListener('click', () => goTo(current - 1));
+nextBtn.addEventListener('click', () => goTo(current + 1));
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  goTo(current - 1);
+  if (e.key === 'ArrowRight') goTo(current + 1);
+});
+
+// Init
+applyScale();
+window.addEventListener('resize', applyScale);
+goTo(0);
+</script>
+</body>
+</html>
