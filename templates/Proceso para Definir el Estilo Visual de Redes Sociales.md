@@ -110,7 +110,7 @@ Compatibilidad entre sí (sans-serif \+ serif suele funcionar bien)
 | Títulos / H1 | Bold 700 | Título principal del carrusel |
 | Subtítulos / H2 | SemiBold 600 | Encabezados de slides de contenido |
 | Cuerpo | Regular 400 | Texto explicativo en slides |
-| Caption / marca | Light 300 | @riesgoia, numeración, tags |
+| Caption / marca | Light 300 | @unpibedecompu, numeración, tags |
 
 **Fuente:** Google Fonts — `Outfit` · Una sola familia, variación por peso · Minimalista y contemporánea
 

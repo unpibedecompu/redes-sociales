@@ -33,14 +33,14 @@ Investigar y documentar al profesional con las siguientes secciones:
 
 Cada sección debe incluir sus fuentes al final como links de Markdown.
 
-### 2. Crear `approaches.md`
+### 2. Producir los archivos de estructura del carrusel
 
-Redactar 5 enfoques distintos para el carrusel, cada uno con:
+A partir de `source.md`, generar los siguientes archivos en orden:
 
-- Nombre y concepto central
-- Lógica narrativa y por qué funciona para los objetivos del pilar
-- Estructura de slides (qué va en cada uno)
-- Tono dominante
-- Perfil de audiencia al que apunta
+**2.1 `estructure_original.md`** — Estructura base siguiendo la lógica narrativa definida en `template_description.md`. Sin adaptación de lenguaje.
 
-Incluir al final una tabla comparativa con motor narrativo, emoción dominante y perfil de audiencia.
+**2.2 `estructure_detailed.md`** — Descripción línea por línea de cada elemento de texto en cada slide: qué rol cumple, qué jerarquía tiene y por qué funciona ese copy. Sin specs visuales.
+
+**2.3 `estructure_one_sentence.md`** — Una sola oración por slide, derivada de `estructure_detailed.md`. Sin lenguaje técnico. Para público general.
+
+**2.4 `carrousel_description.md`** — Especificación completa de diseño y texto por slide, derivada de `estructure_one_sentence.md`. Incluye fondo, marco, layout y tabla con cada elemento de texto junto a sus specs tipográficas exactas. Tomar como referencia `template_description.md` y `template.html`.
