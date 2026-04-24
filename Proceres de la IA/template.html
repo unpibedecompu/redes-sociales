@@ -81,8 +81,7 @@ header p {
   position: relative;
 }
 
-/* The slide is rendered at 200×200 (matching elementos.html thumbnail size)
-   and scaled up to fill the frame via transform. */
+/* Slides are rendered at 1080×1080 (Instagram native) and scaled to fill the frame via transform. */
 .sl-scale {
   position: absolute;
   top: 0;
@@ -92,9 +91,9 @@ header p {
 }
 
 .sl {
-  width: 200px;
-  height: 200px;
-  border-radius: 6px;
+  width: 1080px;
+  height: 1080px;
+  border-radius: 32px;
   overflow: hidden;
   position: relative;
   font-family: 'Outfit', sans-serif;
@@ -145,7 +144,7 @@ header p {
 <header>
   <div class="pilar-label">Pilar 2 · Profesionales de la IA</div>
   <h2>Próceres de la IA — Marco Interior</h2>
-  <p>Template de referencia · Paleta Lavanda + Lila Suave · Outfit · 5 slides</p>
+  <p>Template de referencia · Paleta Lavanda + Lila Suave · Outfit · 5 slides · 1080×1080 px</p>
 </header>
 
 <div class="ig-wrap">
@@ -163,63 +162,63 @@ header p {
 const C = { bg1:'#f0e8ff', bg2:'#e4d4ff', acc:'#9b5de5', txt:'#1a1a1a', wht:'#ffffff' };
 
 const slides = [
-  `<div class="sl" style="background:${C.acc};padding:10px">
-    <div style="border:1.5px solid rgba(255,255,255,.4);height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;gap:8px">
-      <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Profesionales de la IA</div>
-      <div style="font-size:1.1rem;font-weight:900;color:${C.wht};line-height:1.1">Geoffrey Hinton</div>
-      <div style="font-size:0.62rem;color:rgba(255,255,255,.8);line-height:1.4">El "Padrino de la IA" que renunció a Google para hablar libremente sobre sus miedos</div>
-      <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap">
-        <span style="font-size:0.48rem;padding:2px 8px;border:1px solid rgba(255,255,255,.4);border-radius:20px;color:rgba(255,255,255,.8)">Premio Turing 2018</span>
-        <span style="font-size:0.48rem;padding:2px 8px;border:1px solid rgba(255,255,255,.4);border-radius:20px;color:rgba(255,255,255,.8)">Ex-Google</span>
+  `<div class="sl" style="background:${C.acc};padding:54px">
+    <div style="border:8px solid rgba(255,255,255,.4);height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:flex-end;padding:86px;gap:43px">
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Profesionales de la IA</div>
+      <div style="font-size:5.94rem;font-weight:900;color:${C.wht};line-height:1.1">Geoffrey Hinton</div>
+      <div style="font-size:3.35rem;color:rgba(255,255,255,.8);line-height:1.4">El "Padrino de la IA" que renunció a Google para hablar libremente sobre sus miedos</div>
+      <div style="display:flex;gap:32px;margin-top:22px;flex-wrap:wrap">
+        <span style="font-size:2.6rem;padding:11px 43px;border:5px solid rgba(255,255,255,.4);border-radius:108px;color:rgba(255,255,255,.8)">Premio Turing 2018</span>
+        <span style="font-size:2.6rem;padding:11px 43px;border:5px solid rgba(255,255,255,.4);border-radius:108px;color:rgba(255,255,255,.8)">Ex-Google</span>
       </div>
     </div>
   </div>`,
 
-  `<div class="sl" style="background:${C.bg1};padding:10px">
-    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
-      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">trayectoria</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;gap:8px;align-items:flex-start">
-          <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">1986</div>
-          <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">Publicó backpropagation — base de todo el deep learning moderno</div>
+  `<div class="sl" style="background:${C.bg1};padding:54px">
+    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">trayectoria</div>
+      <div style="display:flex;flex-direction:column;gap:43px">
+        <div style="display:flex;gap:43px;align-items:flex-start">
+          <div style="font-size:2.8rem;font-weight:700;color:${C.acc};width:173px;flex-shrink:0">1986</div>
+          <div style="font-size:3.0rem;color:${C.txt};line-height:1.5">Publicó backpropagation — base de todo el deep learning moderno</div>
         </div>
-        <div style="display:flex;gap:8px;align-items:flex-start">
-          <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">2012</div>
-          <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">AlexNet gana ImageNet — inicio de la era del deep learning</div>
+        <div style="display:flex;gap:43px;align-items:flex-start">
+          <div style="font-size:2.8rem;font-weight:700;color:${C.acc};width:173px;flex-shrink:0">2012</div>
+          <div style="font-size:3.0rem;color:${C.txt};line-height:1.5">AlexNet gana ImageNet — inicio de la era del deep learning</div>
         </div>
-        <div style="display:flex;gap:8px;align-items:flex-start">
-          <div style="font-size:0.52rem;font-weight:700;color:${C.acc};width:32px;flex-shrink:0">2023</div>
-          <div style="font-size:0.56rem;color:${C.txt};line-height:1.5">Renuncia a Google. "Me arrepiento de mi trabajo."</div>
+        <div style="display:flex;gap:43px;align-items:flex-start">
+          <div style="font-size:2.8rem;font-weight:700;color:${C.acc};width:173px;flex-shrink:0">2023</div>
+          <div style="font-size:3.0rem;color:${C.txt};line-height:1.5">Renuncia a Google. "Me arrepiento de mi trabajo."</div>
         </div>
       </div>
     </div>
   </div>`,
 
-  `<div class="sl" style="background:${C.bg2};padding:10px">
-    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
-      <div style="font-size:1.8rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
-      <div style="font-size:0.72rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">Es difícil ver cómo evitás que los malos actores la usen para malos propósitos. La amenaza existencial es real.</div>
-      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
-      <div style="font-size:0.5rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Geoffrey Hinton · 2023</div>
+  `<div class="sl" style="background:${C.bg2};padding:54px">
+    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px">
+      <div style="font-size:9.7rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:3.9rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">Es difícil ver cómo evitás que los malos actores la usen para malos propósitos. La amenaza existencial es real.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:2.7rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Geoffrey Hinton · 2023</div>
     </div>
   </div>`,
 
-  `<div class="sl" style="background:${C.bg1};padding:10px">
-    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;padding:16px;gap:10px">
-      <div style="font-size:0.48rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">por qué importa</div>
-      <div style="font-size:0.78rem;font-weight:700;color:${C.txt};line-height:1.3">No es un activista. Es la persona que construyó esto.</div>
-      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
-      <div style="font-size:0.6rem;color:${C.txt};opacity:.75;line-height:1.7">Cuando el científico que inventó el deep learning dice que le preocupa el riesgo existencial, la pregunta no es si creerle — es por qué no lo escuchamos más.</div>
+  `<div class="sl" style="background:${C.bg1};padding:54px">
+    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">por qué importa</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.3">No es un activista. Es la persona que construyó esto.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.24rem;color:${C.txt};opacity:.75;line-height:1.7">Cuando el científico que inventó el deep learning dice que le preocupa el riesgo existencial, la pregunta no es si creerle — es por qué no lo escuchamos más.</div>
     </div>
   </div>`,
 
-  `<div class="sl" style="background:${C.bg1};padding:10px">
-    <div style="border:1.5px solid ${C.acc};height:100%;border-radius:4px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px;gap:8px">
-      <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">próximo perfil</div>
-      <div style="font-size:0.9rem;font-weight:700;color:${C.txt};text-align:center;line-height:1.3">¿Quién es el próximo?</div>
-      <div style="width:24px;height:1.5px;background:${C.acc}"></div>
-      <div style="font-size:0.58rem;color:${C.txt};opacity:.65;text-align:center;line-height:1.5;max-width:130px">Seguinos para conocer a las personas detrás del debate más importante del siglo</div>
-      <div style="font-size:0.48rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:4px">@unpibedecompu</div>
+  `<div class="sl" style="background:${C.bg1};padding:54px">
+    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:86px;gap:43px">
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">próximo perfil</div>
+      <div style="font-size:4.86rem;font-weight:700;color:${C.txt};text-align:center;line-height:1.3">¿Quién es el próximo?</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.65;text-align:center;line-height:1.5;max-width:702px">Seguinos para conocer a las personas detrás del debate más importante del siglo</div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};margin-top:22px">@unpibedecompu</div>
     </div>
   </div>`
 ];
@@ -252,10 +251,9 @@ for (let i = 0; i < total; i++) {
   dotsEl.appendChild(d);
 }
 
-// Scale each slide to exactly fill the frame
 function applyScale() {
   const fw = frame.offsetWidth;
-  const scale = fw / 200;
+  const scale = fw / 1080;
   document.querySelectorAll('.sl-scale').forEach(el => {
     el.style.transform = `scale(${scale})`;
   });
@@ -272,13 +270,11 @@ function goTo(index) {
 prevBtn.addEventListener('click', () => goTo(current - 1));
 nextBtn.addEventListener('click', () => goTo(current + 1));
 
-// Keyboard navigation
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft')  goTo(current - 1);
   if (e.key === 'ArrowRight') goTo(current + 1);
 });
 
-// Init
 applyScale();
 window.addEventListener('resize', applyScale);
 goTo(0);

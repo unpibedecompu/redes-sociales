@@ -33,14 +33,24 @@ Investigar y documentar al profesional con las siguientes secciones:
 
 Cada sección debe incluir sus fuentes al final como links de Markdown.
 
-### 2. Producir los archivos de estructura del carrusel
+### 2. Crear `estructure_original.md`
 
-A partir de `source.md`, generar los siguientes archivos en orden:
+Crear `estructure_original.md`, usando la información de source y la estructura base siguiendo la lógica narrativa definida en `narrative_logic.md`.
 
-**2.1 `estructure_original.md`** — Estructura base siguiendo la lógica narrativa definida en `template_description.md`. Sin adaptación de lenguaje.
+### 3. Crear `estructure_one_sentence.md`
 
-**2.2 `estructure_detailed.md`** — Descripción línea por línea de cada elemento de texto en cada slide: qué rol cumple, qué jerarquía tiene y por qué funciona ese copy. Sin specs visuales.
+Crear `estructure_one_sentece.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje tecnico, para el publico general. Consulta que par de slide de los puntos (4.,5.) de `narrative_logic.md` utilizar, y que eventos del punto 2. utilizar.
 
-**2.3 `estructure_one_sentence.md`** — Una sola oración por slide, derivada de `estructure_detailed.md`. Sin lenguaje técnico. Para público general.
+No utilizar palabras como neurona, red neuronal, backpropagation. Si se puede usar el acronimo IA.
 
-**2.4 `carrousel_description.md`** — Especificación completa de diseño y texto por slide, derivada de `estructure_one_sentence.md`. Incluye fondo, marco, layout y tabla con cada elemento de texto junto a sus specs tipográficas exactas. Tomar como referencia `template_description.md` y `template.html`.
+### 4. Crear `carrousel_description.md`
+
+Especificación completa de diseño y texto por slide, derivada de `estructure_one_sentence.md`. Incluye fondo, marco, layout y tabla con cada elemento de texto junto a sus specs tipográficas exactas. Tomar como referencia `template_description.md` y `template.html`.
+
+### 5. Crear `[Nombre_Apellido].html`
+
+Archivo HTML interactivo del carrusel, basado en `carrousel_description.md`. Nombrar el archivo con el nombre completo del prócer en formato `Nombre_Apellido.html` y ubicarlo en el directorio `Próceres de la IA/Nombre Apellido`.
+
+Tomar `template.html` como referencia.
+
+Ask me for aproval between each step

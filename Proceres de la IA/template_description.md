@@ -1,7 +1,7 @@
 # Template: Próceres de la IA — Marco Interior
 
 ## Estilo visual
-**Marco Interior** — un borde fino de color acento enmarca todo el contenido dentro de cada slide, con márgenes uniformes de 10px en todos los lados. El marco es el único elemento gráfico; no hay formas adicionales, texturas ni decoraciones.
+**Marco Interior** — un borde fino de color acento enmarca todo el contenido dentro de cada slide, con márgenes uniformes de 54px en todos los lados. El marco es el único elemento gráfico; no hay formas adicionales, texturas ni decoraciones.
 
 ## Paleta
 | Rol | HEX |
@@ -20,7 +20,7 @@
 - Cuerpo: `400`
 - Labels / tags: `300`, `letter-spacing: .15em`, `uppercase`
 
-## Estructura de los 6 slides
+## Estructura de los slides
 
 ### 01 · Portada
 - Fondo: violeta acento (`#9b5de5`)
@@ -30,41 +30,33 @@
 ### 02 · Trayectoria
 - Fondo: lavanda clara
 - Marco: violeta acento
-- Contenido: 3 hitos cronológicos con año destacado en violeta
+- Contenido: hitos cronológicos importantes con año destacado en violeta
 
 ### 03 · Contexto de la cita
 - Fondo: lavanda clara
 - Marco: violeta acento
-- Contenido: label + frase fuerte en bold + separador + argumento corto que establece por qué las palabras de esta persona tienen peso antes de leer la cita
+- Contenido: label + frase fuerte en bold
 
 ### 04 · Cita sobre riesgos de la IA
 - Fondo: lavanda profunda
 - Marco: violeta acento
 - Contenido: comillas decorativas (`opacity: .2`) + cita textual en cursiva + atribución
 
-### 05 · Por qué importa
+### 05 · Para pensar
 - Fondo: lavanda clara
 - Marco: violeta acento
-- Contenido: label + frase fuerte en bold + separador + argumento de 2-3 oraciones
+- Contenido: label + frase fuerte en bold + separador + pregunta
 
-### 06 · Cierre
+### 06 · Qué sigue
 - Fondo: lavanda clara
 - Marco: violeta acento
 - Contenido: "próximo perfil" + CTA + @unpibedecompu
 
 ## Reglas de composición
-- Padding del slide al marco: `10px` en todos los lados
-- Padding interior del marco al contenido: `16px`
-- Border del marco: `1.5px solid`
-- Border-radius del marco: `4px`
-- Separador entre secciones: línea de `24px × 1.5px` en acento
-- Labels de sección: `0.48rem`, `letter-spacing: .15em`, `uppercase`
-
-## Lógica narrativa
-Cada carrusel de Próceres sigue esta secuencia fija:
-1. **Quién es** — impacto visual inmediato con el nombre y una bajada que engancha. Una slide.
-2. **Qué hizo** — trayectoria cronológica que establece credibilidad. Una slide por evento.
-3. **el quiebre** — el contexto que lo lleva a decir la cita. Una slide.
-4. **Qué dijo** — cita directa sobre riesgos de la IA, sin intermediarios. Una slide.
-5. **Para pensar** - Pregunta abierta para la audiencia basada en la cita y autoridad de la persona. Una slide.
-6. **Qué sigue** — CTA para continuar la serie. Una slide.
+- Tamaño de slide: `1080×1080 px` (Instagram nativo)
+- Padding del slide al marco: `54px` en todos los lados
+- Padding interior del marco al contenido: `86px`
+- Border del marco: `8px solid`
+- Border-radius del marco: `22px`
+- Separador entre secciones: línea de `130px × 8px` en acento
+- Labels de sección: `2.6rem`, `letter-spacing: .15em`, `uppercase`
