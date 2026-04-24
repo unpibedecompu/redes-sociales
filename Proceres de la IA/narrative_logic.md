@@ -7,3 +7,6 @@ Cada carrusel de Próceres sigue esta secuencia fija:
 5. **Para pensar** - Pregunta abierta para la audiencia basada en la cita y autoridad de la persona. Una slide.
 - Escribir 5 opciones de pares de slide de 4. con la cita y 5. con una pregunta relacionada
 6. **Qué sigue** — CTA para continuar la serie. Una slide.
+
+- Los eventos de los puntos 2 y 3 se presentan en una timeline
+- Los eventos tienen el objetivo de darle autoridad a la cita e importancia a la pregunta correspondiente

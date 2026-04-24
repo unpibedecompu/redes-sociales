@@ -6,7 +6,8 @@
       "WebFetch(domain:commons.wikimedia.org)",
       "WebFetch(domain:www.semanticscholar.org)",
       "WebFetch(domain:en.wikipedia.org)",
-      "Bash(node \"Proceres de la IA/Geoffrey Hinton/render_slides.js\")"
+      "Bash(node \"Proceres de la IA/Geoffrey Hinton/render_slides.js\")",
+      "Bash(python blend_effect.py)"
     ]
   }
 }
