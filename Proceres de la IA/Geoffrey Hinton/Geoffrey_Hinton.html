@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
+<html lang="es"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Geoffrey Hinton — Próceres de la IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&amp;display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -185,6 +184,8 @@ header p {
   transition: border-color .2s, color .2s;
 }
 .coord-copy:hover { border-color: #9b5de5; color: #9b5de5; }
+.coord-download { border-color: #1e3a1e; color: #3a7a3a; }
+.coord-download:hover { border-color: #4caf50; color: #4caf50; }
 body.edit-mode .sl { cursor: grab !important; }
 body.edit-mode .sl * { cursor: grab !important; }
 body.edit-mode.dragging .sl,
@@ -196,23 +197,25 @@ body.edit-mode.dragging .sl * { cursor: grabbing !important; }
 <header>
   <div class="pilar-label">Pilar 2 · Profesionales de la IA</div>
   <h2>Geoffrey Hinton</h2>
-  <p>Próceres de la IA · 9 slides · 1080×1080 px</p>
+  <p>Próceres de la IA · 7 slides · 1080×1080 px</p>
 </header>
 
 <div class="ig-wrap">
   <div class="ig-row">
-    <button class="arrow" id="prev" disabled>&#8592;</button>
+    <button class="arrow" id="prev" disabled>←</button>
     <div class="ig-frame" id="frame">
       <div class="ig-track" id="track"></div>
     </div>
-    <button class="arrow" id="next">&#8594;</button>
+    <button class="arrow" id="next">→</button>
   </div>
   <div class="ig-dots" id="dots"></div>
   <div class="edit-bar">
     <button class="edit-toggle" id="editBtn">Edit background</button>
-    <div class="coord-panel" id="coordPanel">
-      <span class="coord-text" id="coordText">—</span>
+    <div class="coord-panel" id="coordPanel" style="display:none">
+      <span class="coord-text" id="coordText">top:-49px; left:-719px</span>
       <button class="coord-copy" id="copyBtn">Copy</button>
+      <button class="coord-copy" id="saveBtn">Saved ✓</button>
+      <button class="coord-copy coord-download" id="downloadBtn">↓ HTML</button>
     </div>
   </div>
 </div>
@@ -242,39 +245,41 @@ const slides = [
     </div>
   </div>`,
 
-  /* 02 · Trayectoria 1986 */
+  /* 02 · Trayectoria */
   `<div class="sl" style="background:${C.bg1};padding:54px">
-    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-700px;left:-1000px;opacity:0.2;mix-blend-mode:multiply;z-index:0">
-    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px;position:relative;z-index:1">
+    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-700px;left:-1000px;opacity:0.25;mix-blend-mode:multiply;filter:grayscale(1) blur(8px);z-index:0">
+    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:48px;position:relative;z-index:1">
       <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">Trayectoria</div>
-      <div style="font-size:2.8rem;font-weight:700;color:${C.acc}">1986</div>
-      <div style="font-size:3.0rem;color:${C.txt};line-height:1.5">En 1986, publicó el descubrimiento que hace posible que las máquinas aprendan. Sin él, no existiría ninguna IA actual.</div>
-    </div>
-  </div>`,
-
-  /* 03 · Trayectoria 2012 */
-  `<div class="sl" style="background:${C.bg1};padding:54px">
-    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-1400px;left:-760px;opacity:0.2;mix-blend-mode:multiply;z-index:0">
-    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px;position:relative;z-index:1">
-      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">Trayectoria</div>
-      <div style="font-size:2.8rem;font-weight:700;color:${C.acc}">2012</div>
-      <div style="font-size:3.0rem;color:${C.txt};line-height:1.5">En 2012, su equipo demostró que se podía crear programas que simulen "inteligencia", dando inicio a la revolución de la IA.</div>
-    </div>
-  </div>`,
-
-  /* 04 · Trayectoria 2018 */
-  `<div class="sl" style="background:${C.bg1};padding:54px">
-    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-600px;left:-760px;opacity:0.2;mix-blend-mode:multiply;z-index:0">
-    <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px;position:relative;z-index:1">
-      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">Trayectoria</div>
-      <div style="font-size:2.8rem;font-weight:700;color:${C.acc}">2018</div>
-      <div style="font-size:3.0rem;color:${C.txt};line-height:1.5">En 2018, recibió el premio Turing, que es como el "Nobel de la Computación".</div>
+      <div style="position:relative;display:flex;flex-direction:column">
+        <div style="position:absolute;left:17px;top:22px;bottom:22px;width:6px;background:${C.acc};border-radius:3px"></div>
+        <div style="display:flex;gap:48px;align-items:flex-start;padding-bottom:62px">
+          <div style="width:40px;height:40px;border-radius:50%;background:${C.acc};flex-shrink:0;margin-top:2px;position:relative;z-index:1"></div>
+          <div>
+            <div style="font-size:2.8rem;font-weight:700;color:${C.acc};line-height:1">1986</div>
+            <div style="font-size:2.6rem;color:${C.txt};line-height:1.45;margin-top:14px">Publicó el descubrimiento que hace posible que las máquinas aprendan. Sin él, no existiría ninguna IA actual.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:48px;align-items:flex-start;padding-bottom:62px">
+          <div style="width:40px;height:40px;border-radius:50%;background:${C.acc};flex-shrink:0;margin-top:2px;position:relative;z-index:1"></div>
+          <div>
+            <div style="font-size:2.8rem;font-weight:700;color:${C.acc};line-height:1">2012</div>
+            <div style="font-size:2.6rem;color:${C.txt};line-height:1.45;margin-top:14px">Su equipo demostró que las máquinas podían simular inteligencia, dando inicio a la revolución del deep learning.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:48px;align-items:flex-start">
+          <div style="width:40px;height:40px;border-radius:50%;background:${C.acc};flex-shrink:0;margin-top:2px;position:relative;z-index:1"></div>
+          <div>
+            <div style="font-size:2.8rem;font-weight:700;color:${C.acc};line-height:1">2018</div>
+            <div style="font-size:2.6rem;color:${C.txt};line-height:1.45;margin-top:14px">Recibió el Premio Turing — el "Nobel de la Computación".</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>`,
 
   /* 05 · El giro */
   `<div class="sl" style="background:${C.bg1};padding:54px">
-    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-1100px;left:-760px;opacity:0.2;mix-blend-mode:multiply;z-index:0">
+    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-1100px;left:-760px;opacity:0.25;mix-blend-mode:multiply;filter:grayscale(1) blur(8px);z-index:0">
     <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px;position:relative;z-index:1">
       <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">El giro</div>
       <div style="font-size:3.9rem;font-weight:700;color:${C.txt};line-height:1.3">En 2022, una IA hizo algo que él pensaba que tardaría décadas en pasar, y en meses cambió de opinión sobre todo lo que había construido.</div>
@@ -284,7 +289,7 @@ const slides = [
 
   /* 06 · Trayectoria 2024 */
   `<div class="sl" style="background:${C.bg1};padding:54px">
-    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-700px;left:-500px;opacity:0.2;mix-blend-mode:multiply;z-index:0">
+    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-700px;left:-500px;opacity:0.25;mix-blend-mode:multiply;filter:grayscale(1) blur(8px);z-index:0">
     <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px;position:relative;z-index:1">
       <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">Trayectoria</div>
       <div style="font-size:2.8rem;font-weight:700;color:${C.acc}">2024</div>
@@ -304,7 +309,7 @@ const slides = [
 
   /* 08 · Para pensar */
   `<div class="sl" style="background:${C.bg1};padding:54px">
-    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:0px;left:-760px;opacity:0.2;mix-blend-mode:multiply;z-index:0">
+    <img src="background/profile_picture.webp" style="position:absolute;width:2600px;height:auto;top:-49px;left:-719px;opacity:0.25;mix-blend-mode:multiply;filter:grayscale(1) blur(8px);z-index:0">
     <div style="border:8px solid ${C.acc};height:100%;border-radius:22px;display:flex;flex-direction:column;justify-content:center;padding:86px;gap:54px;position:relative;z-index:1">
       <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">Para pensar</div>
       <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.3">¿Es responsable seguir construyendo algo que sus propios creadores admiten que no pueden controlar?</div>
@@ -400,6 +405,8 @@ const editBtn    = document.getElementById('editBtn');
 const coordPanel = document.getElementById('coordPanel');
 const coordText  = document.getElementById('coordText');
 const copyBtn    = document.getElementById('copyBtn');
+const saveBtn    = document.getElementById('saveBtn');
+const downloadBtn = document.getElementById('downloadBtn');
 
 function parseObjPos(style) {
   const raw = (style.objectPosition || '50% 50%').trim();
@@ -516,6 +523,95 @@ copyBtn.addEventListener('click', () => {
     setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1500);
   });
 });
+
+saveBtn.addEventListener('click', () => {
+  const slEls = document.querySelectorAll('.sl');
+  const sl = slEls[current];
+  const img = sl ? sl.querySelector('img') : null;
+  if (!img) {
+    saveBtn.textContent = 'No BG';
+    setTimeout(() => { saveBtn.textContent = 'Save'; }, 1200);
+    return;
+  }
+
+  const scriptEl = document.querySelector('script');
+  const isOF = !!img.style.objectFit;
+
+  if (isOF) {
+    const newVal = img.style.objectPosition;
+    const oldMatch = slides[current].match(/object-position:([^;'">\s]+)/);
+    if (oldMatch) {
+      const oldVal = oldMatch[1];
+      if (oldVal !== newVal) {
+        const from = `object-position:${oldVal}`;
+        const to   = `object-position:${newVal}`;
+        slides[current]         = slides[current].replace(from, to);
+        scriptEl.textContent    = scriptEl.textContent.replace(from, to);
+      }
+    }
+  } else {
+    const newTop  = Math.round(parseFloat(img.style.top))  + 'px';
+    const newLeft = Math.round(parseFloat(img.style.left)) + 'px';
+    const topMatch  = slides[current].match(/top:(-?\d+(?:\.\d+)?px)/);
+    const leftMatch = slides[current].match(/left:(-?\d+(?:\.\d+)?px)/);
+    if (topMatch && leftMatch) {
+      const oldCombo = `top:${topMatch[1]};left:${leftMatch[1]}`;
+      const newCombo = `top:${newTop};left:${newLeft}`;
+      if (oldCombo !== newCombo) {
+        slides[current]      = slides[current].replace(oldCombo, newCombo);
+        scriptEl.textContent = scriptEl.textContent.replace(oldCombo, newCombo);
+      }
+    }
+  }
+
+  saveBtn.textContent = 'Saved ✓';
+  setTimeout(() => { saveBtn.textContent = 'Save'; }, 1500);
+});
+
+downloadBtn.addEventListener('click', () => {
+  // Strip runtime DOM so the downloaded file doesn't have pre-built slides
+  // that would double up when the script runs on load.
+  const trackContent   = track.innerHTML;
+  const trackWidth     = track.style.width;
+  const trackTransform = track.style.transform;
+  const prevDis        = prevBtn.disabled;
+  const nextDis        = nextBtn.disabled;
+  const hadEdit        = document.body.classList.contains('edit-mode');
+
+  track.innerHTML      = '';
+  track.style.width    = '';
+  track.style.transform = '';
+  prevBtn.disabled     = false;
+  nextBtn.disabled     = false;
+  coordPanel.style.display = 'none';
+  editBtn.classList.remove('active');
+  document.body.classList.remove('edit-mode');
+
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+  // Restore live state
+  track.innerHTML      = trackContent;
+  track.style.width    = trackWidth;
+  track.style.transform = trackTransform;
+  prevBtn.disabled     = prevDis;
+  nextBtn.disabled     = nextDis;
+  if (hadEdit) {
+    document.body.classList.add('edit-mode');
+    coordPanel.style.display = 'flex';
+    editBtn.classList.add('active');
+  }
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'Geoffrey_Hinton.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
 </script>
-</body>
-</html>
+
+
+</body></html>
