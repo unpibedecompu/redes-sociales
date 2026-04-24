@@ -39,9 +39,10 @@ Crear `estructure_original.md`, usando la información de source y la estructura
 
 ### 3. Crear `estructure_one_sentence.md`
 
-Crear `estructure_one_sentece.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje tecnico, para el publico general. Consulta que par de slide de los puntos (4.,5.) de `narrative_logic.md` utilizar, y que eventos del punto 2. utilizar.
-
-No utilizar palabras como neurona, red neuronal, backpropagation. Si se puede usar el acronimo IA.
+- Crear `estructure_one_sentece.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje tecnico, para el publico general. 
+- Consulta que par de slide de los puntos (4.,5.) de `narrative_logic.md` utilizar, y que eventos del punto 2. utilizar.
+- No utilizar palabras como neurona, red neuronal, backpropagation. 
+- Si se puede usar el acronimo IA.
 
 ### 4. Crear `carrousel_description.md`
 

@@ -1,8 +1,14 @@
 const { chromium } = require('playwright');
 const path = require('path');
 
-const HTML_FILE = path.resolve(__dirname, 'Geoffrey_Hinton.html');
-const OUT_DIR   = __dirname;
+const htmlArg = process.argv[2];
+if (!htmlArg) {
+  console.error('Usage: node templates/render_slides.js <path/to/file.html>');
+  process.exit(1);
+}
+
+const HTML_FILE = path.resolve(process.cwd(), htmlArg);
+const OUT_DIR   = path.dirname(HTML_FILE);
 
 (async () => {
   const browser = await chromium.launch();
