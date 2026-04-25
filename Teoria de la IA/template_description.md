@@ -25,35 +25,30 @@
 
 ## Estructura de los slides
 
-### 01 · Portada
+### Portada
 - Fondo: lavanda clara (`#f0e8ff`)
 - Corchetes: violeta acento — `opacity: .5`
-- Contenido (alineado al fondo): label pilar + nombre del concepto + frase de importancia en safety + @unpibedecompu
 
-### 02 · Explicación
+### Explicación
 - Fondo: blanco (`#ffffff`)
 - Corchetes: violeta acento
-- Contenido: label "definición" + título en lenguaje simple + separador + cuerpo explicativo
 
-### 03 · Relación con AI Safety
+### Relación con AI Safety
 - Fondo: lavanda clara
 - Corchetes: violeta acento
-- Contenido: label "por qué importa" + frase fuerte + separador + cuerpo
 
-### 04 · Cita
+### Cita
 - Fondo: lavanda profunda (`#e4d4ff`)
 - Corchetes: violeta acento
-- Contenido: label "en sus palabras" + cita textual en cursiva + separador + atribución
 
-### 05 · Para pensar
+### Para pensar
 - Fondo: lavanda clara
 - Corchetes: violeta acento
-- Contenido: label "para pensar" + pregunta abierta en bold + separador + contexto
 
-### 06 · CTA
+### CTA
 - Fondo: violeta acento (`#9b5de5`)
 - Corchetes: blanco — `opacity: .5`
-- Contenido: label "próximo concepto" + CTA + separador + @unpibedecompu
+- Contenido: CTA + separador + @unpibedecompu
 
 ## Reglas de composición
 - Tamaño de slide: `1080×1080 px` (Instagram nativo)

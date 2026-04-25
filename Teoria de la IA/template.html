@@ -143,7 +143,7 @@ header p {
 
 <header>
   <div class="pilar-label">Pilar 1 · Teoría de la IA</div>
-  <h2>Teoría de la IA — Corchetes Técnicos</h2>
+  <h2>Alineamiento — Corchetes Técnicos</h2>
   <p>Template de referencia · Paleta Lavanda + Lila Suave · Outfit · 6 slides · 1080×1080 px</p>
 </header>
 
@@ -161,77 +161,88 @@ header p {
 <script>
 const C = { bg1:'#f0e8ff', bg2:'#e4d4ff', acc:'#9b5de5', txt:'#1a1a1a', wht:'#ffffff' };
 
+// Bracket corners at 1080px scale: 80×80 SVG at 54px from each edge
 const brkAcc = `
-  <svg style="position:absolute;top:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="16,1 1,1 1,16" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
-  <svg style="position:absolute;top:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="0,1 15,1 15,16" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
-  <svg style="position:absolute;bottom:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="1,0 1,15 16,15" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>
-  <svg style="position:absolute;bottom:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="15,0 15,15 0,15" fill="none" stroke="${C.acc}" stroke-width="1.5"/></svg>`;
+  <svg style="position:absolute;top:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="80,2 2,2 2,80" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>
+  <svg style="position:absolute;top:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="0,2 78,2 78,80" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="2,0 2,78 80,78" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="78,0 78,78 0,78" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>`;
 
 const brkWht = `
-  <svg style="position:absolute;top:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="16,1 1,1 1,16" fill="none" stroke="white" stroke-width="1.5"/></svg>
-  <svg style="position:absolute;top:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="0,1 15,1 15,16" fill="none" stroke="white" stroke-width="1.5"/></svg>
-  <svg style="position:absolute;bottom:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="1,0 1,15 16,15" fill="none" stroke="white" stroke-width="1.5"/></svg>
-  <svg style="position:absolute;bottom:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 16 16"><polyline points="15,0 15,15 0,15" fill="none" stroke="white" stroke-width="1.5"/></svg>`;
+  <svg style="position:absolute;top:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="80,2 2,2 2,80" fill="none" stroke="white" stroke-width="3"/></svg>
+  <svg style="position:absolute;top:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="0,2 78,2 78,80" fill="none" stroke="white" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="2,0 2,78 80,78" fill="none" stroke="white" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="78,0 78,78 0,78" fill="none" stroke="white" stroke-width="3"/></svg>`;
 
 const slides = [
-  `<div class="sl" style="background:${C.bg1};padding:86px;position:relative;display:flex;flex-direction:column;justify-content:flex-end">
+  // 1 · Portada — lavanda clara, corchetes acc opacity .5
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:flex-end;gap:32px">
     ${brkAcc}
     <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:32px">
-      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc}">Pilar 1 · Teoría de la IA</div>
-      <div style="font-size:5.4rem;font-weight:700;color:${C.txt};line-height:1.15">Nombre del Concepto</div>
-      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.5">Por qué este concepto es central para entender el peligro de la IA</div>
-      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};opacity:.7">@unpibedecompu</div>
-    </div>
-  </div>`,
-
-  `<div class="sl" style="background:${C.wht};padding:86px;position:relative;display:flex;flex-direction:column;justify-content:center;gap:48px">
-    ${brkAcc}
-    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
-      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">definición</div>
-      <div style="font-size:4.5rem;font-weight:700;color:${C.txt};line-height:1.2">El concepto explicado en una frase que cualquiera entiende</div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};font-weight:300">Pilar 1 · Teoría de la IA</div>
+      <div style="font-size:6.75rem;font-weight:900;color:${C.txt};line-height:1.05">Alineamiento</div>
       <div style="width:130px;height:8px;background:${C.acc}"></div>
-      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">Explicación divulgativa del mecanismo central, sin términos técnicos. Cómo funciona en la práctica con un ejemplo concreto.</div>
+      <div style="font-size:3.2rem;color:${C.txt};opacity:.7;line-height:1.45">Que la IA haga lo que querés — y no solo lo que le pediste</div>
+      <div style="display:flex;gap:24px;margin-top:8px;flex-wrap:wrap">
+        <span style="font-size:2.4rem;padding:10px 40px;border:4px solid ${C.acc};border-radius:108px;color:${C.acc};font-weight:300;letter-spacing:.1em">Conceptos clave</span>
+        <span style="font-size:2.4rem;padding:10px 40px;border:4px solid ${C.acc};border-radius:108px;color:${C.acc};font-weight:300;letter-spacing:.1em">AI Safety</span>
+      </div>
     </div>
   </div>`,
 
-  `<div class="sl" style="background:${C.bg1};padding:86px;position:relative;display:flex;flex-direction:column;justify-content:center;gap:48px">
-    ${brkAcc}
-    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
-      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">por qué importa</div>
-      <div style="font-size:4.5rem;font-weight:700;color:${C.txt};line-height:1.2">Frase directa que conecta este concepto con el riesgo real</div>
-      <div style="width:130px;height:8px;background:${C.acc}"></div>
-      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">Cómo este concepto hace a la IA más difícil de controlar o más peligrosa. El vínculo con AI Safety en lenguaje llano.</div>
-    </div>
-  </div>`,
-
-  `<div class="sl" style="background:${C.bg2};padding:86px;position:relative;display:flex;flex-direction:column;justify-content:center;gap:48px">
-    ${brkAcc}
-    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
-      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">en sus palabras</div>
-      <div style="font-size:3.9rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">"Cita textual de un profesional relevante sobre este concepto o su implicancia para la seguridad."</div>
-      <div style="width:130px;height:8px;background:${C.acc}"></div>
-      <div style="font-size:2.7rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc}">Nombre · Institución</div>
-    </div>
-  </div>`,
-
-  `<div class="sl" style="background:${C.bg1};padding:86px;position:relative;display:flex;flex-direction:column;justify-content:center;gap:54px">
+  // 2 · Explicación — blanco, corchetes acc
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:54px">
     ${brkAcc}
     <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:54px">
-      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc}">para pensar</div>
-      <div style="font-size:4.86rem;font-weight:700;color:${C.txt};line-height:1.2">¿Pregunta abierta que invita a reflexionar sobre el problema?</div>
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">definición</div>
+      <div style="font-size:3.9rem;font-weight:700;color:${C.txt};line-height:1.3">Le pediste que cuide la comida. Volviste y estaba quemada. La cuidó — estuvo mirándola todo el tiempo.</div>
       <div style="width:130px;height:8px;background:${C.acc}"></div>
-      <div style="font-size:3.1rem;color:${C.txt};opacity:.65;line-height:1.6">Contexto adicional o reformulación de la pregunta para generar engagement.</div>
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">A los sistemas de IA les pasa lo mismo. Optimizan lo que les pedís, no lo que querés. A esa brecha entre instrucción e intención se le llama <span style="font-weight:700;color:${C.acc}">alineamiento</span>.</div>
     </div>
   </div>`,
 
-  `<div class="sl" style="background:${C.acc};padding:86px;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:43px">
+  // 3 · Relación con AI Safety — lavanda clara, corchetes acc
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:54px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">relación con AI Safety</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.25">Cuanto más poderoso el sistema, más grande la brecha</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">Un sistema más capaz que nosotros con este problema puede causar daños que no anticipamos — y que no podemos corregir.</div>
+    </div>
+  </div>`,
+
+  // 4 · Cita — lavanda profunda, corchetes acc
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:43px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:43px">
+      <div style="font-size:9.7rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:3.9rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">La IA no va a ser malvada. Va a ser muy buena haciendo algo que no quisimos.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:2.7rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc};font-weight:300">Stuart Russell · Berkeley AI Research</div>
+    </div>
+  </div>`,
+
+  // 5 · Para pensar — lavanda clara, corchetes acc
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:54px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">para pensar</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.25">¿Podés escribir una instrucción que capture todo lo que querés, sin excepciones?</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">Nadie pudo todavía. Y eso es exactamente el problema.</div>
+    </div>
+  </div>`,
+
+  // 6 · CTA — violeta acento, corchetes blanco opacity .5
+  `<div class="sl" style="background:${C.acc};padding:86px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:48px">
     ${brkWht}
-    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:43px;text-align:center">
-      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">próximo concepto</div>
-      <div style="font-size:4.86rem;font-weight:700;color:${C.wht};line-height:1.2">¿Qué concepto sigue?</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:48px;text-align:center">
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:300">próximo concepto</div>
+      <div style="font-size:4.86rem;font-weight:700;color:${C.wht};line-height:1.2">¿Cómo intentamos resolverlo?</div>
       <div style="width:130px;height:8px;background:rgba(255,255,255,.5)"></div>
-      <div style="font-size:3.1rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:810px">Seguinos para entender cómo funciona la IA — y por qué eso importa</div>
-      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.wht};margin-top:16px">@unpibedecompu</div>
+      <div style="font-size:3.1rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:750px">Seguí la serie de Teoría de la IA para entender las piezas del problema</div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-top:16px">@unpibedecompu</div>
     </div>
   </div>`
 ];
@@ -244,7 +255,6 @@ const nextBtn = document.getElementById('next');
 
 let current = 0;
 const total = slides.length;
-const step  = 100 / total;
 
 // Build slides
 slides.forEach(html => {
@@ -275,7 +285,7 @@ function applyScale() {
 
 function goTo(index) {
   current = Math.max(0, Math.min(index, total - 1));
-  track.style.transform = `translateX(-${current * step}%)`;
+  track.style.transform = `translateX(-${current * (100 / total)}%)`;
   document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
   prevBtn.disabled = current === 0;
   nextBtn.disabled = current === total - 1;

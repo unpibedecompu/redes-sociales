@@ -35,12 +35,12 @@ Cada sección debe incluir sus fuentes al final como links de Markdown.
 
 ### 2. Crear `estructure_original.md`
 
-Crear `estructure_original.md`, usando la información de source y la estructura base siguiendo la lógica narrativa definida en `narrative_logic.md`.
+Crear `estructure_original.md`, usando la información de source y la estructura base siguiendo la estructura narrativa definida en `narrative_structure.md`.
 
 ### 3. Crear `estructure_one_sentence.md`
 
 - Crear `estructure_one_sentece.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje tecnico, para el publico general. 
-- Consulta que par de slide de los puntos (4.,5.) de `narrative_logic.md` utilizar, y que eventos del punto 2. utilizar.
+- Consulta que par de slide de los puntos (4.,5.) de `narrative_structure.md` utilizar, y que eventos del punto 2. utilizar.
 - No utilizar palabras como neurona, red neuronal, backpropagation. 
 - Si se puede usar el acronimo IA.
 

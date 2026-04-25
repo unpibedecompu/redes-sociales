@@ -7,7 +7,8 @@
       "WebFetch(domain:www.semanticscholar.org)",
       "WebFetch(domain:en.wikipedia.org)",
       "Bash(node \"Proceres de la IA/Geoffrey Hinton/render_slides.js\")",
-      "Bash(python blend_effect.py)"
+      "Bash(python blend_effect.py)",
+      "PowerShell(Rename-Item *)"
     ]
   }
 }

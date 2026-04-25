@@ -1,4 +1,4 @@
-## Lógica narrativa
+## Estructura narrativa
 Cada carrusel de Próceres sigue esta secuencia fija:
 1. **Quién es** — impacto visual inmediato con el nombre y una bajada que engancha. Una slide.
 2. **Qué hizo** — trayectoria cronológica que establece credibilidad. Incluir todos los eventos importantes. Una slide por evento.

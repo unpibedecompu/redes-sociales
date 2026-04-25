@@ -29,25 +29,34 @@ Investigar y documentar el concepto con las siguientes secciones:
 
 Cada sección debe incluir sus fuentes al final como links de Markdown.
 
-### 2. Crear `estructure_original.md`
+### 2. Crear `analogies.md`
 
-Crear `estructure_original.md`, usando la información de source y la estructura base siguiendo la lógica narrativa definida en `narrative_logic.md`.
+- Crear `analogies.md`, escribiendo 5 posible analogias para explicar el concepto, usando la información en `source.md`.
 
-### 3. Crear `estructure_one_sentence.md`
+### 3. Crear `estructure_original.md`
 
-- Crear `estructure_one_sentece.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje tecnico, para el publico general.
-- Consulta para los puntos con varias opciones en `narrative_logic.md` cual se elige.
+- Consultar que analogia se elige de `analogies.md`
+- Crear `estructure_original.md`, usando la analogia elegida, la información de `source.md` y la estructura narrativa de `narrative_structure.md`.
+- Se pueden usar mas o menos slides según la estructura.
+
+### 4. Crear `estructure_one_sentence.md`
+
+- Consultar que cita y que pregunta se eligieron.
+- Crear `estructure_one_sentece.md` derivada de `estructure_original.md`. 
+- Usar la menor cantidad de oraciónes por slide, en lo posible 1 sola.
+- sin lenguaje tecnico, para el publico general.
 - No utilizar palabras como neurona, red neuronal, backpropagation, gradiente. A excepción de que sea el concepto del que se habla. 
 - Sí se puede usar el acrónimo IA.
 
-### 4. Crear `carrousel_description.md`
+### 5. Crear `carrousel_description.md`
 
 Especificación completa de diseño y texto por slide, derivada de `estructure_one_sentence.md`. Incluye fondo, corchetes, layout y tabla con cada elemento de texto junto a sus specs tipográficas exactas. Tomar como referencia `template_description.md` y `template.html`.
 
-### 5. Crear `[Nombre_Concepto].html`
+### 6. Crear `[Nombre_Concepto].html`
 
-Archivo HTML interactivo del carrusel, basado en `carrousel_description.md`. Nombrar el archivo con el nombre del concepto en formato `Nombre_Concepto.html` y ubicarlo en el directorio `Teoría de la IA/Nombre Concepto`.
+- Crear archivo HTML interactivo del carrusel, basado en `carrousel_description.md`. Nombrar el archivo con el nombre del concepto en formato `Nombre_Concepto.html` y ubicarlo en el directorio `Teoría de la IA/Nombre Concepto`.
+- Tomar `template.html` como referencia.
+- El label del pilar muestra solo el título del pilar (ej. "Teoría de la IA"), sin el número ("Pilar 1").
+- Los labels de categorización interna — Analogía, El Concepto, AI Safety, Ejemplo, Para pensar — **no deben aparecer en los slides**. Son categorías de trabajo, no contenido visible.
 
-Tomar `template.html` como referencia.
-
-Ask me for approval between each step
+Consultame antes de pasar al siguiente paso

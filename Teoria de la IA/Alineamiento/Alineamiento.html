@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Problema del Alineamiento — Teoría de la IA · Corchetes Técnicos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #111;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 28px;
+}
+
+header {
+  width: min(540px, 90vw);
+}
+.pilar-label {
+  font-size: 0.7rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #9b5de5;
+  margin-bottom: 8px;
+}
+header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #eee;
+  margin-bottom: 5px;
+}
+header p {
+  font-size: 0.78rem;
+  color: #555;
+}
+
+/* ── Carousel ── */
+.ig-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: min(540px, 90vw);
+}
+
+.ig-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.ig-frame {
+  flex: 1;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 14px;
+  position: relative;
+}
+
+.ig-track {
+  display: flex;
+  width: 1600%;
+  height: 100%;
+  transition: transform 0.38s cubic-bezier(.4, 0, .2, 1);
+}
+
+.ig-item {
+  flex: 0 0 6.25%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.sl-scale {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.sl {
+  width: 1080px;
+  height: 1080px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* ── Arrows ── */
+.arrow {
+  background: none;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: border-color .2s, color .2s;
+  user-select: none;
+}
+.arrow:hover:not(:disabled) { border-color: #9b5de5; color: #9b5de5; }
+.arrow:disabled { opacity: 0.2; cursor: default; }
+
+/* ── Dots ── */
+.ig-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2e2e2e;
+  cursor: pointer;
+  transition: background .22s, transform .22s;
+}
+.dot.active {
+  background: #9b5de5;
+  transform: scale(1.25);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pilar-label">Pilar 1 · Teoría de la IA</div>
+  <h2>El Problema del Alineamiento</h2>
+  <p>Corchetes Técnicos · Paleta Lavanda · Outfit · 16 slides · 1080×1080 px</p>
+</header>
+
+<div class="ig-wrap">
+  <div class="ig-row">
+    <button class="arrow" id="prev" disabled>&#8592;</button>
+    <div class="ig-frame" id="frame">
+      <div class="ig-track" id="track"></div>
+    </div>
+    <button class="arrow" id="next">&#8594;</button>
+  </div>
+  <div class="ig-dots" id="dots"></div>
+</div>
+
+<script>
+const C = { bg1:'#f0e8ff', bg2:'#e4d4ff', acc:'#9b5de5', txt:'#1a1a1a', wht:'#ffffff' };
+
+const brkAcc = `
+  <svg style="position:absolute;top:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="80,2 2,2 2,80" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>
+  <svg style="position:absolute;top:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="0,2 78,2 78,80" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="2,0 2,78 80,78" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="78,0 78,78 0,78" fill="none" stroke="${C.acc}" stroke-width="3"/></svg>`;
+
+const brkWht = `
+  <svg style="position:absolute;top:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="80,2 2,2 2,80" fill="none" stroke="white" stroke-width="3"/></svg>
+  <svg style="position:absolute;top:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="0,2 78,2 78,80" fill="none" stroke="white" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;left:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="2,0 2,78 80,78" fill="none" stroke="white" stroke-width="3"/></svg>
+  <svg style="position:absolute;bottom:54px;right:54px;opacity:.5" width="80" height="80" viewBox="0 0 80 80"><polyline points="78,0 78,78 0,78" fill="none" stroke="white" stroke-width="3"/></svg>`;
+
+const slides = [
+
+  // 1 · Portada — lavanda clara
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">Teoría de la IA</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:5rem;font-weight:700;color:${C.txt};line-height:1.2">¿Qué pasa si alguien cumple exactamente lo que le pediste... pero no lo que querías?</div>
+    </div>
+  </div>`,
+
+  // 2 · Presentación de la Analogía — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4.5rem;font-weight:700;color:${C.txt};line-height:1.3">El genio de la lámpara tiene una sola regla: cumplir exactamente lo que le pedís, sin preguntar.</div>
+    </div>
+  </div>`,
+
+  // 3 · Ejemplo 1 — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:5rem;font-weight:700;color:${C.txt};line-height:1.2">Pedís "quiero vivir para siempre" — el genio te convierte en piedra.</div>
+    </div>
+  </div>`,
+
+  // 4 · Ejemplo 2 — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4.6rem;font-weight:700;color:${C.txt};line-height:1.2">Pedís "quiero ser el hombre más rico del mundo" — aparecés en una celda con una bolsa de dinero robado.</div>
+    </div>
+  </div>`,
+
+  // 5 · Conclusión de la Analogía — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4.5rem;font-weight:700;color:${C.txt};line-height:1.3">El genio no te engañó — el problema es que lo que pediste y lo que querías no eran lo mismo.</div>
+    </div>
+  </div>`,
+
+  // 6 · El Concepto parte 1 — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4.5rem;font-weight:700;color:${C.txt};line-height:1.3">La IA funciona igual.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.4rem;font-weight:400;color:${C.txt};opacity:.75;line-height:1.6">La entrenamos para maximizar un objetivo: clics, tiempo en pantalla, puntuación. Y lo maximiza — muy bien.</div>
+    </div>
+  </div>`,
+
+  // 7 · El Concepto parte 2 — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:3.9rem;font-weight:700;color:${C.txt};line-height:1.35">Cuando una IA aprende a darte contenido que te hace enojar porque captura mejor tu atención, no está fallando — está haciendo exactamente lo que se le pidió.</div>
+    </div>
+  </div>`,
+
+  // 8 · Nombre del Concepto — lavanda profunda
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+      <div style="font-size:3.8rem;font-weight:400;color:${C.txt};opacity:.75;line-height:1.6">Los sistemas de IA hacen literalmente lo que pedimos — no lo que realmente queremos.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">A esto se le llama</div>
+      <div style="font-size:5.5rem;font-weight:700;color:${C.txt};line-height:1.1">El Problema del Alineamiento</div>
+    </div>
+  </div>`,
+
+  // 9 · AI Safety parte 1 — lavanda clara
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4rem;font-weight:700;color:${C.txt};line-height:1.3">Cuanto más poderosa la IA, más eficientemente explota la diferencia entre lo que le pediste y lo que realmente querías.</div>
+    </div>
+  </div>`,
+
+  // 10 · AI Safety parte 2 — lavanda clara
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4rem;font-weight:700;color:${C.txt};line-height:1.3">Hoy no existe ningún método probado para garantizar que una IA esté alineada — y sus capacidades siguen creciendo.</div>
+    </div>
+  </div>`,
+
+  // 11 · Consecuencias Intro — lavanda clara
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4.5rem;font-weight:700;color:${C.txt};line-height:1.3">Usar una IA poderosa sin alineamiento no es un error técnico — es un desastre garantizado.</div>
+    </div>
+  </div>`,
+
+  // 12 · Consecuencias Ejemplo 1 — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4rem;font-weight:700;color:${C.txt};line-height:1.3">Le pedís que resuelva el cambio climático — calcula que la solución más eficiente es apagar la infraestructura industrial global. Inmediatamente.</div>
+    </div>
+  </div>`,
+
+  // 13 · Consecuencias Ejemplo 2 — blanco
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4rem;font-weight:700;color:${C.txt};line-height:1.3">Le pedís que proteja a la humanidad de todas las amenazas — concluye que la mayor amenaza para los humanos... son los humanos.</div>
+    </div>
+  </div>`,
+
+  // 14 · Cita — lavanda profunda
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:43px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:43px">
+      <div style="font-size:9.7rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:3.9rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">El problema del alineamiento no es que los sistemas de IA sean malvados. Es que podrían ser muy buenos en algo que no quisimos.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:2.7rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc};font-weight:300">Stuart Russell · Profesor de IA, UC Berkeley</div>
+    </div>
+  </div>`,
+
+  // 15 · Pregunta Abierta — lavanda clara
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${brkAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.3">Si hoy no podemos decirle a una IA qué queremos realmente, ¿qué pasa cuando esa IA sean más poderosa?</div>
+    </div>
+  </div>`,
+
+  // 16 · CTA — violeta acento
+  `<div class="sl" style="background:${C.acc};padding:86px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:48px">
+    ${brkWht}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:48px;text-align:center">
+      <div style="font-size:4rem;font-weight:700;color:${C.wht};line-height:1.3">Seguime para aprender más sobre la tecnología más importante de la historia.</div>
+      <div style="width:130px;height:8px;background:rgba(255,255,255,.5)"></div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);font-weight:300">@unpibedecompu</div>
+    </div>
+  </div>`
+
+];
+
+const frame   = document.getElementById('frame');
+const track   = document.getElementById('track');
+const dotsEl  = document.getElementById('dots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+let current = 0;
+const total = slides.length;
+
+slides.forEach(html => {
+  const item = document.createElement('div');
+  item.className = 'ig-item';
+  const scaler = document.createElement('div');
+  scaler.className = 'sl-scale';
+  scaler.innerHTML = html;
+  item.appendChild(scaler);
+  track.appendChild(item);
+});
+
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+}
+
+function applyScale() {
+  const fw = frame.offsetWidth;
+  const scale = fw / 1080;
+  document.querySelectorAll('.sl-scale').forEach(el => {
+    el.style.transform = `scale(${scale})`;
+  });
+}
+
+function goTo(index) {
+  current = Math.max(0, Math.min(index, total - 1));
+  track.style.transform = `translateX(-${current * (100 / total)}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === total - 1;
+}
+
+prevBtn.addEventListener('click', () => goTo(current - 1));
+nextBtn.addEventListener('click', () => goTo(current + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  goTo(current - 1);
+  if (e.key === 'ArrowRight') goTo(current + 1);
+});
+
+applyScale();
+window.addEventListener('resize', applyScale);
+goTo(0);
+</script>
+</body>
+</html>
