@@ -6,9 +6,13 @@
       "WebFetch(domain:commons.wikimedia.org)",
       "WebFetch(domain:www.semanticscholar.org)",
       "WebFetch(domain:en.wikipedia.org)",
-      "Bash(node \"Proceres de la IA/Geoffrey Hinton/render_slides.js\")",
+      "Bash(node \"Profesionales de la IA/Geoffrey Hinton/render_slides.js\")",
       "Bash(python blend_effect.py)",
-      "PowerShell(Rename-Item *)"
+      "PowerShell(Rename-Item *)",
+      "WebFetch(domain:red.anthropic.com)",
+      "WebFetch(domain:www.uniladtech.com)",
+      "WebFetch(domain:thenextweb.com)",
+      "WebFetch(domain:futurism.com)"
     ]
   }
 }

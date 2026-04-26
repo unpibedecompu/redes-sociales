@@ -26,7 +26,7 @@
 
 | Elemento | Contenido | Peso | Tamaño | Color | Extras |
 |---|---|---|---|---|---|
-| Label | Próceres de la IA | 300 | 0.48rem | rgba(255,255,255,.7) | uppercase · letter-spacing .15em |
+| Label | Profesionales de la IA | 300 | 0.48rem | rgba(255,255,255,.7) | uppercase · letter-spacing .15em |
 | Nombre | Geoffrey Hinton | 900 | 1.1rem | #ffffff | line-height 1.1 |
 | Bajada | El científico que construyó la IA moderna — y ahora dice que puede destruir a la humanidad. | 400 | 0.62rem | rgba(255,255,255,.8) | line-height 1.4 |
 | Tag 1 | Premio Turing 2018 | 300 | 0.48rem | rgba(255,255,255,.8) | pill · border 1px solid rgba(255,255,255,.4) · padding 2px 8px |

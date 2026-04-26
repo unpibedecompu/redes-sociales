@@ -1,4 +1,4 @@
-# Próceres de la IA — Task
+# Profesionales de la IA — Task
 
 ## Objetivo principal
 Hacer del conocimiento común que el actual desarrollo acelerado de la IA es peligroso. La tecnología de IA es tan peligrosa como la tecnología nuclear, y debe gestionarse con las mismas precauciones.
@@ -50,7 +50,7 @@ Especificación completa de diseño y texto por slide, derivada de `estructure_o
 
 ### 5. Crear `[Nombre_Apellido].html`
 
-Archivo HTML interactivo del carrusel, basado en `carrousel_description.md`. Nombrar el archivo con el nombre completo del prócer en formato `Nombre_Apellido.html` y ubicarlo en el directorio `Próceres de la IA/Nombre Apellido`.
+Archivo HTML interactivo del carrusel, basado en `carrousel_description.md`. Nombrar el archivo con el nombre completo del profesional en formato `Nombre_Apellido.html` y ubicarlo en el directorio `Profesionales de la IA/Nombre Apellido`.
 
 Tomar `template.html` como referencia.
 

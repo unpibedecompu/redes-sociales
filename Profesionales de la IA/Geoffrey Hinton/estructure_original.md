@@ -2,7 +2,7 @@
 
 ## 01 · Portada — Quién es
 
-**Label:** Próceres de la IA
+**Label:** Profesionales de la IA
 **Nombre:** Geoffrey Hinton
 **Bajada:** El científico que construyó el deep learning moderno hoy dice que puede destruir a la humanidad
 **Tags:** Premio Turing 2018 · Nobel de Física 2024 · Ex-Google Brain

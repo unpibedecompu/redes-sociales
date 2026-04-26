@@ -1,4 +1,4 @@
-# Template: Próceres de la IA — Marco Interior
+# Template: Profesionales de la IA — Marco Interior
 
 ## Estilo visual
 **Marco Interior** — un borde fino de color acento enmarca todo el contenido dentro de cada slide, con márgenes uniformes de 54px en todos los lados. El marco es el único elemento gráfico; no hay formas adicionales, texturas ni decoraciones.
