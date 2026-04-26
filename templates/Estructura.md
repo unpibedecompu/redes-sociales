@@ -12,8 +12,6 @@ Hacer del conocimiento común que el actual desarrollo acelerado de la IA es pel
 
 **Plataforma:** streaming y carruseles
 
-**Estilo visual (carrusel):** Corchetes Técnicos
-
 ## **Pilar 2: Profesionales de la IA**
 
 **Objetivo:** Perfilar a personas importantes en el desarrollo de la IA y en la Seguridad de la IA — investigadores, ingenieros, ejecutivos y críticos — para humanizar el debate y mostrar que expertos serios y con credenciales están profundamente preocupados.
@@ -21,8 +19,6 @@ Hacer del conocimiento común que el actual desarrollo acelerado de la IA es pel
 **Alineación con el objetivo principal:** La autoridad importa para la persuasión. Mostrar que las personas que construyen esta tecnología están entre las más preocupadas por ella es uno de los argumentos más sólidos que tenés. Contrarresta el rechazo de que las preocupaciones por la seguridad vienen de personas que "no entienden la tecnología".
 
 **Plataforma:** carruseles
-
-**Estilo visual (carrusel):** Marco Interior
 
 ## **Pilar 3: Seguridad de la IA**
 
@@ -48,8 +44,6 @@ Hacer del conocimiento común que el actual desarrollo acelerado de la IA es pel
 
 **Plataforma:** carruseles
 
-**Estilo visual (carrusel):** Número de Archivo
-
 ## **Pilar 6: Gobernanza de la IA**
 
 **Objetivo:** Cubrir el estado actual de la regulación, la política y la coordinación internacional de la IA — la Ley de IA de la UE, órdenes ejecutivas, organismos internacionales propuestos, la Declaración de Bletchley, y cómo podría verse realmente una supervisión significativa.
@@ -57,8 +51,6 @@ Hacer del conocimiento común que el actual desarrollo acelerado de la IA es pel
 **Alineación con el objetivo principal:** Este pilar completa directamente la analogía nuclear. La razón por la que la tecnología nuclear no acabó con la civilización no es la suerte — es el OIEA, el TNP, los tratados de armas y décadas de difícil diplomacia. Tu tesis implica que se necesita una gobernanza equivalente para la IA. Este pilar hace ese argumento explícito y muestra a tu audiencia cómo se ve el camino a seguir.
 
 **Plataforma:** carrusel
-
-**Estilo visual (carrusel):** Cruces Decorativas
 
 ## **Pilar 7: ¿Qué Podés Hacer Vos?**
 

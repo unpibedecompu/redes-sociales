@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # Requirements: pip install Pillow numpy
+# Usage: python templates/blend_effect.py <input> [output]
+
+import argparse
+from pathlib import Path
 
 from PIL import Image
 import numpy as np
 
 BG_COLOR      = (240, 232, 255)   # #f0e8ff — trayectoria slide
 GHOST_OPACITY = 0.30
-INPUT         = "profile_picture_no_background.png"
-OUTPUT        = "blended_output.png"
 
 
 def _hls_channel(m1, m2, hue):
@@ -52,16 +54,15 @@ def luminosity_blend(backdrop, source):
 
 
 
-def main():
-    photo = Image.open(INPUT).convert("RGBA")
+def blend(input_path: Path, output_path: Path):
+    photo = Image.open(input_path).convert("RGBA")
     w, h = photo.size
 
     bg_f        = np.full((h, w, 3), BG_COLOR, dtype=np.float64) / 255.0
     photo_arr   = np.array(photo)
     photo_rgb_f = photo_arr[..., :3].astype(np.float64) / 255.0
-    photo_alpha = photo_arr[..., 3:4].astype(np.float64) / 255.0  # (H, W, 1)
+    photo_alpha = photo_arr[..., 3:4].astype(np.float64) / 255.0
 
-    # Luminosity blend of BG_COLOR onto photo, preserving original alpha
     lum = luminosity_blend(bg_f, photo_rgb_f)
     lum_img = (lum * 255).astype(np.uint8)
 
@@ -69,10 +70,20 @@ def main():
     result_arr[..., :3] = lum_img
     result_arr[..., 3]  = (photo_alpha[..., 0] * GHOST_OPACITY * 255).astype(np.uint8)
 
-    result = Image.fromarray(result_arr, "RGBA")
+    Image.fromarray(result_arr, "RGBA").save(output_path)
+    print(f"Saved: {output_path}")
 
-    result.save(OUTPUT)
-    print(f"Saved: {OUTPUT}")
+
+def main():
+    parser = argparse.ArgumentParser(description="Luminosity blend + ghost opacity effect")
+    parser.add_argument("input", help="Input image path")
+    parser.add_argument("output", nargs="?", help="Output image path (default: <stem>_blended.png next to input)")
+    args = parser.parse_args()
+
+    input_path = Path(args.input)
+    output_path = Path(args.output) if args.output else input_path.parent / f"{input_path.stem}_blended.png"
+
+    blend(input_path, output_path)
 
 
 if __name__ == "__main__":
