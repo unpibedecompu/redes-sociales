@@ -28,7 +28,7 @@ Para los 4 expertos en AI más importantes del mundo, la respuesta es sí. Y ac�
 
 Explosión de Inteligencia:
 
-La IA escala a una velocidad sin precedentes: en solo cuatro años, pasó de sugerir líneas de código a generar proyectos enteros. \[grafico METR\]
+La IA escala a una velocidad sin precedentes: en solo cuatro años, pasó de sugerir líneas de código a crear proyectos enteros. \[grafico METR\]
 
 Hoy, empresas como Anthropic ya usan sus propios modelos para programar versiones superiores. 
 
@@ -36,7 +36,7 @@ Se estima que en un año la IA podrá automejorarse sin supervisión, superando 
 
 ¿Esta inteligencia nos va a beneficiar?
 
-Esto no lo tenemos asegurado. Existen innumerables experimentos simulados en donde IA ‘s como Claude recurren a mentir, extorsionar e incluso asesinar a personas con tal de lograr un objetivo o autopreservarse.
+Esto no lo tenemos asegurado. Existen un monton experimentos simulados en donde IA ‘s como Claude recurren a mentir, extorsionar e incluso asesinar a personas con tal de lograr un objetivo.
 
 Las IA ‘s que van a surgir de la “explosión de inteligencia” van a ser mucho más inteligentes que cualquier ser humano, y por lo tanto capaz de hacer lo que quieran.
 
@@ -46,4 +46,4 @@ Por eso existe la seguridad de la IA: un campo que busca asegurarse de que estos
 
 Outro:
 
-Si te interesa saber como, seguime que te cuento en el siguiente reel.
+Si te interesa saber como, seguime que te cuento mas en el siguiente reel.
