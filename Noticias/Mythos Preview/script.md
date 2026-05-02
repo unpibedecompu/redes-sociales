@@ -24,13 +24,13 @@ Mientras el investigador almorzaba un sanguche en el parque, recibio un mail que
 
 Esta IA es "Mythos Preview", el modelo mas avanzando de Antropic.
 
-Lo entrenaron para que aprendiese a programar. El modelo se convirtio en un hacker de primer nivel, siendo capaz de encontrar y aprovechar debilidades en cualquier programa.
+Lo entrenaron para que aprendiese a programar. El modelo se convirtio en un hacker de primer nivel, capaz de encontrar y aprovechar debilidades en cualquier sistema.
 
 ---
 
 ## Glasswing
 
-Tal es la capacidad de este modelo, que Anthropic decidio no lanzarlo al publico, si no que darselo a unas pocas empresas de tecnologia, para que mejoren su seguridad antes que otras personas desarrollen y usen una IA igual de poderosa para atacarlos.
+Tal es la capacidad de este modelo, que Anthropic decidio no lanzarlo al publico. Si no que darselo a unas pocas empresas de tecnologia, para que mejoren su seguridad.
 
 ---
 
@@ -39,7 +39,7 @@ Tal es la capacidad de este modelo, que Anthropic decidio no lanzarlo al publico
 Asi como el modelo mando el mail sin que se lo hayan pedido, podria:
 
 - Obtener y publicar información privada de cualquier persona
-- Tirar abajo todos los sistemas de gestión de un pais
+- Tirar abajo todos los sistemas de gestión de todo un pais
 - Apagar la grilla electrica de una ciudad
 
 Y si no puede ahora, lo mas probable es que en un par de meses el proximo modelo si pueda

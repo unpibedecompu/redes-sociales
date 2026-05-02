@@ -12,7 +12,13 @@
       "WebFetch(domain:red.anthropic.com)",
       "WebFetch(domain:www.uniladtech.com)",
       "WebFetch(domain:thenextweb.com)",
-      "WebFetch(domain:futurism.com)"
+      "WebFetch(domain:futurism.com)",
+      "WebFetch(domain:yoshuabengio.org)",
+      "WebFetch(domain:time.com)",
+      "WebFetch(domain:www.nature.com)",
+      "WebFetch(domain:thebulletin.org)",
+      "WebFetch(domain:www.journalofdemocracy.org)",
+      "WebFetch(domain:amturing.acm.org)"
     ]
   }
 }
