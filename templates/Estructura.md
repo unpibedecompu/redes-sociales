@@ -38,9 +38,9 @@ Hacer del conocimiento común que el actual desarrollo acelerado de la IA es pel
 
 ## **Pilar 5: Historia de los Riesgos Existenciales**
 
-**Objetivo:** Examinar cómo la humanidad ha identificado, debatido y gestionado previamente tecnologías con potencial existencial o catastrófico — la bomba atómica, las armas biológicas, las armas químicas — con foco en qué soluciones de gobernanza se construyeron y qué tan bien funcionaron.
+**Objetivo:** Mostrar que la humanidad ya enfrentó tecnologías con potencial de destrucción masiva — armas nucleares, biológicas, químicas — y examinar cómo respondimos: qué instituciones construimos, qué tratados firmamos, qué falló y qué funcionó. El objetivo es que la audiencia comprenda que la gobernanza y la cooperación internacional son la solución a los riesgos existenciales, incluido el riesgo existencial que impone el rápido desarrollo de la IA.
 
-**Alineación con el objetivo principal:** Este es tu pilar más único y poderoso. La analogía nuclear es central en tu tesis, y el precedente histórico es una de las herramientas retóricas más persuasivas disponibles. Reencuadra el riesgo de la IA como un patrón conocido, no como un escenario de ciencia ficción. También le da a tu audiencia una prueba de concepto: la humanidad ya ha hecho esto antes, de manera imperfecta pero significativa.
+**Alineación con el objetivo principal:** La historia importa para la persuasión en dos sentidos. Primero, mostrar que estuvimos a punto de desencadenar catástrofes irreversibles hace que el riesgo de la IA deje de ser abstracto. Segundo — y más importante — demuestra que la gobernanza y la cooperación internacional ya funcionaron antes: el OIEA, el TNP y los tratados de armas químicas son prueba de concepto. Si la humanidad pudo construir esas instituciones, puede construir equivalentes para la IA. Este pilar cierra el ciclo entre el problema y la solución antes de que Pilar 6 lo desarrolle en detalle.
 
 **Plataforma:** carruseles
 

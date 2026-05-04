@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template — Historia de los Riesgos Existenciales · Número de Archivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #111;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 28px;
+}
+
+header {
+  width: min(540px, 90vw);
+}
+.pilar-label {
+  font-size: 0.7rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #9b5de5;
+  margin-bottom: 8px;
+}
+header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #eee;
+  margin-bottom: 5px;
+}
+header p {
+  font-size: 0.78rem;
+  color: #555;
+}
+
+/* ── Carousel ── */
+.ig-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: min(540px, 90vw);
+}
+
+.ig-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.ig-frame {
+  flex: 1;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 14px;
+  position: relative;
+}
+
+.ig-track {
+  display: flex;
+  width: 700%;
+  height: 100%;
+  transition: transform 0.38s cubic-bezier(.4, 0, .2, 1);
+}
+
+.ig-item {
+  flex: 0 0 14.2857%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Slides are rendered at 1080×1080 (Instagram native) and scaled to fill the frame via transform. */
+.sl-scale {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  /* transform: scale(X) applied by JS */
+}
+
+.sl {
+  width: 1080px;
+  height: 1080px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* ── Arrows ── */
+.arrow {
+  background: none;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: border-color .2s, color .2s;
+  user-select: none;
+}
+.arrow:hover:not(:disabled) { border-color: #9b5de5; color: #9b5de5; }
+.arrow:disabled { opacity: 0.2; cursor: default; }
+
+/* ── Dots ── */
+.ig-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2e2e2e;
+  cursor: pointer;
+  transition: background .22s, transform .22s;
+}
+.dot.active {
+  background: #9b5de5;
+  transform: scale(1.25);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pilar-label">Pilar 5 · Historia de los Riesgos Existenciales</div>
+  <h2>Cuba, 1962 — Número de Archivo</h2>
+  <p>Template de referencia · Paleta Lavanda + Lila Suave · Outfit · 7 slides · 1080×1080 px</p>
+</header>
+
+<div class="ig-wrap">
+  <div class="ig-row">
+    <button class="arrow" id="prev" disabled>&#8592;</button>
+    <div class="ig-frame" id="frame">
+      <div class="ig-track" id="track"></div>
+    </div>
+    <button class="arrow" id="next">&#8594;</button>
+  </div>
+  <div class="ig-dots" id="dots"></div>
+</div>
+
+<script>
+const C = { bg1:'#f0e8ff', bg2:'#e4d4ff', acc:'#9b5de5', txt:'#1a1a1a', wht:'#ffffff' };
+
+const slides = [
+  // 1 · Portada — lavanda clara, "1962" abajo-derecha
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:flex-end;gap:32px">
+    <div style="position:absolute;bottom:-60px;right:-30px;font-size:36rem;font-weight:900;color:${C.acc};opacity:.09;line-height:1;letter-spacing:-.03em;pointer-events:none">1962</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:32px">
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};font-weight:300">Pilar 5 · Historia de los Riesgos Existenciales</div>
+      <div style="font-size:5.4rem;font-weight:700;color:${C.txt};line-height:1.1">13 días. La humanidad estuvo a horas del fin.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.0rem;color:${C.txt};opacity:.7;line-height:1.5">La Crisis de los Misiles de Cuba y lo que nos enseña sobre la IA</div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};opacity:.6;font-weight:300">@unpibedecompu</div>
+    </div>
+  </div>`,
+
+  // 2 · El Momento — blanco, "OCT" arriba-izquierda
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:54px">
+    <div style="position:absolute;top:-30px;left:-20px;font-size:30rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1;letter-spacing:-.02em;pointer-events:none">OCT</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">octubre, 1962</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.25">Kennedy vs. Khrushchev. 13 días para decidir el destino del mundo.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">Un submarino soviético sin comunicación con Moscú estuvo a un voto de lanzar un torpedo nuclear. El hombre que dijo no se llama Vasili Arkhipov. Nunca lo viste en un libro de historia.</div>
+    </div>
+  </div>`,
+
+  // 3 · El Margen — lavanda profunda, "1962" centrado
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:43px">
+    <div style="position:absolute;font-size:38rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1;letter-spacing:-.03em;pointer-events:none">1962</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:43px;text-align:center">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">el margen</div>
+      <div style="font-size:10rem;font-weight:900;color:${C.acc};line-height:1">1 voto</div>
+      <div style="font-size:3.5rem;font-weight:700;color:${C.txt}">separó al mundo del fin</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:2.9rem;color:${C.txt};opacity:.75;line-height:1.6;max-width:750px">Arkhipov fue el único de los tres oficiales del B-59 que se negó a autorizar el lanzamiento. La humanidad no lo eligió — simplemente tuvo suerte.</div>
+    </div>
+  </div>`,
+
+  // 4 · El Paralelo — blanco, "'62" abajo-derecha
+  `<div class="sl" style="background:${C.wht};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:54px">
+    <div style="position:absolute;bottom:-40px;right:-20px;font-size:34rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1;letter-spacing:-.02em;pointer-events:none">'62</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">el paralelo hoy</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.25">Con la IA, también podría ser una sola decisión automática la que incline la balanza.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">En 1962 había humanos en el loop. Si delegamos decisiones críticas a sistemas de IA, ese margen — ese Vasili Arkhipov — desaparece.</div>
+    </div>
+  </div>`,
+
+  // 5 · Cita — lavanda profunda, "1962" arriba-izquierda
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:43px">
+    <div style="position:absolute;top:-30px;left:-15px;font-size:32rem;font-weight:900;color:${C.acc};opacity:.07;line-height:1;letter-spacing:-.03em;pointer-events:none">1962</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:43px">
+      <div style="font-size:9.7rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:3.9rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic">La historia nos salvó por suerte. La suerte no es una estrategia — y con la IA, las apuestas son más altas que nunca.</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:2.7rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc};font-weight:300">Toby Ord · The Precipice, 2020</div>
+    </div>
+  </div>`,
+
+  // 6 · Para pensar — lavanda clara, "1962" abajo-izquierda
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:54px">
+    <div style="position:absolute;bottom:-40px;left:-10px;font-size:34rem;font-weight:900;color:${C.acc};opacity:.08;line-height:1;letter-spacing:-.03em;pointer-events:none">1962</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">para pensar</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.25">Si en 1962 la suerte fue lo que nos salvó, ¿qué estamos haciendo para no depender de la suerte esta vez?</div>
+      <div style="width:130px;height:8px;background:${C.acc}"></div>
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">Con la IA, el margen de error puede ser mucho más pequeño — y el tiempo para corregir, mucho más corto.</div>
+    </div>
+  </div>`,
+
+  // 7 · CTA — violeta acento, "1962" centrado blanco
+  `<div class="sl" style="background:${C.acc};padding:86px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:48px">
+    <div style="position:absolute;font-size:36rem;font-weight:900;color:rgba(255,255,255,.07);line-height:1;letter-spacing:-.03em;pointer-events:none">1962</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:48px;text-align:center">
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:300">próximo episodio</div>
+      <div style="font-size:4.86rem;font-weight:700;color:${C.wht};line-height:1.2">¿Qué más estuvo a punto de salir mal?</div>
+      <div style="width:130px;height:8px;background:rgba(255,255,255,.5)"></div>
+      <div style="font-size:3.1rem;color:${C.wht};opacity:.75;line-height:1.5;max-width:750px">Seguí la serie histórica para entender qué hizo la humanidad — bien y mal — con tecnologías peligrosas</div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-top:16px">@unpibedecompu</div>
+    </div>
+  </div>`
+];
+
+const frame   = document.getElementById('frame');
+const track   = document.getElementById('track');
+const dotsEl  = document.getElementById('dots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+let current = 0;
+const total = slides.length;
+
+// Build slides
+slides.forEach(html => {
+  const item = document.createElement('div');
+  item.className = 'ig-item';
+  const scaler = document.createElement('div');
+  scaler.className = 'sl-scale';
+  scaler.innerHTML = html;
+  item.appendChild(scaler);
+  track.appendChild(item);
+});
+
+// Build dots
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+}
+
+function applyScale() {
+  const fw = frame.offsetWidth;
+  const scale = fw / 1080;
+  document.querySelectorAll('.sl-scale').forEach(el => {
+    el.style.transform = `scale(${scale})`;
+  });
+}
+
+function goTo(index) {
+  current = Math.max(0, Math.min(index, total - 1));
+  track.style.transform = `translateX(-${current * (100 / total)}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === total - 1;
+}
+
+prevBtn.addEventListener('click', () => goTo(current - 1));
+nextBtn.addEventListener('click', () => goTo(current + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  goTo(current - 1);
+  if (e.key === 'ArrowRight') goTo(current + 1);
+});
+
+applyScale();
+window.addEventListener('resize', applyScale);
+goTo(0);
+</script>
+</body>
+</html>
