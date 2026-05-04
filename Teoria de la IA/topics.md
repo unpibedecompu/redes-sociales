@@ -1,0 +1,6 @@
+- alineamiento
+- diferencia entre especie humana y especie IA
+- inteligencia de la IA: experta en todo menos en lavar autos
+- LLM: de predictor de palabras a agente con valores
+- LLM como reflejo de lo humano vs LLM como sistema optimizable
+- Utility Engineering

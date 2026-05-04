@@ -1,0 +1,4 @@
+- Geoffrey Hinton
+- Yoshua Bengio
+- Dan Hendrycks
+- Neel Lamda
