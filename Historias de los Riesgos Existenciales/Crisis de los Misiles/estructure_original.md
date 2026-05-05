@@ -1,167 +1,103 @@
 # Estructura Original — Crisis de los Misiles Cubanos (1962)
+*Perspectiva: Vasili Arkhipov, comandante de flotilla a bordo del submarino B-59*
 
 ---
 
 ## Slide 1 — Portada
 
-**Octubre de 1962. Un oficial soviético dijo que no. El mundo sobrevivió.**
-
-Subtítulo: La historia del hombre que evitó la guerra nuclear — y lo que nos enseña sobre la IA.
+En octubre de 1962, el protocolo era claro: tres oficiales debían estar de acuerdo para lanzar el torpedo nuclear. Dos dijeron que sí. Yo era el tercero.
 
 ---
 
 ## Slides 2–4 — El Momento
+*Primera persona. Arkhipov no sabe nada de lo que ocurre en la superficie.*
 
 ### Slide 2
 
-En 1962, la Guerra Fría llegó a su punto más peligroso.
+Octubre de 1962. Llevo semanas navegando en secreto por el Atlántico en el B-59, un submarino armado con un torpedo nuclear. Nuestras órdenes son vagas. La misión, clasificada.
 
-Estados Unidos había desplegado misiles nucleares en Turquía, apuntando a Moscú. La Unión Soviética respondió en secreto: acordó con Cuba instalar sus propios misiles a 150 kilómetros de Florida.
+No tenemos comunicación con Moscú desde hace días. No sé qué está pasando en la superficie. No sé si hay guerra.
 
-El 14 de octubre, un avión espía U-2 fotografió los sitios de construcción. El mundo no lo sabía todavía. Kennedy sí.
+Lo que sí sé: afuera hay once destructores estadounidenses.
 
 ### Slide 3
 
-Kennedy anunció la crisis el 22 de octubre por cadena nacional. Declaró un bloqueo naval alrededor de Cuba. Barcos soviéticos cargados de misiles se aproximaban a la zona de exclusión.
+El calor a bordo supera los 60 grados. El oxígeno escasea. Los hombres están al límite.
 
-Durante 13 días, los dos países con la mayor capacidad nuclear de la historia estuvieron al borde del enfrentamiento directo.
+El 27 de octubre, las explosiones empiezan a golpear el casco.
 
-El mundo contuvo la respiración.
+El capitán Savitsky no duda: cree que la guerra comenzó mientras estábamos bajo el agua. Ordena armar el torpedo nuclear.
 
-### Slide 4 — El Sábado Negro
+### Slide 4
 
-El 27 de octubre de 1962 fue el día más peligroso de la historia moderna.
+El procedimiento requiere el acuerdo de los tres oficiales de mayor rango.
 
-Tres eventos ocurrieron casi al mismo tiempo:
+El capitán Savitsky dice que sí. El oficial Maslennikov dice que sí.
 
-— Un avión U-2 estadounidense fue derribado sobre Cuba por un misil soviético.
+Yo digo que no.
 
-— Otro U-2 se desvió accidentalmente hacia espacio aéreo soviético. Cazas MiG despegaron a interceptarlo.
+Que es demasiado pronto.
 
-— En el Atlántico, un submarino soviético armado con un torpedo nuclear recibió cargas de profundidad de la marina de EEUU. Sin comunicación con Moscú desde hacía días, su capitán creyó que la guerra había comenzado.
+### Slide 5
 
----
-
-## Slide 5 — El Margen
-
-**Un voto. De un solo hombre.**
-
-A bordo del submarino B-59, el protocolo soviético requería el acuerdo unánime de tres oficiales para lanzar el torpedo nuclear.
-
-El capitán Savitsky: sí.
-El oficial político Maslennikov: sí.
-El comandante de flotilla Vasili Arkhipov: **no**.
-
-Arkhipov convenció al capitán de salir a superficie y esperar órdenes.
-
-Robert McNamara, Secretario de Defensa durante la crisis, lo describió décadas después:
-
-*"¿Qué tan cerca estuvimos? Un palmo de mano."*
+Los estadounidenses querian que el submarino se identifique. Lo pidieron tirando explosivos (por protocolo). No habia guerra. Fue una falsa alarma.
 
 ---
-
-## Slides 6–7 — La Respuesta
 
 ### Slide 6
 
-Después de los 13 días, el mundo construyó las instituciones que no tenía antes de la crisis.
+Durante los 13 dias que duro la Crisis de Misiles, hubieron 2 incidentes mas que nos dejaron al borde de la Guerra Nuclear, y practicamente, la extición humana.
 
-**Línea directa Moscú–Washington (1963):** durante la crisis, un mensaje tardaba horas en llegar. El Hotline redujo ese tiempo a minutos.
-
-**Tratado de Prohibición Parcial de Pruebas Nucleares (1963):** primer acuerdo de control de armamentos de la era nuclear. Prohibió las pruebas en la atmósfera.
-
-**Tratado de No Proliferación Nuclear (1968):** el acuerdo multilateral más firmado de la historia. Buscó impedir que más países adquirieran armas nucleares.
+¿Que se hizo para evitar que esto siga ocurriendo?¿Comó evitamos la guerra nuclear?
 
 ### Slide 7
 
-La respuesta no fue perfecta.
+COOPERACIÓN INTERNACIONAL
 
-La línea roja llegó después de la crisis, no antes. El TNP no detuvo a India, Pakistán ni Corea del Norte. Cuba quedó afuera de las negociaciones finales — y Castro estaba dispuesto a aceptar una guerra nuclear.
+## Slides 8-9 — La Respuesta
 
-Pero las instituciones se construyeron. Y eso cambió el mundo.
+### Slide 8
+
+**Línea directa Moscú–Washington (1963):** durante la crisis, los mensajes tardaban horas en descodificarse y traducirse. El Hotline redujo ese tiempo a minutos.
+
+**Tratado de No Proliferación Nuclear (1968):** buscó impedir que más países adquirieran armas nucleares. Hoy tiene 191 estados parte — el tratado de control de armas con mayor adhesión de la historia.
+
+**Tratado de Tlatelolco — 1967**: Creó la primera zona libre de armas nucleares en un área poblada: América Latina y el Caribe.
+
+## Slide 9 — La Evidencia
+
+En 1945 solo un país tenía armas nucleares. En 1962, cinco. Las proyecciones de los años 60 indicaban entre 20 y 30 para el año 2000.
+
+La gobernanza internacional contuvo esa curva en 9.
+
+El Hotline no fue un símbolo. Se usó:
+
+- **Guerra de los Seis Días (1967):** La URSS alertó a EEUU de que no intervendría militarmente a favor de los árabes. La línea directa evitó que la guerra regional escalara a confrontación entre superpotencias.
+- **Guerra Indo-Pakistaní (1971):** La URSS usó el Hotline para comunicar su apoyo a India y sus intenciones — permitiendo a EEUU calcular sus movimientos sin actuar sobre suposiciones.
+- **Guerra de Yom Kippur (1973):** Cuando la URSS amenazó con intervención unilateral, Nixon y Brezhnev usaron la línea directa para negociar un alto al fuego. Sin comunicación directa, la crisis pudo haberse convertido en guerra entre superpotencias.
 
 ---
 
-## Slide 8 — La Evidencia
-
-**En 1960, los expertos proyectaban que habría entre 20 y 30 países con armas nucleares para fines del siglo XX.**
-
-Hoy hay nueve.
-
-El Tratado de No Proliferación Nuclear no fue perfecto. Pero la diferencia entre 9 y 30 estados nucleares es la diferencia entre un mundo peligroso y un mundo casi imposible de gestionar.
-
-La gobernanza internacional funcionó. De forma incompleta, tardía y con grietas — pero funcionó.
-
----
-
-## Slides 9–10 — El Paralelo con la IA
-
-### Slide 9
-
-La Crisis de los Misiles casi termina el mundo por tres razones: velocidad, información incompleta y dependencia de decisiones individuales bajo presión extrema.
-
-Los sistemas de IA replican exactamente ese patrón.
-
-La IA acelera los tiempos de decisión de horas a segundos — igual que los misiles acortaron el tiempo de respuesta de días a minutos.
-
-Los sistemas más capaces de IA son opacos incluso para sus creadores — igual que Kennedy no sabía que ya había ojivas tácticas desplegadas en Cuba, listas para usarse.
+## Slides 10–11 — El Paralelo con la IA
 
 ### Slide 10
 
-En 1962, el mundo fue salvado porque Vasili Arkhipov tuvo autoridad para decir que no — y la usó.
+La carrera nuclear de los años 40 y 50 es el paralelo histórico más preciso para el desarrollo de la IA hoy.
 
-Los sistemas autónomos no tienen un Arkhipov.
+En menos de 20 años, la humanidad pasó de la primera explosión nuclear a miles de ojivas apuntando a cada ciudad del planeta. La carrera fue impulsada por el miedo a quedar atrás, por intereses nacionales y por la inercia de científicos que creían que su trabajo era inevitable.
 
-Si la IA reemplaza el juicio humano en decisiones de alta consecuencia, eliminamos el único mecanismo que, según los registros históricos, efectivamente funcionó.
-
-Hoy no existe un Hotline para incidentes de IA. No existe un TNP para sistemas autónomos. La gobernanza llegó después de la crisis nuclear. Con la IA, puede que no haya tiempo de aprenderlo de nuevo.
-
----
+El desarrollo de la IA sigue el mismo patrón: una carrera entre rivales geopolíticos, donde frenar se siente como perder y una tecnologia que presenta un riesgo existencial para la humanidad.
 
 ## Slide 11 — Cita
 
-*Cinco opciones — elegir una para el carrusel final:*
-
-**Opción A**
-*"La combinación indefinida de falibilidad humana y armas nucleares destruirá naciones."*
-— Robert McNamara, Secretario de Defensa de EEUU durante la Crisis de los Misiles
-
-**Opción B**
-*"La gran preocupación de Kennedy — y probablemente también de Khrushchev — era el mando y control: que en algún punto de la cadena, alguien pudiera actuar por su cuenta."*
-— Arthur Schlesinger Jr., historiador y asesor de Kennedy
-
-**Opción C**
-*"El sábado 27 de octubre de 1962, una cadena de eventos estaba en movimiento que podría haber estado cerca de terminar la civilización. ¿Qué tan cerca? Un palmo de mano."*
-— Robert McNamara
-
-**Opción D**
-*"Fue el momento más peligroso de la historia humana. Porque nunca antes dos potencias habían poseído entre ellas la capacidad técnica de destruir el mundo."*
-— Arthur Schlesinger Jr.
-
-**Opción E**
-*"Vasili Arkhipov salvó el mundo."*
-— Thomas Blanton, director del National Security Archive, en el 40° aniversario de la crisis
+**Thomas Blanton** (director del National Security Archive, en el 60° aniversario):
+> *"La crisis demostró que incluso los líderes más capaces, con la mejor información disponible, pueden estar a punto de destruir el mundo por accidente."*
 
 ---
 
 ## Slide 12 — Para pensar
 
-*Cinco opciones — elegir una para el carrusel final:*
-
-**Opción A**
-En 1962, el mundo dependió de que un solo hombre en un submarino dijera que no. ¿Qué pasa cuando ese hombre es reemplazado por un algoritmo?
-
-**Opción B**
 La gobernanza nuclear llegó después de casi destruir el mundo. ¿Cuánto daño tiene que hacer la IA antes de que construyamos las instituciones que necesitamos?
-
-**Opción C**
-Kennedy tardó 13 días en resolver la crisis. Un sistema de IA que gestione una escalada militar tendría segundos. ¿Cambia eso el resultado?
-
-**Opción D**
-El TNP no detuvo a todos los países — pero redujo los estados nucleares de 30 proyectados a 9 reales. ¿Es ese nivel de "éxito parcial" suficiente cuando hablamos de IA?
-
-**Opción E**
-Durante la crisis, ni Kennedy ni Khrushchev tenían información completa. Los dos tomaron decisiones que casi destruyen el mundo. ¿Qué tan diferente es eso de cómo se despliegan hoy los sistemas de IA?
 
 ---
 
