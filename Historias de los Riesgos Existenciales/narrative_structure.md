@@ -4,6 +4,10 @@ Cada carrusel examina un episodio histórico donde una tecnología con potencial
 
 ---
 
+- Las secciones 1, 2 y 3 se narran desde la perspectiva de uno de los participantes del evento. Consultarle al usuario qué participante quiere usar antes de escribir.
+- Siempre en primera persona.
+- Si el participante no sabe algo en ese momento de la historia, no lo menciones — revelalo más adelante, cuando el participante lo descubra o cuando la narración salga de su perspectiva.
+
 ## 1. Portada
 
 **Función:** enganchar con un hecho histórico que no se puede ignorar.
@@ -11,9 +15,13 @@ Cada carrusel examina un episodio histórico donde una tecnología con potencial
 **Qué va:**
 - Un dato o momento específico de la historia, fraseado como titular, no como enciclopedia
 - Tiene que generar urgencia o incredulidad instantánea
+- Escrito desde la perspectiva del participante elegido — como si él lo estuviera anunciando
+
 **Qué NO va:**
 - Contexto completo ni explicaciones
 - Jerga técnica o términos de política internacional sin contexto
+
+- Dar 5 opciones
 
 **Ejemplo:** *"Durante 13 días la humanidad estuvo al borde de la extinción."*
 
@@ -25,10 +33,10 @@ Cada carrusel examina un episodio histórico donde una tecnología con potencial
 
 **Qué va:**
 - El contexto mínimo necesario: quiénes, qué, cuándo
-- El mecanismo por el que el riesgo se materializó — la cadena de eventos
-- Nada de análisis todavía — solo los hechos, narrados como una historia
+- El mecanismo por el que el riesgo se materializó — la cadena de eventos, vista desde los ojos del participante elegido
+- Nada de análisis todavía — solo los hechos, narrados en primera persona o perspectiva cercana al participante
 
-**Criterio:** tiene que sentirse como una historia, no como una clase de historia.
+**Criterio:** tiene que sentirse como una historia vivida, no como una clase de historia.
 
 ---
 
@@ -37,9 +45,9 @@ Cada carrusel examina un episodio histórico donde una tecnología con potencial
 **Función:** mostrar cuán cerca estuvo de ocurrir el peor escenario.
 
 **Qué va:**
-- El número, la persona o el momento puntual que separó el desastre de la normalidad
+- El número, la persona o el momento puntual que separó el desastre de la normalidad, narrado desde la perspectiva del participante elegido
 - Puede ser un voto, un retraso, un error técnico, una persona específica
-- El dato tiene que ser lo suficientemente concreto como para que la audiencia lo visualice
+- El dato tiene que ser lo suficientemente concreto como para que la audiencia lo visualice — y el participante lo tiene que estar viviendo, no describiendo desde afuera
 
 ---
 
@@ -69,6 +77,8 @@ Cada carrusel examina un episodio histórico donde una tecnología con potencial
 - Celebración acrítica — el objetivo es mostrar evidencia real, no propaganda
 - Datos que ignoren los límites o fallas de la respuesta
 
+- Dar 5 opciones
+
 **Criterio:** el lector tiene que salir convencido de que "funcionó, al menos en parte" — base para argumentar que algo similar puede funcionar con la IA.
 
 ---
@@ -81,6 +91,8 @@ Cada carrusel examina un episodio histórico donde una tecnología con potencial
 - La analogía directa: por qué este caso se parece al riesgo de la IA
 - Qué mecanismo comparten (velocidad, falta de control, decisiones automáticas, escalada sin humanos en el loop, etc.)
 - Puede incluir lo que falta en la gobernanza de la IA comparado con la respuesta histórica
+
+- consultar por la analogia que se busca usar
 
 **Criterio:** el lector tiene que poder explicarle a alguien más por qué este caso histórico importa hoy.
 
