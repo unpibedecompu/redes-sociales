@@ -22,7 +22,8 @@
       "Bash(dir C:\\\\Users\\\\shimi\\\\Desktop\\\\unpibedecompu\\\\redes sociales\\\\Profesionales de la IA *)",
       "Bash(Get-ChildItem *)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\shimi\\\\Desktop\\\\unpibedecompu\\\\redes sociales\" | ForEach-Object { $_.Name + \" \\(\" + $\\(if \\($_.PSIsContainer\\) { \"folder\" } else { \"file\" }\\) + \"\\)\" })",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\shimi\\\\Desktop\\\\unpibedecompu\\\\redes sociales\\\\Profesionales de la IA\" -Recurse | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Users\\\\shimi\\\\Desktop\\\\unpibedecompu\\\\redes sociales\\\\\", \"\"\\) + \" \\(\" + $\\(if \\($_.PSIsContainer\\) { \"folder\" } else { \"file\" }\\) + \"\\)\" })"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\shimi\\\\Desktop\\\\unpibedecompu\\\\redes sociales\\\\Profesionales de la IA\" -Recurse | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Users\\\\shimi\\\\Desktop\\\\unpibedecompu\\\\redes sociales\\\\\", \"\"\\) + \" \\(\" + $\\(if \\($_.PSIsContainer\\) { \"folder\" } else { \"file\" }\\) + \"\\)\" })",
+      "WebFetch(domain:www.githubstatus.com)"
     ]
   }
 }

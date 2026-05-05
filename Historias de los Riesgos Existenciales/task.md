@@ -37,7 +37,6 @@ Crear `estructure_original.md`, usando la información de source y la estructura
 ### 3. Crear `estructure_one_sentence.md`
 
 - Crear `estructure_one_sentence.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje técnico, para el público general.
-- Consultar qué par de slides de cita y pregunta abierta utilizar de las opciones ofrecidas.
 - No utilizar jerga técnica, acrónimos de política internacional ni términos militares sin explicar.
 - Sí se puede usar el acrónimo IA.
 

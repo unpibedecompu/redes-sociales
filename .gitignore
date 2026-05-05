@@ -11,3 +11,9 @@ package-lock.json
 *.ico
 *.bmp
 *.tiff
+
+# Video
+*.mp4
+*.mov
+*.avi
+*.mkv
