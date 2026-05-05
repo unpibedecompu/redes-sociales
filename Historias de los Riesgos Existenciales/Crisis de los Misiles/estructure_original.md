@@ -14,19 +14,17 @@ En octubre de 1962, el protocolo era claro: tres oficiales debían estar de acue
 
 ### Slide 2
 
-Octubre de 1962. Llevo semanas navegando en secreto por el Atlántico en el B-59, un submarino armado con un torpedo nuclear. Nuestras órdenes son vagas. La misión, clasificada.
+Llevo semanas navegando en secreto por el Atlántico en el B-59, un submarino sovietico armado con un torpedo nuclear.
 
-No tenemos comunicación con Moscú desde hace días. No sé qué está pasando en la superficie. No sé si hay guerra.
-
-Lo que sí sé: afuera hay once destructores estadounidenses.
-
-### Slide 3
+No tenemos comunicación con Moscú desde hace días.
 
 El calor a bordo supera los 60 grados. El oxígeno escasea. Los hombres están al límite.
 
+### Slide 3
+
 El 27 de octubre, las explosiones empiezan a golpear el casco.
 
-El capitán Savitsky no duda: cree que la guerra comenzó mientras estábamos bajo el agua. Ordena armar el torpedo nuclear.
+El capitán Savitsky no duda: cree que la guerra comenzó mientras estábamos bajo el agua. Ordena lanzar el torpedo nuclear.
 
 ### Slide 4
 
@@ -34,9 +32,7 @@ El procedimiento requiere el acuerdo de los tres oficiales de mayor rango.
 
 El capitán Savitsky dice que sí. El oficial Maslennikov dice que sí.
 
-Yo digo que no.
-
-Que es demasiado pronto.
+Yo digo que no. Es demasiado pronto.
 
 ### Slide 5
 
@@ -50,11 +46,12 @@ Durante los 13 dias que duro la Crisis de Misiles, hubieron 2 incidentes mas que
 
 ¿Que se hizo para evitar que esto siga ocurriendo?¿Comó evitamos la guerra nuclear?
 
+
+## Slides 7-9 — La Respuesta
+
 ### Slide 7
 
 COOPERACIÓN INTERNACIONAL
-
-## Slides 8-9 — La Respuesta
 
 ### Slide 8
 
@@ -70,17 +67,21 @@ En 1945 solo un país tenía armas nucleares. En 1962, cinco. Las proyecciones d
 
 La gobernanza internacional contuvo esa curva en 9.
 
-El Hotline no fue un símbolo. Se usó:
+## Slide 10
 
-- **Guerra de los Seis Días (1967):** La URSS alertó a EEUU de que no intervendría militarmente a favor de los árabes. La línea directa evitó que la guerra regional escalara a confrontación entre superpotencias.
-- **Guerra Indo-Pakistaní (1971):** La URSS usó el Hotline para comunicar su apoyo a India y sus intenciones — permitiendo a EEUU calcular sus movimientos sin actuar sobre suposiciones.
-- **Guerra de Yom Kippur (1973):** Cuando la URSS amenazó con intervención unilateral, Nixon y Brezhnev usaron la línea directa para negociar un alto al fuego. Sin comunicación directa, la crisis pudo haberse convertido en guerra entre superpotencias.
+El Hotline se usó:
+
+- **Guerra de los Seis Días (1967)**
+- **Guerra Indo-Pakistaní (1971)**
+- **Guerra de Yom Kippur (1973)**
+
+Evitando una guerra nuclear entre superpotencias en cada caso.
 
 ---
 
-## Slides 10–11 — El Paralelo con la IA
+## Slides 11–12 — El Paralelo con la IA
 
-### Slide 10
+### Slide 11
 
 La carrera nuclear de los años 40 y 50 es el paralelo histórico más preciso para el desarrollo de la IA hoy.
 
@@ -88,20 +89,20 @@ En menos de 20 años, la humanidad pasó de la primera explosión nuclear a mile
 
 El desarrollo de la IA sigue el mismo patrón: una carrera entre rivales geopolíticos, donde frenar se siente como perder y una tecnologia que presenta un riesgo existencial para la humanidad.
 
-## Slide 11 — Cita
+## Slide 12 — Cita
 
 **Thomas Blanton** (director del National Security Archive, en el 60° aniversario):
 > *"La crisis demostró que incluso los líderes más capaces, con la mejor información disponible, pueden estar a punto de destruir el mundo por accidente."*
 
 ---
 
-## Slide 12 — Para pensar
+## Slide 13 — Para pensar
 
 La gobernanza nuclear llegó después de casi destruir el mundo. ¿Cuánto daño tiene que hacer la IA antes de que construyamos las instituciones que necesitamos?
 
 ---
 
-## Slide 13 — CTA
+## Slide 14 — CTA
 
 La historia no recuerda los sistemas que fallaron. Recuerda a los que dijeron que no a tiempo.
 
