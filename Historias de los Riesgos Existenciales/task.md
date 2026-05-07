@@ -34,17 +34,11 @@ Cada sección debe incluir sus fuentes al final como links de Markdown.
 
 Crear `estructure_original.md`, usando la información de source y la estructura base siguiendo la estructura narrativa definida en `narrative_structure.md`.
 
-### 3. Crear `estructure_one_sentence.md`
+### 3. Crear `carrousel_description.md`
 
-- Crear `estructure_one_sentence.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje técnico, para el público general.
-- No utilizar jerga técnica, acrónimos de política internacional ni términos militares sin explicar.
-- Sí se puede usar el acrónimo IA.
+Especificación completa de diseño y texto por slide, derivada de `estructure_original.md`. Incluye fondo, número de archivo de fondo, layout y tabla con cada elemento de texto junto a sus specs tipográficas exactas. Tomar como referencia `template_description.md` y `template.html`.
 
-### 4. Crear `carrousel_description.md`
-
-Especificación completa de diseño y texto por slide, derivada de `estructure_one_sentence.md`. Incluye fondo, número de archivo de fondo, layout y tabla con cada elemento de texto junto a sus specs tipográficas exactas. Tomar como referencia `template_description.md` y `template.html`.
-
-### 5. Crear `[Nombre_Evento].html`
+### 4. Crear `[Nombre_Evento].html`
 
 Archivo HTML interactivo del carrusel, basado en `carrousel_description.md`. Nombrar el archivo con el nombre del evento histórico en formato `Nombre_Evento.html` y ubicarlo en el directorio `Historias de los Riesgos Existenciales/Nombre Evento`.
 
