@@ -1,0 +1,2 @@
+- executive summary: https://internationalaisafetyreport.org/publication/2026-report-executive-summary
+- full report: https://internationalaisafetyreport.org/publication/international-ai-safety-report-2026
