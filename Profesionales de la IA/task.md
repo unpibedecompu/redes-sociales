@@ -40,7 +40,7 @@ Crear `estructure_original.md`, usando la información de source y la estructura
 ### 3. Crear `estructure_one_sentence.md`
 
 - Crear `estructure_one_sentece.md` derivada de `estructure_original.md`. Una sola oración por slide, sin lenguaje tecnico, para el publico general. 
-- Consulta que par de slide de los puntos (4.,5.) de `narrative_structure.md` utilizar, y que eventos del punto 2. utilizar.
+- Consulta que par de slide de los puntos (5.,6.) de `narrative_structure.md` utilizar, y que eventos del punto 2. utilizar.
 - No utilizar palabras como neurona, red neuronal, backpropagation. 
 - Si se puede usar el acronimo IA.
 
@@ -48,10 +48,32 @@ Crear `estructure_original.md`, usando la información de source y la estructura
 
 Especificación completa de diseño y texto por slide, derivada de `estructure_one_sentence.md`. Incluye fondo, marco, layout y tabla con cada elemento de texto junto a sus specs tipográficas exactas. Tomar como referencia `template_description.md` y `template.html`.
 
-### 5. Crear `[Nombre_Apellido].html`
+### 5. Preparar imagen del profesional
+
+- Pedir la foto del profesional **sin fondo** (fondo transparente, PNG).
+- Guardarla en `Profesionales de la IA/Nombre Apellido/background/Nombre Apellido.png`.
+- Correr `blend_with_eyes.py` sobre esa imagen:
+  ```
+  python "Profesionales de la IA/blend_with_eyes.py" "Profesionales de la IA/Nombre Apellido/background/Nombre Apellido.png"
+  ```
+  Esto genera `Nombre Apellido_composed.png` en el mismo directorio.
+- Usar `Nombre Apellido_composed.png` como imagen del profesional en el HTML.
+
+### 6. Crear `[Nombre_Apellido].html`
 
 Archivo HTML interactivo del carrusel, basado en `carrousel_description.md`. Nombrar el archivo con el nombre completo del profesional en formato `Nombre_Apellido.html` y ubicarlo en el directorio `Profesionales de la IA/Nombre Apellido`.
 
 Tomar `template.html` como referencia.
+
+### 7. Crear `ig_description.md`
+
+Descripción para la publicación de Instagram. Cuatro oraciones cortas:
+
+1. `[Nombre] [Apellido]: [rol o título que lo define]` — con emoji acorde.
+2. Su contribución principal al campo — una oración, sin lenguaje técnico.
+3. Su advertencia central sobre los riesgos de la IA — una oración.
+4. `Seguime para enterarte de más.` 👇
+
+Hashtags: `#AI #artificialintelligence #aisafety #airisks #agi`
 
 Ask me for aproval between each step

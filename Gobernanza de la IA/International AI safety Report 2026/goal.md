@@ -5,10 +5,12 @@
 - mostrar riesgos mas importantes
 - mostrar a la cooperación internacional como solución
 
-## Order:
+---
+
+## Slides Order:
 
 1. Portada
-2. Explicar que es el "International AI Safety Report"
+2. Explicar que es el "International AI Safety Report" en pocas palabras
 3. Mejora en capacidades: desbalance en la capacidades desarrolladas -> cuadro comparativo de matematica vs capacidad simple
 4. Mejora en capacidades: trayectoria
   - **Se detenga** si se encuentra un cuello de botella. Ej: datos, energia, infraestructura
