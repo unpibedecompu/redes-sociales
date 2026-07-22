@@ -11,4 +11,4 @@ Ver [estilo general](./general_style.md) para paleta, tipografía y reglas de co
 
 ## Uso de fondos
 
-Este pilar alterna entre los tres colores de la paleta general (lavanda clara, blanco, lavanda profunda, acento) según el tipo de slide — ver el detalle exacto en `template_description.md` de este pilar.
+Este pilar alterna entre los tres colores de la paleta general (lavanda clara, blanco, lavanda profunda, acento) según el tipo de slide.
