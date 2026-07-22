@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International AI Safety Report 2026 — Gobernanza de la IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #111;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 28px;
+}
+
+header { width: min(540px, 90vw); }
+.pilar-label {
+  font-size: 0.7rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #9b5de5;
+  margin-bottom: 8px;
+}
+header h2 { font-size: 1.5rem; font-weight: 700; color: #eee; margin-bottom: 5px; }
+header p  { font-size: 0.78rem; color: #555; }
+
+.ig-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: min(540px, 90vw);
+}
+.ig-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.ig-frame {
+  flex: 1;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 14px;
+  position: relative;
+}
+.ig-track {
+  display: flex;
+  width: 1100%;
+  height: 100%;
+  transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+}
+.ig-item {
+  flex: 0 0 9.09090909%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.sl-scale {
+  position: absolute;
+  top: 0; left: 0;
+  transform-origin: top left;
+}
+.sl {
+  width: 1080px;
+  height: 1080px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Outfit', sans-serif;
+}
+
+.arrow {
+  background: none;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: border-color .2s, color .2s;
+  user-select: none;
+}
+.arrow:hover:not(:disabled) { border-color: #9b5de5; color: #9b5de5; }
+.arrow:disabled { opacity: 0.2; cursor: default; }
+
+.ig-dots { display: flex; gap: 7px; align-items: center; }
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #2e2e2e;
+  cursor: pointer;
+  transition: background .22s, transform .22s;
+}
+.dot.active { background: #9b5de5; transform: scale(1.25); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pilar-label">Pilar 6 · Gobernanza de la IA</div>
+  <h2>International AI Safety Report 2026</h2>
+  <p>Paleta Lavanda + Violeta · Outfit · 11 slides · 1080×1080 px</p>
+</header>
+
+<div class="ig-wrap">
+  <div class="ig-row">
+    <button class="arrow" id="prev" disabled>&#8592;</button>
+    <div class="ig-frame" id="frame">
+      <div class="ig-track" id="track"></div>
+    </div>
+    <button class="arrow" id="next">&#8594;</button>
+  </div>
+  <div class="ig-dots" id="dots"></div>
+</div>
+
+<script>
+const C = { bg1:'#f0e8ff', bg2:'#e4d4ff', acc:'#9b5de5', txt:'#1a1a1a', wht:'#ffffff' };
+
+const crossAcc = `
+  <svg style="position:absolute;top:54px;left:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>
+  <svg style="position:absolute;top:54px;right:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>
+  <svg style="position:absolute;bottom:54px;left:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>
+  <svg style="position:absolute;bottom:54px;right:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>`;
+
+const crossSoft = `
+  <svg style="position:absolute;top:54px;left:54px;opacity:.25" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>
+  <svg style="position:absolute;top:54px;right:54px;opacity:.25" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>
+  <svg style="position:absolute;bottom:54px;left:54px;opacity:.25" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>
+  <svg style="position:absolute;bottom:54px;right:54px;opacity:.25" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="${C.acc}" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="${C.acc}" stroke-width="5"/></svg>`;
+
+const crossWht = `
+  <svg style="position:absolute;top:54px;left:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="white" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="white" stroke-width="5"/></svg>
+  <svg style="position:absolute;top:54px;right:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="white" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="white" stroke-width="5"/></svg>
+  <svg style="position:absolute;bottom:54px;left:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="white" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="white" stroke-width="5"/></svg>
+  <svg style="position:absolute;bottom:54px;right:54px;opacity:.4" width="80" height="80" viewBox="0 0 80 80"><line x1="40" y1="8" x2="40" y2="72" stroke="white" stroke-width="5"/><line x1="8" y1="40" x2="72" y2="40" stroke="white" stroke-width="5"/></svg>`;
+
+const sep = `<div style="width:130px;height:8px;background:${C.acc}"></div>`;
+
+const slides = [
+
+  // 1 · Portada
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:flex-end;gap:30px">
+    ${crossAcc}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:30px">
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};font-weight:300">Gobernanza de la IA · Informe Internacional</div>
+      <div style="font-size:5.2rem;font-weight:700;color:${C.txt};line-height:1.1">El informe que 30 países encargaron para entender la IA</div>
+      ${sep}
+      <div style="font-size:3.0rem;color:${C.txt};opacity:.7;line-height:1.45">Lo que la ciencia consensuada dice sobre el riesgo real del desarrollo de IA</div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:${C.acc};font-weight:300;margin-top:6px">@unpibedecompu</div>
+    </div>
+  </div>`,
+
+  // 2 · Qué es
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:44px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:44px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">qué es</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.25">El primer análisis científico global sobre IA de propósito general</div>
+      ${sep}
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div style="font-size:2.9rem;color:${C.txt};opacity:.8;line-height:1.5;display:flex;gap:22px;align-items:flex-start">
+          <span style="color:${C.acc};font-weight:700;font-size:3.4rem;flex-shrink:0;line-height:1.2">30</span>
+          <span>países solicitantes — más de 100 expertos científicos participantes</span>
+        </div>
+        <div style="font-size:2.9rem;color:${C.txt};opacity:.8;line-height:1.5;display:flex;gap:22px;align-items:flex-start">
+          <span style="color:${C.acc};font-weight:700;flex-shrink:0">→</span>
+          <span>Coordinado por Yoshua Bengio, Université de Montréal</span>
+        </div>
+        <div style="font-size:2.9rem;color:${C.txt};opacity:.8;line-height:1.5;display:flex;gap:22px;align-items:flex-start">
+          <span style="color:${C.acc};font-weight:700;flex-shrink:0">→</span>
+          <span>Objetivo: generar evidencia compartida para que los gobiernos puedan actuar</span>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  // 3 · Desbalance de capacidades
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:36px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:36px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">mejora en capacidades</div>
+      <div style="font-size:3.8rem;font-weight:700;color:${C.txt};line-height:1.2">La IA resuelve olimpiadas de matemáticas. Pero el avance no es parejo.</div>
+      ${sep}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div style="background:rgba(155,93,229,.12);border-radius:18px;padding:32px;display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:2.0rem;font-weight:700;color:${C.acc};letter-spacing:.06em;text-transform:uppercase">Formal / Técnico</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.85">Olimpiada de Matemáticas</div>
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.85">Código de competición</div>
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.85">Escritura estructurada</div>
+          </div>
+          <div style="margin-top:6px">
+            <div style="font-size:2.2rem;font-weight:900;color:${C.acc}">Rendimiento alto</div>
+            <div style="height:10px;width:100%;background:rgba(155,93,229,.2);border-radius:5px;margin-top:8px">
+              <div style="height:100%;width:90%;background:${C.acc};border-radius:5px"></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(26,26,26,.06);border-radius:18px;padding:32px;display:flex;flex-direction:column;gap:16px">
+          <div style="font-size:2.0rem;font-weight:700;color:${C.txt};opacity:.55;letter-spacing:.06em;text-transform:uppercase">Abierto / Cotidiano</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.6">Razonamiento causal</div>
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.6">Consistencia lógica</div>
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.6">Comprensión contextual</div>
+          </div>
+          <div style="margin-top:6px">
+            <div style="font-size:2.2rem;font-weight:900;color:${C.txt};opacity:.45">Variable</div>
+            <div style="height:10px;width:100%;background:rgba(26,26,26,.1);border-radius:5px;margin-top:8px">
+              <div style="height:100%;width:52%;background:rgba(26,26,26,.3);border-radius:5px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  // 4 · Trayectoria
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:40px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">trayectoria</div>
+      <div style="font-size:4.0rem;font-weight:700;color:${C.txt};line-height:1.2">¿Qué sigue? Depende de si hay un cuello de botella.</div>
+      ${sep}
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;gap:24px;align-items:center;padding:24px 28px;border-left:6px solid rgba(26,26,26,.2);background:rgba(26,26,26,.04);border-radius:0 14px 14px 0">
+          <div style="font-size:3.6rem;flex-shrink:0">🛑</div>
+          <div>
+            <div style="font-size:2.4rem;font-weight:700;color:${C.txt};opacity:.45;letter-spacing:.05em;text-transform:uppercase">Se detiene</div>
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.5;line-height:1.5;margin-top:4px">Datos, energía o infraestructura frenan el progreso</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:24px;align-items:center;padding:24px 28px;border-left:6px solid ${C.acc};background:rgba(155,93,229,.07);border-radius:0 14px 14px 0">
+          <div style="font-size:3.6rem;flex-shrink:0">➡️</div>
+          <div>
+            <div style="font-size:2.4rem;font-weight:700;color:${C.acc};letter-spacing:.05em;text-transform:uppercase">Mantiene el ritmo</div>
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.7;line-height:1.5;margin-top:4px">Crecimiento continuo al ritmo actual</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:24px;align-items:center;padding:24px 28px;border-left:6px solid ${C.txt};background:rgba(26,26,26,.09);border-radius:0 14px 14px 0">
+          <div style="font-size:3.6rem;flex-shrink:0">⚡</div>
+          <div>
+            <div style="font-size:2.4rem;font-weight:700;color:${C.txt};letter-spacing:.05em;text-transform:uppercase">Se acelera — ya ocurre</div>
+            <div style="font-size:2.1rem;color:${C.txt};opacity:.75;line-height:1.5;margin-top:4px">La IA ayuda en su propio desarrollo. Este camino ya está activo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  // 5 · Riesgos: mal uso
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:40px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">riesgos severos · mal uso</div>
+      <div style="font-size:4.0rem;font-weight:700;color:${C.txt};line-height:1.2">La IA reduce el costo de hacer daño a escala masiva</div>
+      ${sep}
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;gap:22px;align-items:flex-start;padding:22px 26px;border-left:6px solid ${C.acc};background:rgba(155,93,229,.07);border-radius:0 14px 14px 0">
+          <div style="font-size:3.0rem;flex-shrink:0;line-height:1.3">🎭</div>
+          <div style="font-size:2.3rem;color:${C.txt};line-height:1.55">Fraudes, estafas, manipulación e imágenes íntimas no consensuales</div>
+        </div>
+        <div style="display:flex;gap:22px;align-items:flex-start;padding:22px 26px;border-left:6px solid ${C.acc};background:rgba(155,93,229,.07);border-radius:0 14px 14px 0">
+          <div style="font-size:3.0rem;flex-shrink:0;line-height:1.3">💻</div>
+          <div>
+            <div style="font-size:2.3rem;color:${C.txt};line-height:1.55">Ciberataques más veloces y sofisticados</div>
+            <div style="font-size:2.0rem;color:${C.acc};font-weight:600;margin-top:6px">→ Ver: Mythos Preview</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:22px;align-items:flex-start;padding:22px 26px;border-left:6px solid ${C.acc};background:rgba(155,93,229,.07);border-radius:0 14px 14px 0">
+          <div style="font-size:3.0rem;flex-shrink:0;line-height:1.3">⚗️</div>
+          <div style="font-size:2.3rem;color:${C.txt};line-height:1.55">Armas biológicas: reducción de la barrera de acceso para actores sin expertise</div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  // 6 · Riesgos: trabajo y automation bias
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:44px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:44px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">riesgos severos · impacto sistémico</div>
+      <div style="font-size:4.0rem;font-weight:700;color:${C.txt};line-height:1.2">Dos riesgos que se refuerzan mutuamente</div>
+      ${sep}
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div style="padding:32px;background:rgba(155,93,229,.08);border-radius:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:2.3rem;font-weight:700;color:${C.acc};text-transform:uppercase;letter-spacing:.06em">Mercado laboral</div>
+          <div style="font-size:2.7rem;color:${C.txt};line-height:1.6">Automatización masiva de tareas cognitivas. El impacto afecta a trabajos de conocimiento, no solo manuales.</div>
+        </div>
+        <div style="padding:32px;background:rgba(26,26,26,.05);border-radius:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:2.3rem;font-weight:700;color:${C.txt};text-transform:uppercase;letter-spacing:.06em">Global Automation Bias</div>
+          <div style="font-size:2.7rem;color:${C.txt};opacity:.75;line-height:1.6">Tendencia global a confiar en decisiones de la IA sin verificarlas, incluso cuando son erróneas.</div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  // 7 · Riesgos: pérdida de control
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:54px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:54px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">riesgos severos · pérdida de control</div>
+      <div style="font-size:4.2rem;font-weight:700;color:${C.txt};line-height:1.25">Sistemas que aprenden a perseguir objetivos que no les asignamos</div>
+      ${sep}
+      <div style="font-size:3.1rem;color:${C.txt};opacity:.75;line-height:1.7">A medida que los sistemas de IA se vuelven más capaces y autónomos, aumenta el riesgo de que actúen de formas imprevistas — o que resistan intentos de corrección. Es el riesgo más difícil de medir y el más difícil de revertir.</div>
+    </div>
+  </div>`,
+
+  // 8 · Brechas científicas (quote layout)
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:32px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">gestión de riesgos · brechas científicas</div>
+      <div style="font-size:9.7rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1;margin-top:-10px">"</div>
+      <div style="font-size:3.1rem;font-weight:600;color:${C.txt};line-height:1.65;font-style:italic;margin-top:-55px">Los investigadores aún no pueden entrenar sistemas de IA para que se comporten como pretenden, ni explicar por qué producen sus resultados. Los métodos de evaluación tampoco detectan capacidades peligrosas antes del despliegue.</div>
+      ${sep}
+      <div style="font-size:2.4rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc};font-weight:300">International AI Safety Report 2026</div>
+    </div>
+  </div>`,
+
+  // 9 · Capacidad institucional
+  `<div class="sl" style="background:${C.bg1};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:48px">
+      <div style="font-size:2.6rem;letter-spacing:.15em;text-transform:uppercase;color:${C.acc};font-weight:300">gestión de riesgos · instituciones</div>
+      <div style="font-size:4.0rem;font-weight:700;color:${C.txt};line-height:1.2">Lo que hay que construir: evidencia más rápida, coordinación sin fronteras</div>
+      ${sep}
+      <div style="display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;gap:26px;align-items:flex-start">
+          <div style="width:12px;height:12px;background:${C.acc};border-radius:50%;flex-shrink:0;margin-top:16px"></div>
+          <div style="font-size:2.9rem;color:${C.txt};opacity:.8;line-height:1.6">Acelerar la generación de evidencia sobre los riesgos reales de la IA</div>
+        </div>
+        <div style="display:flex;gap:26px;align-items:flex-start">
+          <div style="width:12px;height:12px;background:${C.acc};border-radius:50%;flex-shrink:0;margin-top:16px"></div>
+          <div style="font-size:2.9rem;color:${C.txt};opacity:.8;line-height:1.6">Coordinar la respuesta institucional — la IA actúa sin fronteras. Las instituciones, sí las tienen.</div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  // 10 · Cita institucional
+  `<div class="sl" style="background:${C.bg2};padding:86px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+    ${crossSoft}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:40px">
+      <div style="font-size:9.7rem;font-weight:900;color:${C.acc};opacity:.2;line-height:1">"</div>
+      <div style="font-size:3.9rem;font-weight:600;color:${C.txt};line-height:1.6;font-style:italic;margin-top:-52px">Some institutions may have yet to fully appreciate the scale and societal implications of general-purpose AI advances.</div>
+      ${sep}
+      <div style="font-size:2.7rem;letter-spacing:.1em;text-transform:uppercase;color:${C.acc};font-weight:300">International AI Safety Report 2026</div>
+    </div>
+  </div>`,
+
+  // 11 · CTA
+  `<div class="sl" style="background:${C.acc};padding:86px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:48px">
+    ${crossWht}
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:48px;text-align:center">
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:300">seguí aprendiendo</div>
+      <div style="font-size:4.6rem;font-weight:700;color:${C.wht};line-height:1.2">La tecnología no espera. Las instituciones, sí.</div>
+      <div style="width:130px;height:8px;background:rgba(255,255,255,.5)"></div>
+      <div style="font-size:3.0rem;color:${C.wht};opacity:.8;line-height:1.55;max-width:750px">Seguí la serie de Gobernanza de la IA para entender qué se necesita para una supervisión que realmente funcione.</div>
+      <div style="font-size:2.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-top:10px">@unpibedecompu</div>
+    </div>
+  </div>`
+
+];
+
+const frame   = document.getElementById('frame');
+const track   = document.getElementById('track');
+const dotsEl  = document.getElementById('dots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+let current = 0;
+const total = slides.length;
+
+slides.forEach(html => {
+  const item = document.createElement('div');
+  item.className = 'ig-item';
+  const scaler = document.createElement('div');
+  scaler.className = 'sl-scale';
+  scaler.innerHTML = html;
+  item.appendChild(scaler);
+  track.appendChild(item);
+});
+
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+}
+
+function applyScale() {
+  const fw = frame.offsetWidth;
+  const scale = fw / 1080;
+  document.querySelectorAll('.sl-scale').forEach(el => {
+    el.style.transform = `scale(${scale})`;
+  });
+}
+
+function goTo(index) {
+  current = Math.max(0, Math.min(index, total - 1));
+  track.style.transform = `translateX(-${current * (100 / total)}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === total - 1;
+}
+
+prevBtn.addEventListener('click', () => goTo(current - 1));
+nextBtn.addEventListener('click', () => goTo(current + 1));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  goTo(current - 1);
+  if (e.key === 'ArrowRight') goTo(current + 1);
+});
+
+applyScale();
+window.addEventListener('resize', applyScale);
+goTo(0);
+</script>
+</body>
+</html>

@@ -36,11 +36,11 @@
 
 - **GFlowNets (2021–presente)** — Las *Generative Flow Networks* son un nuevo paradigma para aprender políticas generativas que muestrean con probabilidad proporcional a una función de recompensa. Especialmente útiles para descubrimiento científico. Hoy son el núcleo técnico del proyecto Scientist AI en LawZero.
 
+*Fuentes: [Paper: Neural Probabilistic LM (JMLR 2003)](https://dl.acm.org/doi/10.5555/944919.944966) · [Paper: Attention (arXiv 2014)](https://arxiv.org/abs/1409.0473) · [Paper: GANs (arXiv 2014)](https://arxiv.org/abs/1406.2661) · [Deep Learning (MIT Press)](https://www.deeplearningbook.org/) · [ACM Turing Award 2018](https://www.acm.org/articles/bulletins/2019/march/turing-award-2018)*
+
 ### Impacto general
 
 Bengio es uno de los tres "Padrinos del Deep Learning" junto a Geoffrey Hinton y Yann LeCun. Su trabajo estableció las bases matemáticas y arquitectónicas de los sistemas de IA más usados del mundo. El mecanismo de atención que desarrolló su equipo en 2014 es el componente central de ChatGPT, Gemini, Claude y cualquier LLM moderno. Las GANs que co-firmó habilitan todo el contenido sintético que circula hoy en internet. Y el libro de texto *Deep Learning* (MIT Press, 2016), co-escrito con Ian Goodfellow y Aaron Courville, formó a una generación entera de investigadores en IA.
-
-*Fuentes: [Paper: Neural Probabilistic LM (JMLR 2003)](https://dl.acm.org/doi/10.5555/944919.944966) · [Paper: Attention (arXiv 2014)](https://arxiv.org/abs/1409.0473) · [Paper: GANs (arXiv 2014)](https://arxiv.org/abs/1406.2661) · [Deep Learning (MIT Press)](https://www.deeplearningbook.org/) · [ACM Turing Award 2018](https://www.acm.org/articles/bulletins/2019/march/turing-award-2018)*
 
 ## Premios y reconocimientos
 
