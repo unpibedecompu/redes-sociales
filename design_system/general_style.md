@@ -44,5 +44,3 @@ Cada pilar tiene **un único elemento gráfico decorativo distintivo** que lo di
 | [Gobernanza de la IA](./gobernanza_de_la_ia.md) | Cruces Decorativas |
 | AI Safety | Círculos Decorativos |
 | Noticias de la IA | Palabras grandes repetidas |
-
-Para el detalle de contenido slide por slide de cada pilar, ver el `template_description.md` dentro de la carpeta de ese pilar.

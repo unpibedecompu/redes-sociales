@@ -13,4 +13,4 @@ Ver [estilo general](./general_style.md) para paleta, tipografía y reglas de co
 
 ## Uso de fondos
 
-Este pilar alterna entre acento (portada), lavanda clara (contenido) y lavanda profunda (cita) — ver el detalle exacto en `template_description.md` de este pilar.
+Este pilar alterna entre acento (portada), lavanda clara (contenido) y lavanda profunda (cita).
