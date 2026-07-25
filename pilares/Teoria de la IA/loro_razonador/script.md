@@ -1,0 +1,4 @@
+- las LLM's no son solo loros estocasticos
+- Una parte del entrenamiento se encarga de que razonen
+- un buen razonamiento es superior a "decir la palabra mas probable"
+- 

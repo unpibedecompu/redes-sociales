@@ -1,5 +1,0 @@
-- nuclear weapons
-- biological weapons
-- chemical weapons
-- second world war
-- ozone layer
