@@ -1,0 +1,1 @@
+- Fable 5 system card talks about limiting RSI: https://www-cdn.anthropic.com/d00db56fa754a1b115b6dd7cb2e3c342ee809620.pdf
