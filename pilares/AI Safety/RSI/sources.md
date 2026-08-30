@@ -1,1 +1,2 @@
 - Fable 5 system card talks about limiting RSI: https://www-cdn.anthropic.com/d00db56fa754a1b115b6dd7cb2e3c342ee809620.pdf
+- " the rare occurrences of misalignment present in today’s models could compound as the models build their successors, growing more frequent but less understood until we lose control of them.": https://www.anthropic.com/institute/recursive-self-improvement

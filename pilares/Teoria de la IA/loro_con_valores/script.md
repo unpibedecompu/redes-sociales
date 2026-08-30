@@ -49,7 +49,7 @@
 
 - ¿como hacen las empresas para definir estos valores? al dia de hoy no existe una manera 100% efectiva "definirlos"
 - Anthropic lo logra con bastante exito describiendo los valores deseados en una "constitución"
-- Pero tambien existen casos como el de openAI que tuve que dar de baja a chatGPT-4o que en lugar de ser sincera, siempre te daba la razón [palabra psicofancia escrita en la pantalla], generando un par de casos de psicosis en el camino [imagen de informe]
+- Pero tambien existen casos como el de openAI que tuvo que dar de baja a chatGPT-4o que en lugar de ser sincera, siempre te daba la razón [palabra psicofancia escrita en la pantalla], generando un par de casos de psicosis en el camino [imagen de informe]
 
 ### outro 2: frase final
 - [cerrar con una conclusión sobre la tasa de ceramica]

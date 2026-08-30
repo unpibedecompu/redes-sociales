@@ -15,4 +15,4 @@
   - portada
   - descripción con hashtag
   - utilizar "reel de prueba"
-  - fuentes en linktree 
+  - fuentes en linktree
