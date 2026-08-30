@@ -12,7 +12,7 @@
 - [yo escuchando un audio de mi amigo, con voz en off del audio, sincero]
 - ah, pero te salio para el cu-
 - [mi voz en off]
-- la IA me respondio "¡Está muy linda! Se nota que es hecha a mano, y eso le da un montón de carácter"
+- la IA me respondio [ voz de agente de voz ]"¡Está muy linda! Se nota que es hecha a mano, y eso le da un montón de carácter"
 
 - si la IA aprende de las personas, ¿por que no responde con una metira piadosa o una sincerdad brutal como mis amigos?
 
@@ -29,6 +29,6 @@
 
 ### outro 2: frase final
  
-- A medida que se sigan automatizando decisiones con estos modelos, desde la contratación empleados, hasta la aprobación de seguros medicos, mas control van a tener estos valores sobre nuestras vidas.
+- A medida que se sigan automatizando decisiones con estos modelos, desde la contratación de empleados, hasta la aprobación de seguros medicos, mas control van a tener estos valores sobre nuestras vidas.
 - ¿no seria bueno, quizas, que todos podamos decidir sobre estos valores, antes de que estos modelos decidan por nosotros?
 - te leo en los comentarios
