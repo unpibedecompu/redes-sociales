@@ -1,0 +1,6 @@
+- reseacher summary: https://www.planned-obsolescence.org/p/the-hugging-face-attack-surprised
+- complete report: https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/
+- twitter METR summary report: https://x.com/METR_Evals/status/2092692175452803393
+- open AI report: https://openai.com/es-419/index/hugging-face-incident-and-the-road-ahead/
+- black hat talk: https://www.youtube.com/watch?v=87DyyMV0kCY
+- public AI boards: https://archive.ph/peSm1
