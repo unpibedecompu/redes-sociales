@@ -14,4 +14,4 @@ Si no que tenga como objetivo algo tan brillante como viajar a las estrellas o c
 Y al ser tan inteligente va a poder hacer cualquier cosa para cumplirlo. Hackear los semaforos de una ciudad [ clip de un choque leve ], diseñar pandemias, o peor aun, tirar abajo todas las redes sociales [ se corta a mitad de frase a pantalla negra ].
 
 [ Aparesco por el costado de la pantalla negra ]
-¿Que tan probable es que pase algo asi?, te invito a que lo leas en mi newsletter, te dejo el link en la bio. [ image del newsletter con titulo ]
+¿Que tan probable es que pase algo asi? y ¿cuando podria llegar a pasar?, te invito a que lo leas en mi newsletter, te dejo el link en la bio. [ image del newsletter con titulo ]

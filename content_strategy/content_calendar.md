@@ -1,3 +1,5 @@
+- producción viernes, sabados, domingo y lunes
+
 - publicar reels martes, jueves y sabados
 - publicar de manera ciclica:
   - Teoria de la IA
