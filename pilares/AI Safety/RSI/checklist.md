@@ -1,7 +1,8 @@
 # checklist:
+
 ## [x] Fuentes en Doc
 ## [x] Link a portada: https://www.canva.com/design/DAHTU1rxpkc/gLphBYBNPxeTnGqL0qKm0g/edit
-## [ ] Guión historia pregunta difusión del mismo dia: 
+## [x] Guión historia pregunta difusión del mismo dia: 
 - Se que entre mis seguidores tiene opiniones muy variadas sobre la IA, asi que les queria consultar,
 
 ## [x] Pregunta mismo dia:
