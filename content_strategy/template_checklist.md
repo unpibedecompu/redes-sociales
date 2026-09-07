@@ -1,14 +1,16 @@
 # checklist:
-[ ] Usar reel de prueba
-[ ] Fuentes en LinkTree
-[ ] Link a portada:
-[ ] Guión historia difusión del dia anterior:
 
-[ ] Pregunta dia anterior:
+## [ ] Fuentes en Doc
+## [ ] Link a portada:
+## [ ] Guión historia pregunta difusión del mismo dia:
 
-[ ] Responder preguntas el dia anterior
-[ ] Descripción:
+## [ ] Pregunta mismo dia:
 
-[ ] Hashtag:
+## [ ] Descripción:
 
-[ ] Historia promoción
+## [ ] Hashtag: 
+
+## [ ] Publicar historia pregunta difusión
+## [ ] Responder respuestas historia pregunta
+## [ ] Usar reel de prueba
+## [ ] Historia promoción
