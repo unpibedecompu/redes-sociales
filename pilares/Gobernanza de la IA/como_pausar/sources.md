@@ -1,0 +1,5 @@
+- 8 companies: https://futureoflife.org/ai-safety-index-summer-2026/
+- 16 companies: https://www.infosecurity-magazine.com/news/ai-seoul-summit-safety-commitments/
+- 9 companies: https://epoch.ai/data/ai-companies?view=graph&tab=revenue
+- datacenter images: https://epoch.ai/data/ai-data-centers
+- chips supply chain: https://epoch.ai/publications/chips-topic-overview
