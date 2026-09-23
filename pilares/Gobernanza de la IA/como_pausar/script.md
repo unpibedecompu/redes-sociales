@@ -55,7 +55,7 @@ Result:
 
 - Initialize as a Bilateral deal between US and China
 - Some countries that were worried accept the deal
-- Pax Silica and 
+- Pax Silica and WAICO
 - They want US and China to proceed slowly and transparently
 - The "Consortium" is created
 
