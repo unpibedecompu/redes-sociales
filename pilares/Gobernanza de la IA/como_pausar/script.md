@@ -24,4 +24,7 @@ Y La tercera (y mas divertida): Monitoreando la creación de nuevos datacenters 
     - US o China pierde el control de su IA y perdemos todos, 
     - o se logra una super inteligencia con la que US [ imagen del congreso ] o un grupo de personas [ imagen de CEO's en  la casa balnca ] o un solo individuo [ imagen de CEO's por separado ] podria consolidar un regimen autoritario a nivel mundial, dd forma permanente, lo que tampoco seria bueno para China ... ni para nadie.
 
-- se tiene q seguir desarrollando
+- Persona 2: okay, y nos quedamos sin IA para siempre?
+- Persona 1: no. Pausamos, nos coordinamos y seguimos desarrollando de forma segura.
+- Persona 2: y eso como lo harias?
+- Persona 1: [ mirando a camara ] en otro reel te lo cuento
