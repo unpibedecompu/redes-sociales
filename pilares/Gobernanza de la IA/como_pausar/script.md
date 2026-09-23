@@ -51,5 +51,17 @@ Result:
 - everyone can safely halt training
 - There is time to create fine-grained verification options for training to restart
 
+## Step 3: Get Worldwide Buy-in
+
+- Initialize as a Bilateral deal between US and China
+- Some countries that were worried accept the deal
+- Pax Silica and 
+- They want US and China to proceed slowly and transparently
+- The "Consortium" is created
+
+## 2030: Plan A is Established
+
+- AI development continues in a more cautious, transparent and distriubted way.
+
 ## Outro
 - Es una de muchas posibilidades
