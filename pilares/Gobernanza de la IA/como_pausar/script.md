@@ -23,3 +23,5 @@ Y La tercera (y mas divertida): Monitoreando la creación de nuevos datacenters 
 - Persona 1: por que va perdiendo, sus dos futuros posible son: 
     - US o China pierde el control de su IA y perdemos todos, 
     - o se logra una super inteligencia con la que US [ imagen del congreso ] o un grupo de personas [ imagen de CEO's en  la casa balnca ] o un solo individuo [ imagen de CEO's por separado ] podria consolidar un regimen autoritario a nivel mundial, dd forma permanente, lo que tampoco seria bueno para China ... ni para nadie.
+
+- se tiene q seguir desarrollando
