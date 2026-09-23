@@ -12,13 +12,13 @@
 - Persona 2: okay, pero como se asegura U.S. que China no esta haciendo trampa... y viceversa?
 - Persona 1: Por ejemplo con las 3 propuestas de AI 2040:
 
-La primera: controlando a nivel mundial la cadena de suministros de chips necesarios para crear IAs. Hoy hay 5 empresas que diseñan chips y 1 que los fabrica [ imagenes logos empresas ]. Con pedirle reportes de compra y venta a estas 6 empresas ya sabes quienes tienen computo suficiente para crear nuevas IA.
+La primera: controlando a nivel mundial la cadena de suministros de chips necesarios para crear IAs. Hoy hay 5 empresas que diseñan chips y 1 que los fabrica [ imagenes logos empresas ]. Con pedirle reportes de compra y venta a estas 6 empresas ya sabes quienes tienen computo suficiente para crear IAs de frontera.
 
-La segunda: instalando programas en los datacenter existentes, que verifiquen que no se crean nuevas IA's sin permiso.
+La segunda: instalando programas en los datacenter existentes, que verifiquen que no se estan creado nuevas IA's.
 
-Y La tercera (y mas divertida): Monitorear la creación de datacenters desde el espacio. Entrenar una IA de frontera requiere de muchas computadoras, datacenters inmensos. Hoy en dia es muy dificil ocultarlos.
+Y La tercera (y mas divertida): Monitoreando la creación de nuevos datacenters desde el espacio. Entrenar una IA de frontera requiere de galpones inmensos llenos de computadoras. Hoy en dia es muy dificil ocultarlos.
 
 - Persona 2: okay, pero ¿Por que China aceptaria un trato asi?
 - Persona 1: por que va perdiendo, sus dos futuros posible son: 
     - la IA se le va de control a ellos o a US y perdemos todos, 
-    - o se logra una super inteligencia con la que US, un grupo de personas o un solo individuo podria consolidar un regimen autoritario permanente a nivel mundial, lo que tampoco seria bueno para China, ni para nadie.
+    - o se logra una super inteligencia con la que US o un grupo de personas o un solo individuo podria consolidar un regimen autoritario a nivel mundial permanente, lo que tampoco seria bueno para China ... ni para nadie.
