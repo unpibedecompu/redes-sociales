@@ -5,16 +5,16 @@
 
 # Script
 
-- La ultima semana estuve hablando con varias personas sobre riesgos de la IA y siempre llegamos a este punto de la conversación:
+- La ultima semana estuve hablando con varias personas sobre IA y siempre llegamos a este punto de la conversación:
 - Persona 2: ponele que el desarrollo acelerado de la IA puede ser peligroso, como lo frenas a nivel mundial?
 - Persona 1: Igual que con las armas nucleares, biologicas y quimicas. Con acuerdos internacionales.
 - Persona 1: Mira esto, hoy en dia las empresas que desarrollan IA de frontera no son mas de 20 [ Dos columnas mostrando los logos de 4 empresas U.S. y 4 Chinas, aparecen de arriba]. China y U.S. tiene el poder mas que suficiente para frenanlas si quieren.
 - Persona 2: okay, pero como se asegura U.S. que China no esta haciendo trampa... y viceversa?
-- Persona 1: los expertos proponen estas 3 formas:
+- Persona 1: Por ejemplo con las 3 propuestas de AI 2040:
 
-La primera: hoy en dia el desarrollo de IA de frontera depende absolutamente del acceso a los chips donde corre la IA [ imagen de GPU's ]. En el mundo existen 5 empresas que diseñan chips y 1 que los fabrica [ imagen de logos de las empresas ]. Pidiendo reportes de compras y ventas a esas 6 empresas ya solucionaste la mitad del problema.
+La primera: controlando a nivel mundial la cadena de suministros de chips necesarios para crear IAs. Hoy hay 5 empresas que diseñan chips y 1 que los fabrica [ imagenes logos empresas ]. Con pedirle reportes de compra y venta a estas 6 empresas ya sabes quienes tienen computo suficiente para crear nuevas IA.
 
-La segunda: es instalando programas en los datacenter existentes, que verifiquen que no se crean nuevas IA's sin permiso.
+La segunda: instalando programas en los datacenter existentes, que verifiquen que no se crean nuevas IA's sin permiso.
 
 Y La tercera (y mas divertida): Monitorear la creación de datacenters desde el espacio. Entrenar una IA de frontera requiere de muchas computadoras, datacenters inmensos. Hoy en dia es muy dificil ocultarlos.
 
