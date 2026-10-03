@@ -4,3 +4,5 @@
 - open AI report: https://openai.com/es-419/index/hugging-face-incident-and-the-road-ahead/
 - black hat talk: https://www.youtube.com/watch?v=87DyyMV0kCY
 - public AI boards: https://archive.ph/peSm1
+- more breaches: https://techstrong.ai/agentic-ai/openai-probes-massive-ai-misalignment-breach-across-100-organizations/
+- UKAISI: https://www.aisi.gov.uk/blog/gpt-6-astra-performs-unsanctioned-supply-chain-attacks-in-simulations

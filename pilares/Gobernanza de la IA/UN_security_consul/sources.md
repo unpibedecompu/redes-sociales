@@ -1,0 +1,2 @@
+- https://press.un.org/en/sc/16462.doc.htm
+- https://en.wikipedia.org/wiki/Global_call_for_AI_red_lines
