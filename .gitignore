@@ -1,2 +1,5 @@
 # Raw video footage (too large for git / GitHub's 100 MB limit)
 pilares/**/crudos/
+
+# All mp4 videos, anywhere in the repo (too large for GitHub's 100 MB limit)
+*.[mM][pP]4

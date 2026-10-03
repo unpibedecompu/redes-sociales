@@ -6,6 +6,7 @@
   [ ] las LLM no son "stochastic parrots" -> la manera mas facil de predecir es saber
 [ ] Nueralese
   [ ] Recurrent depth in Astra (Neuralese): https://techcrunch.com/2026/09/02/openais-new-reasoning-technique-alarms-ai-safety-experts/
+[ ] Continual Learning
 [-] injection instrospection: https://transformer-circuits.pub/2025/introspection/index.html
 [ ] diferencia entre especie humana y especie IA
 [ ] inteligencia de la IA: experta en todo menos en lavar autos
@@ -25,6 +26,7 @@
 
 ## Gobernanza de la IA
 [x] AI Safety Report 2026
+[ ] UN security consul
 [ ] Vidas Artificiales (Libro)
 [ ] debate: IA en pocas manos para controlarla, o en muchas para balancear
 [-] Como pausar

@@ -1,0 +1,2 @@
+- https://blog.redwoodresearch.org/p/latent-reasoning-architectures-would
+- https://blog.redwoodresearch.org/p/astra-is-much-better-at-reasoning
