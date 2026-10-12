@@ -1,0 +1,6 @@
+- AlphaGo: https://deepmind.google/research/breakthroughs/alphago/
+- AlphaGo paper (Nature, 2016) "Mastering the game of Go with deep neural networks and tree search": https://www.nature.com/articles/nature16961
+- AlphaFold: https://deepmind.google/science/alphafold/
+- AlphaFold 2 paper (Nature, 2021) "Highly accurate protein structure prediction with AlphaFold": https://www.nature.com/articles/s41586-021-03819-2
+- AlphaProof: "AI achieves silver-medal standard solving International Mathematical Olympiad problems": https://deepmind.google/discover/blog/ai-solves-imo-problems-at-silver-medal-level/
+- AlphaProof paper (Nature, 2025) "Olympiad-level formal mathematical reasoning with reinforcement learning": https://www.nature.com/articles/s41586-025-09833-y
