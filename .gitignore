@@ -3,3 +3,15 @@ pilares/**/crudos/
 
 # All mp4 videos, anywhere in the repo (too large for GitHub's 100 MB limit)
 *.[mM][pP]4
+
+# Adobe Premiere Pro project files, auto-saves, previews and caches (anywhere in the repo)
+*.prproj
+*.prin
+*.prel
+*.pek
+*.cfa
+*.pkf
+Adobe Premiere Pro Auto-Save/
+Adobe Premiere Pro Video Previews/
+Adobe Premiere Pro Audio Previews/
+Adobe Premiere Pro Captured Audio/
