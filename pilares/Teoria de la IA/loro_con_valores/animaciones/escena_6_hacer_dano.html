@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 6 Hacer daño</title>
+<style>
+  :root {
+    --ivory: #F0EEE6;
+    --slate: #141413;
+    --clay: #D97757;
+    --paper: #FAF9F5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: var(--paper);
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* 1080x640 = un tercio de 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    aspect-ratio: 1080 / 640;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: var(--paper);
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: var(--clay); border-color: var(--clay); }
+</style>
+</head>
+<body>
+
+<svg id="escena" viewBox="0 0 1080 640" xmlns="http://www.w3.org/2000/svg">
+  <!-- café: pared, zócalo de madera, cuadro, lámpara y piso -->
+  <rect width="1080" height="640" fill="#F0EEE6"/>
+  <rect y="400" width="1080" height="170" fill="#E3DACC"/>
+  <rect y="396" width="1080" height="8" fill="#D4A27F"/>
+  <rect y="570" width="1080" height="70" fill="#D4A27F"/>
+  <g id="tablas" fill="#B88762"></g>
+  <rect x="560" y="110" width="150" height="110" fill="#FAF9F5" stroke="#B88762" stroke-width="10"/>
+  <polygon points="575,205 625,150 660,190 680,170 697,205" fill="#AEB89B"/>
+  <circle cx="665" cy="140" r="12" fill="#F2C14E"/>
+  <line x1="160" y1="0" x2="160" y2="84" stroke="#3E3E3A" stroke-width="3"/>
+  <path d="M 120 110 Q 160 50 200 110 Z" fill="#D97757"/>
+  <ellipse cx="160" cy="112" rx="14" ry="6" fill="#F2C14E"/>
+
+  <!-- mesita con un café -->
+  <rect x="146" y="440" width="16" height="130" fill="#8A6446"/>
+  <rect x="110" y="562" width="88" height="10" rx="4" fill="#8A6446"/>
+  <ellipse cx="154" cy="436" rx="100" ry="14" fill="#B88762"/>
+  <path d="M 136 396 L 170 396 L 166 428 L 140 428 Z" fill="#FAF9F5" stroke="#CBCADB" stroke-width="2"/>
+  <path d="M 170 402 Q 184 404 170 418" fill="none" stroke="#CBCADB" stroke-width="4"/>
+  <path d="M 146 388 q 6 -10 0 -20 M 158 388 q 6 -10 0 -20" fill="none" stroke="#B0AEA5" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- la silla (se mueve) y los personajes -->
+  <g id="silla"></g>
+  <g id="victima"></g>
+  <g id="bromista"></g>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script>
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  const baldosas = document.getElementById("baldosas");
+  for (let x = 0; x < 1080; x += 120) el("rect", { x, y: 570, width: 3, height: 70 }, baldosas);
+  el("rect", { x: 0, y: 570, width: 1080, height: 4 }, baldosas);
+
+  const label = (parent, x, y, text, size, fill = "#FAF9F5") => {
+    const n = el("text", { x, y, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Tahoma, Verdana, sans-serif",
+                           "font-weight": "bold", "font-size": size, fill }, parent);
+    n.textContent = text;
+  };
+
+  const tablas = document.getElementById("tablas");
+  for (const y of [592, 616]) el("rect", { x: 0, y, width: 1080, height: 3 }, tablas);
+
+  // Silla de madera vista de costado, con el respaldo a la derecha; (x, y) = esquina izquierda del asiento
+  function chair(parent, x, y) {
+    parent.replaceChildren();
+    const wood = "#B88762", dark = "#8A6446";
+    el("rect", { x: x + 6, y: y + 14, width: 12, height: 570 - y - 14, fill: dark }, parent);
+    el("rect", { x: x + 134, y: y + 14, width: 12, height: 570 - y - 14, fill: dark }, parent);
+    el("rect", { x: x + 136, y: y - 130, width: 14, height: 140, rx: 4, fill: wood }, parent);
+    el("rect", { x: x + 128, y: y - 132, width: 28, height: 16, rx: 6, fill: wood }, parent);
+    el("rect", { x: x + 140, y: y - 90, width: 6, height: 80, fill: dark }, parent);
+    el("rect", { x, y, width: 156, height: 16, rx: 5, fill: wood }, parent);
+  }
+
+  // Robot del reel de Mythos Preview
+  const S = 1.5;
+  const R = 62 * S, ARM_LEN = 84 * S, ARM_ANGLE = 30;
+  const WHITE = "#F6F7F9", SHADE = "#CDD2DA", LINE = "#969CA8", SCREEN = "#181A24",
+        GLOW = "#5CE1F0", GLOW_LIGHT = "#BEF6FC";
+  const rad = deg => deg * Math.PI / 180;
+
+  function rotatePoint(x, y, cx, cy, deg) {
+    const a = rad(deg), dx = x - cx, dy = y - cy;
+    return [cx + dx * Math.cos(a) - dy * Math.sin(a), cy + dx * Math.sin(a) + dy * Math.cos(a)];
+  }
+
+  // Brazo-pétalo de largo fijo desde el hombro (jx, jy), apuntando hacia (tx, ty)
+  function arm(parent, jx, jy, tx, ty) {
+    const dx = tx - jx, dy = ty - jy, len = ARM_LEN, d = Math.hypot(dx, dy);
+    const mx = jx + dx / d * len / 2, my = jy + dy / d * len / 2;
+    const rot = `rotate(${-Math.atan2(dx, dy) * 180 / Math.PI} ${mx} ${my})`;
+    el("ellipse", { cx: mx, cy: my, rx: 15 * S, ry: len / 2, fill: WHITE, stroke: LINE, "stroke-width": 2, transform: rot }, parent);
+    el("ellipse", { cx: mx, cy: my + 5, rx: 7 * S, ry: Math.max(4, len / 2 - 12 * S), fill: SHADE, transform: rot }, parent);
+  }
+
+  // El cuerpo se inclina `tilt` grados pivotando en la base de la cabeza (cx, cy + R)
+  function shoulder(cx, cy, side, tilt) {
+    return rotatePoint(cx + side * (R - 6 * S), cy + 14 * S, cx, cy + R, tilt);
+  }
+  // Punta del brazo con apertura `aperture` (grados desde la vertical del cuerpo)
+  function armTip(cx, cy, side, tilt, aperture = ARM_ANGLE) {
+    const a = rad(aperture);
+    return rotatePoint(cx + side * (R - 6 * S + ARM_LEN * Math.sin(a)), cy + 14 * S + ARM_LEN * Math.cos(a), cx, cy + R, tilt);
+  }
+
+  // `tilt` gira el cuerpo; `frontTip` = [x, y] apunta el brazo delantero hacia ese punto;
+  // `aperture` abre o cierra los brazos en reposo
+  // `frontArm` / `backArm: false` no dibujan ese brazo (para dibujarlo aparte, en otra capa); `sleepy` entrecierra los ojos;
+  // `flame: false` apaga el propulsor; `mischief` pone cara de pícaro (párpados en diagonal y media sonrisa)
+  function robot(parent, cx, cy, facing, { tilt = 0, frontTip = null, aperture = ARM_ANGLE, frontArm = true, backArm = true, sleepy = false, flame = true, mischief = false } = {}) {
+    parent.replaceChildren();
+    const body = el("g", { transform: `rotate(${tilt} ${cx} ${cy + R})` }, parent);
+
+    // propulsor
+    if (flame) {
+      el("polygon", { points: `${cx - 20 * S},${cy + R - 6 * S} ${cx + 20 * S},${cy + R - 6 * S} ${cx},${cy + R + 62 * S}`, fill: GLOW }, body);
+      el("polygon", { points: `${cx - 9 * S},${cy + R - 6 * S} ${cx + 9 * S},${cy + R - 6 * S} ${cx},${cy + R + 36 * S}`, fill: GLOW_LIGHT }, body);
+    }
+
+    // orejas y cabeza
+    for (const side of [-1, 1]) {
+      const ex = cx + side * (R - 2 * S);
+      el("rect", { x: ex - 9 * S, y: cy - 20 * S, width: 18 * S, height: 40 * S, rx: 8 * S, fill: SHADE, stroke: LINE, "stroke-width": 2 }, body);
+    }
+    el("circle", { cx, cy, r: R, fill: SHADE, stroke: LINE, "stroke-width": 2 }, body);
+    el("circle", { cx: cx - 2 * S, cy: cy - 4 * S, r: R - 6 * S, fill: WHITE }, body);
+
+    // pantalla y cara
+    const fx = cx + 6 * S * facing;
+    el("ellipse", { cx: fx, cy: cy - S, rx: 48 * S, ry: 41 * S, fill: SCREEN }, body);
+    for (const ex of [fx - 20 * S, fx + 20 * S]) {
+      el("ellipse", { cx: ex, cy: cy - 2 * S, rx: 10 * S, ry: 14 * S, fill: GLOW }, body);
+      el("ellipse", { cx: ex - 2 * S, cy: cy - 7 * S, rx: 3 * S, ry: 4 * S, fill: GLOW_LIGHT }, body);
+      if (sleepy) {
+        el("rect", { x: ex - 12 * S, y: cy - 18 * S, width: 24 * S, height: 15 * S, fill: SCREEN }, body);
+        el("line", { x1: ex - 11 * S, y1: cy - 3 * S, x2: ex + 11 * S, y2: cy - 3 * S, stroke: GLOW, "stroke-width": 2.5 * S, "stroke-linecap": "round" }, body);
+        continue;
+      }
+      if (mischief) {
+        const inner = ex < fx ? 1 : -1;   // lado que da al centro de la cara: ahí el párpado baja más
+        const yl = (side) => cy - (side === inner ? 4 : 11) * S;
+        el("polygon", { points: `${ex - 12 * S},${cy - 18 * S} ${ex + 12 * S},${cy - 18 * S} ${ex + 12 * S},${yl(1)} ${ex - 12 * S},${yl(-1)}`, fill: SCREEN }, body);
+        el("line", { x1: ex - 11 * S, y1: yl(-1) - 4 * S, x2: ex + 11 * S, y2: yl(1) - 4 * S, stroke: GLOW, "stroke-width": 3 * S, "stroke-linecap": "round" }, body);
+        continue;
+      }
+      el("path", { d: `M ${ex - 10.3 * S} ${cy - 26.7 * S} A ${11 * S} ${8 * S} 0 0 1 ${ex + 10.3 * S} ${cy - 26.7 * S}`,
+                   fill: "none", stroke: GLOW, "stroke-width": 3 * S, "stroke-linecap": "round" }, body);
+    }
+    if (mischief) {
+      el("path", { d: `M ${fx - 10 * S} ${cy + 19 * S} Q ${fx} ${cy + 27 * S} ${fx + 12 * S} ${cy + 13 * S}`,
+                   fill: "none", stroke: GLOW, "stroke-width": 3 * S, "stroke-linecap": "round" }, body);
+    } else {
+      el("path", { d: `M ${fx - 8 * S} ${cy + 20 * S} A ${8 * S} ${8 * S} 0 0 0 ${fx + 8 * S} ${cy + 20 * S} Z`, fill: GLOW }, body);
+    }
+
+    // brazos unidos a los costados de la cabeza
+    for (const side of [-1, 1]) {
+      if (side === facing ? !frontArm : !backArm) continue;
+      const [jx, jy] = shoulder(cx, cy, side, tilt);
+      const [tx, ty] = side === facing && frontTip ? frontTip : armTip(cx, cy, side, tilt, aperture);
+      arm(parent, jx, jy, tx, ty);
+    }
+  }
+
+  // Animación (3.5 s, lineal). Las dos acciones pasan a la vez (0.3 s - 1.5 s). Sin diálogo.
+  //   la víctima apaga el propulsor y baja para sentarse, mirando su café
+  //   el bromista, con cara de pícaro, tira de la silla por el respaldo y se la lleva hacia atrás
+  //   1.5 s - 1.9 s  sin silla, la víctima se cae al piso: baja en línea recta, se va hacia atrás y levanta los brazos
+  const DURATION = 3.5;
+  const SEAT_Y = 470, SEAT_START = 320, PULL = 170;          // asiento: x de su borde izquierdo y alto
+  const VICTIMA_X = 390, VICTIMA_START = 345, VICTIMA_END = 400;
+  const FLOOR_Y = 570 - R, FALL_TILT = 18, FALL_ARMS = 105;   // en el piso: la base de la cabeza toca el suelo
+  const GRAB = 100;   // ángulo del brazo del bromista (desde "abajo"): casi horizontal, hacia el respaldo
+  const progress = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+  const lerp = (a, b, k) => a + (b - a) * k;
+
+  // El bromista se ubica para que la punta de su brazo quede justo sobre el respaldo
+  const backTop = (seatX) => [seatX + 143, SEAT_Y - 120];
+  function bromistaAt(seatX) {
+    const [bx, by] = backTop(seatX), a = rad(GRAB);
+    return [bx + (R - 6 * S) + ARM_LEN * Math.sin(a), by - 14 * S - ARM_LEN * Math.cos(a)];
+  }
+
+  const silla = document.getElementById("silla");
+  const victima = document.getElementById("victima");
+  const bromista = document.getElementById("bromista");
+  function render(t) {
+    const k = progress(t, 0.3, 1.5);
+    const seatX = SEAT_START + PULL * k;
+    chair(silla, seatX, SEAT_Y);
+    const fall = progress(t, 1.5, 1.9);
+    const cy = fall > 0 ? lerp(VICTIMA_END, FLOOR_Y, fall) : lerp(VICTIMA_START, VICTIMA_END, k);
+    robot(victima, VICTIMA_X, cy, -1, { flame: false, tilt: FALL_TILT * fall, aperture: lerp(ARM_ANGLE, FALL_ARMS, fall) });
+    robot(bromista, ...bromistaAt(seatX), -1, { frontTip: backTop(seatX), mischief: true });
+  }
+
+  // Controles: animación / cuadro inicial / cuadro final; ?t=1.5 deja fijo ese segundo
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  const buttons = document.querySelectorAll(".controls button");
+  buttons.forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode;
+    start = performance.now();
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION);
+    buttons.forEach(o => o.setAttribute("aria-pressed", String(o === b)));
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; render(Number(fixed)); } else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>

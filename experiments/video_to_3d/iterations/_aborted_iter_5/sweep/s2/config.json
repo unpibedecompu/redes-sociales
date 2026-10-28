@@ -1,0 +1,33 @@
+{
+  "note": "No new generation (correct-views 8-view run hit ZeroGPU quota, see ablation_8view_correct_quota_failed.json + generate.log). model_raw.glb = iter_2/model.glb. Rebuild: python -P scripts/generate.py iterations/iter_5/config.json --post-only",
+  "source_config": "iterations/iter_2/config.json",
+  "post": {
+    "clip_bottom_frac": 0.17,
+    "body_scale_xz": [
+      1.05,
+      1.15
+    ],
+    "neck_frac": 0.22,
+    "neck_ramp": 0.05,
+    "tex_gamma_front": 1.45,
+    "tex_gamma_back": 2.0,
+    "tex_sat": 0.9,
+    "tex_sharpen": 0.5,
+    "skin_protect": true,
+    "skin_head_frac": 1.0,
+    "skin_gain": [
+      1.04,
+      1.0,
+      0.97
+    ],
+    "skin_gamma": 1.15,
+    "shoulder_extra_x": 0.1,
+    "shoulder_frac": 0.32,
+    "shoulder_width": 0.08,
+    "skin_min_cc": 200,
+    "skin_dilate": 7,
+    "skin_feather": 4,
+    "skin_sat": 0.9,
+    "back_hi_lift": 1.15
+  }
+}

@@ -1,0 +1,22 @@
+# Review: iteration 1
+**Overall score: 4.5/10** (best so far: 4.5/10 in iter 1, the first scored model) · mean IoU: 0.815
+
+Setup: TRELLIS, 4 preprocessed views (0/90/180/270 on the corrected keyframes), stochastic, 25/25 steps, tex 2048.
+Framing is correct: the front is at 0° and the back at 180° in every pair, so no `--yaw` is needed.
+
+| Criterion | Score | Evidence |
+|---|---|---|
+| Silhouette & proportions | 7 | IoU 0.888 @0°, 0.876 @180°, 0.857 @270°. The weak angles are 45° (0.724) and 135° (0.715), the in-between angles where no input view exists. The head, the shirt length and the hip cut-off match the video. The torso is slightly boxier and wider than the target at 0°. Hair volume is close but the top is flatter. |
+| Front fidelity | 5 | The red tee, the open collar and both chest pockets are present. The face is smeared: eyes are dark blobs, the nose and brows are missing, and the skin is paler/greyer than the warm tan in the target. The beard is heavier and blacker. The hands are rounded stubs. |
+| Side & back fidelity | 2 | The back panel is near-black (render @180°, colour diff 67.7, compared with 39 at the front). 135°, 225° and 270° are also dark (diff 55–64). The plaid on the back is barely visible. This is **baked into the texture, not lighting**: render.html rotates the model under a neutral environment, and sampling `model.glb`'s texture by vertex normal gives a mean RGB of ≈(32,29,35) on back-facing (−Z) surfaces vs ≈(73,57,64) on front-facing ones. The back input `pre_back.png` is bright (mean 76.6 vs 85.8 front) and shows a clean plaid. So TRELLIS is ignoring or underweighting the back view when it produces the texture. The +X side (55,43,49) is also darker than −X (67,60,68). |
+| Texture & colour | 4 | The plaid layout and scale on the front are good. The hue is wrong: the render is saturated navy/blue-violet, the target is a soft lavender purple with grey-white bands, and the render has more contrast. The hair is pure black; the target is dark grey-brown. The red tee is correct. Overall the render is much too dark everywhere except the front. |
+| Mesh quality | 6 | No visible floaters or holes. The low-poly look (≈8.6k faces after `mesh_simplify` 0.95) suits the stylised character. The hands are melted mitts. There are small white specks at the shirt hem/cuffs (@180°, @225°), probably background leaking into the texture at the silhouette edge. The 114 connected pieces are mostly UV-seam splits; I saw no detached geometry. |
+
+## What improved / regressed vs previous
+- There is no previous scored model. Compared with the design.md smoke test (IoU ~0.70, dark back), IoU rose to 0.815, which supports the angle-remap and `preprocess_all` fixes for **geometry**.
+- The dark back/sides persist, so the "grey background in multi-images" hypothesis **did not** fix texture colour. The cause is elsewhere: probably the `stochastic` multi-image algorithm and the texture bake.
+
+## Top 3 recommendations for the next iteration (most impactful first)
+1. **Switch `multiimage_algo` to `"multidiffusion"`** (keep `preprocess_all`, the 4 views, steps 25, tex 2048). With `stochastic`, each denoising step is conditioned on one random view, and the back appearance is clearly being washed out (back texture mean 32 vs input 77). Multidiffusion averages all views at every step, which is the most direct fix for the dark 135–270° renders. Success test: colour diff @180° below 40 and a visible lavender plaid on the back.
+2. **Add the in-between views 45°, 135°, 225° and 315° to `views`** (8 inputs, all preprocessed). The two worst IoUs are exactly at the uncovered angles: 45° (0.724) and 135° (0.715). The 135/225 views also give the back-side texture more evidence. If the Space limits the number of images, add at least 135° and 225°.
+3. **Fix the colour/brightness pipeline after (1) and (2):** if the back stays darker than the front, run a test with the back view as the *primary* (first) image to check whether TRELLIS favours image 0. Separately, check the blue shift: compare the mean hue of `pre_front.png` and `raw_front.png` against the target frame. If the inputs are already lavender, the shift comes from the model/bake, and a post-process hue rotation of the baked texture toward purple (with lowered saturation and contrast) is a cheap fix. Leave `mesh_simplify` and the hands alone until the texture is fixed, because the texture costs far more points.

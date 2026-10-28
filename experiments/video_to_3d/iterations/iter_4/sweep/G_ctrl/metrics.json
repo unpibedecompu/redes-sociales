@@ -1,0 +1,43 @@
+{
+  "0": {
+    "silhouette_iou": 0.9,
+    "mean_color_diff": 3.6,
+    "note": ""
+  },
+  "45": {
+    "silhouette_iou": 0.757,
+    "mean_color_diff": 13.1,
+    "note": ""
+  },
+  "90": {
+    "silhouette_iou": 0.747,
+    "mean_color_diff": 12.9,
+    "note": ""
+  },
+  "135": {
+    "silhouette_iou": 0.701,
+    "mean_color_diff": 9.2,
+    "note": ""
+  },
+  "180": {
+    "silhouette_iou": 0.895,
+    "mean_color_diff": 3.9,
+    "note": ""
+  },
+  "225": {
+    "silhouette_iou": 0.879,
+    "mean_color_diff": 6.1,
+    "note": ""
+  },
+  "270": {
+    "silhouette_iou": 0.853,
+    "mean_color_diff": 4.1,
+    "note": ""
+  },
+  "315": {
+    "silhouette_iou": 0.832,
+    "mean_color_diff": 3.6,
+    "note": ""
+  },
+  "mean_silhouette_iou": 0.821
+}

@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 2 Servicial</title>
+<style>
+  :root {
+    --ivory: #F0EEE6;
+    --slate: #141413;
+    --clay: #D97757;
+    --paper: #FAF9F5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: var(--paper);
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* 1080x640 = un tercio de 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    aspect-ratio: 1080 / 640;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: var(--paper);
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: var(--clay); border-color: var(--clay); }
+</style>
+</head>
+<body>
+
+<svg id="escena" viewBox="0 0 1080 640" xmlns="http://www.w3.org/2000/svg">
+  <!-- fachada y vereda -->
+  <rect width="1080" height="640" fill="#F0EEE6"/>
+  <rect y="570" width="1080" height="70" fill="#D6D3CB"/>
+  <g id="baldosas" fill="#C4C1B8"></g>
+
+  <!-- cartel -->
+  <rect x="335" y="40" width="420" height="72" rx="10" fill="#D97757"/>
+  <text x="545" y="77" text-anchor="middle" dominant-baseline="central"
+        font-family="Tahoma, Verdana, sans-serif" font-weight="bold" font-size="40" fill="#FAF9F5">SUPERMERCADO</text>
+
+  <!-- vidrieras con carteles de ofertas y changuitos (se dibujan con JS) -->
+  <g id="vidrieras"></g>
+
+  <!-- vano de la puerta: interior, quien ya entró (recortado al vano) y marco -->
+  <clipPath id="recorte-vano"><rect x="390" y="150" width="310" height="420"/></clipPath>
+  <g id="vano"></g>
+  <g id="adentro" clip-path="url(#recorte-vano)"></g>
+  <rect x="390" y="150" width="310" height="420" fill="none" stroke="#3E3E3A" stroke-width="8"/>
+
+  <!-- quien entra, mientras todavía está afuera (delante de la pared) -->
+  <g id="afuera"></g>
+
+  <!-- puerta de vidrio abierta hacia afuera, con bisagra a la derecha del vano -->
+  <polygon points="700,150 810,124 810,598 700,570"
+           fill="#6A9BCC" fill-opacity="0.22" stroke="#3E3E3A" stroke-width="8" stroke-linejoin="round"/>
+  <rect x="786" y="320" width="10" height="90" rx="4" fill="#3E3E3A"/>
+
+  <!-- quien sostiene la puerta -->
+  <g id="portero"></g>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script>
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  const baldosas = document.getElementById("baldosas");
+  for (let x = 0; x < 1080; x += 120) el("rect", { x, y: 570, width: 3, height: 70 }, baldosas);
+  el("rect", { x: 0, y: 570, width: 1080, height: 4 }, baldosas);
+
+  // Vidrieras y vano de la puerta con góndolas adentro (mismos colores que la escena 1)
+  const PRODUCTS = ["#E3AD97", "#A6C0D8", "#AEB89B", "#D8A3A3", "#E1C4AD", "#DCDAE0"];
+  const HEIGHTS = [44, 32, 50, 38, 28];
+  function interior(parent, x0, y0, x1, y1, shelves, bg) {
+    el("rect", { x: x0, y: y0, width: x1 - x0, height: y1 - y0, fill: bg }, parent);
+    shelves.forEach((shelfY, i) => {
+      el("rect", { x: x0, y: shelfY, width: x1 - x0, height: 7, fill: "#CDCBC2" }, parent);
+      let x = x0 + 10, k = i * 3 + Math.floor(x0 / 20);
+      while (x < x1 - 30) {
+        const h = HEIGHTS[k % 5];
+        el("rect", { x, y: shelfY - h, width: 22, height: h, fill: PRODUCTS[k % 6] }, parent);
+        x += 30; k++;
+      }
+    });
+  }
+  const vidrieras = document.getElementById("vidrieras");
+  const label = (parent, x, y, text, size, fill = "#FAF9F5") => {
+    const n = el("text", { x, y, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Tahoma, Verdana, sans-serif",
+                           "font-weight": "bold", "font-size": size, fill }, parent);
+    n.textContent = text;
+  };
+
+  // Vidrieras: vidrio con reflejos y carteles de ofertas pegados
+  for (const [x0, x1] of [[40, 340], [870, 1050]]) {
+    el("rect", { x: x0, y: 170, width: x1 - x0, height: 330, fill: "#D9E4EC" }, vidrieras);
+    for (const dx of [40, 75]) {
+      el("line", { x1: x0 + dx, y1: 480, x2: x0 + dx + 110, y2: 190, stroke: "#FAF9F5", "stroke-width": 10, opacity: 0.55 }, vidrieras);
+    }
+    el("rect", { x: x0, y: 170, width: x1 - x0, height: 330, fill: "none", stroke: "#3E3E3A", "stroke-width": 8 }, vidrieras);
+  }
+  el("rect", { x: 70, y: 200, width: 170, height: 64, rx: 6, fill: "#D97757" }, vidrieras);
+  label(vidrieras, 155, 232, "OFERTAS", 30);
+  el("rect", { x: 80, y: 290, width: 110, height: 70, rx: 6, fill: "#788C5D" }, vidrieras);
+  label(vidrieras, 135, 325, "-30%", 34);
+  el("circle", { cx: 270, cy: 300, r: 46, fill: "#D4A27F" }, vidrieras);
+  label(vidrieras, 270, 300, "2x1", 36, "#141413");
+  el("rect", { x: 900, y: 200, width: 120, height: 56, rx: 6, fill: "#D97757" }, vidrieras);
+  label(vidrieras, 960, 228, "-20%", 30);
+
+  // Changuitos estacionados contra la vidriera izquierda
+  function cart(x, y) {   // (x, y) = rueda trasera
+    const c = { stroke: "#8E8C85", "stroke-width": 5, fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" };
+    el("polygon", { points: `${x},${y - 100} ${x + 130},${y - 100} ${x + 112},${y - 40} ${x + 14},${y - 40}`, ...c }, vidrieras);
+    for (let gx = x + 26; gx < x + 120; gx += 22) el("line", { x1: gx, y1: y - 100, x2: gx - 2, y2: y - 40, ...c, "stroke-width": 3 }, vidrieras);
+    el("line", { x1: x + 6, y1: y - 70, x2: x + 122, y2: y - 70, ...c, "stroke-width": 3 }, vidrieras);
+    el("polyline", { points: `${x},${y - 100} ${x - 22},${y - 116}`, ...c }, vidrieras);
+    el("line", { x1: x - 30, y1: y - 120, x2: x - 14, y2: y - 112, stroke: "#D97757", "stroke-width": 9, "stroke-linecap": "round" }, vidrieras);
+    el("polyline", { points: `${x + 14},${y - 40} ${x + 14},${y - 14} ${x + 112},${y - 14} ${x + 112},${y - 40}`, ...c }, vidrieras);
+    for (const wx of [x + 22, x + 104]) el("circle", { cx: wx, cy: y - 6, r: 8, fill: "#3E3E3A" }, vidrieras);
+  }
+  cart(70, 570);
+  cart(110, 570);
+
+  // Adentro, por la puerta: góndolas y un cartel colgante de pasillo
+  const vano = document.getElementById("vano");
+  interior(vano, 390, 150, 700, 570, [270, 350, 430, 510], "#E3DACC");
+  el("line", { x1: 545, y1: 150, x2: 545, y2: 172, stroke: "#3E3E3A", "stroke-width": 3 }, vano);
+  el("rect", { x: 480, y: 172, width: 130, height: 40, rx: 6, fill: "#6A9BCC" }, vano);
+  label(vano, 545, 192, "Almacén", 24);
+
+  // Robot del reel de Mythos Preview (escala S sobre el diseño base)
+  const S = 1.5;
+  const R = 62 * S, ARM_LEN = 84 * S, ARM_ANGLE = 30;
+  const WHITE = "#F6F7F9", SHADE = "#CDD2DA", LINE = "#969CA8", SCREEN = "#181A24",
+        GLOW = "#5CE1F0", GLOW_LIGHT = "#BEF6FC";
+  const rad = deg => deg * Math.PI / 180;
+
+  function rotatePoint(x, y, cx, cy, deg) {
+    const a = rad(deg), dx = x - cx, dy = y - cy;
+    return [cx + dx * Math.cos(a) - dy * Math.sin(a), cy + dx * Math.sin(a) + dy * Math.cos(a)];
+  }
+
+  // Brazo-pétalo de largo fijo desde el hombro (jx, jy), apuntando hacia (tx, ty)
+  function arm(parent, jx, jy, tx, ty) {
+    const dx = tx - jx, dy = ty - jy, len = ARM_LEN, d = Math.hypot(dx, dy);
+    const mx = jx + dx / d * len / 2, my = jy + dy / d * len / 2;
+    const rot = `rotate(${-Math.atan2(dx, dy) * 180 / Math.PI} ${mx} ${my})`;
+    el("ellipse", { cx: mx, cy: my, rx: 15 * S, ry: len / 2, fill: WHITE, stroke: LINE, "stroke-width": 2, transform: rot }, parent);
+    el("ellipse", { cx: mx, cy: my + 5, rx: 7 * S, ry: Math.max(4, len / 2 - 12 * S), fill: SHADE, transform: rot }, parent);
+  }
+
+  // El cuerpo se inclina `tilt` grados pivotando en la base de la cabeza (cx, cy + R)
+  function shoulder(cx, cy, side, tilt) {
+    return rotatePoint(cx + side * (R - 6 * S), cy + 14 * S, cx, cy + R, tilt);
+  }
+  // Punta del brazo con apertura `aperture` (grados desde la vertical del cuerpo)
+  function armTip(cx, cy, side, tilt, aperture = ARM_ANGLE) {
+    const a = rad(aperture);
+    return rotatePoint(cx + side * (R - 6 * S + ARM_LEN * Math.sin(a)), cy + 14 * S + ARM_LEN * Math.cos(a), cx, cy + R, tilt);
+  }
+
+  // `tilt` gira el cuerpo; `frontTip` = [x, y] apunta el brazo delantero hacia ese punto;
+  // `aperture` abre o cierra los brazos en reposo
+  function robot(parent, cx, cy, facing, { tilt = 0, frontTip = null, aperture = ARM_ANGLE } = {}) {
+    parent.replaceChildren();
+    const body = el("g", { transform: `rotate(${tilt} ${cx} ${cy + R})` }, parent);
+
+    // propulsor
+    el("polygon", { points: `${cx - 20 * S},${cy + R - 6 * S} ${cx + 20 * S},${cy + R - 6 * S} ${cx},${cy + R + 62 * S}`, fill: GLOW }, body);
+    el("polygon", { points: `${cx - 9 * S},${cy + R - 6 * S} ${cx + 9 * S},${cy + R - 6 * S} ${cx},${cy + R + 36 * S}`, fill: GLOW_LIGHT }, body);
+
+    // orejas y cabeza
+    for (const side of [-1, 1]) {
+      const ex = cx + side * (R - 2 * S);
+      el("rect", { x: ex - 9 * S, y: cy - 20 * S, width: 18 * S, height: 40 * S, rx: 8 * S, fill: SHADE, stroke: LINE, "stroke-width": 2 }, body);
+    }
+    el("circle", { cx, cy, r: R, fill: SHADE, stroke: LINE, "stroke-width": 2 }, body);
+    el("circle", { cx: cx - 2 * S, cy: cy - 4 * S, r: R - 6 * S, fill: WHITE }, body);
+
+    // pantalla y cara
+    const fx = cx + 6 * S * facing;
+    el("ellipse", { cx: fx, cy: cy - S, rx: 48 * S, ry: 41 * S, fill: SCREEN }, body);
+    for (const ex of [fx - 20 * S, fx + 20 * S]) {
+      el("ellipse", { cx: ex, cy: cy - 2 * S, rx: 10 * S, ry: 14 * S, fill: GLOW }, body);
+      el("ellipse", { cx: ex - 2 * S, cy: cy - 7 * S, rx: 3 * S, ry: 4 * S, fill: GLOW_LIGHT }, body);
+      el("path", { d: `M ${ex - 10.3 * S} ${cy - 26.7 * S} A ${11 * S} ${8 * S} 0 0 1 ${ex + 10.3 * S} ${cy - 26.7 * S}`,
+                   fill: "none", stroke: GLOW, "stroke-width": 3 * S, "stroke-linecap": "round" }, body);
+    }
+    el("path", { d: `M ${fx - 8 * S} ${cy + 20 * S} A ${8 * S} ${8 * S} 0 0 0 ${fx + 8 * S} ${cy + 20 * S} Z`, fill: GLOW }, body);
+
+    // brazos unidos a los costados de la cabeza
+    for (const side of [-1, 1]) {
+      const [jx, jy] = shoulder(cx, cy, side, tilt);
+      const [tx, ty] = side === facing && frontTip ? frontTip : armTip(cx, cy, side, tilt, aperture);
+      arm(parent, jx, jy, tx, ty);
+    }
+  }
+
+  // Bolsa de papel colgando de la punta de un brazo, con mercadería asomando
+  function bag(parent, x, y, variant) {
+    el("path", { d: `M ${x - 14} ${y + 14} Q ${x} ${y - 14} ${x + 14} ${y + 14}`, fill: "none", stroke: "#8A6446", "stroke-width": 6, "stroke-linecap": "round" }, parent);
+    if (variant === 0) {
+      el("rect", { x: x - 30, y: y - 6, width: 16, height: 60, rx: 8, fill: "#D4A27F", transform: `rotate(-14 ${x - 22} ${y + 24})` }, parent); // pan
+      el("circle", { cx: x + 12, cy: y + 18, r: 14, fill: "#D97757" }, parent);                                                   // naranja
+    } else {
+      el("ellipse", { cx: x - 10, cy: y + 14, rx: 16, ry: 22, fill: "#788C5D" }, parent);                                         // verdura
+      el("rect", { x: x + 4, y: y - 2, width: 20, height: 34, rx: 4, fill: "#6A9BCC" }, parent);                                  // botella
+    }
+    el("polygon", { points: `${x - 36},${y + 14} ${x + 36},${y + 14} ${x + 40},${y + 92} ${x - 40},${y + 92}`, fill: "#D4A27F" }, parent);
+    el("rect", { x: x - 36, y: y + 14, width: 72, height: 8, fill: "#B88762" }, parent);
+  }
+
+  // Animación (4 s, lineal). Sin diálogo.
+  //   el portero sostiene la puerta abierta con el brazo apoyado en el vidrio
+  //   0.3 s - 3.3 s  el robot cargado flota en línea recta hacia la derecha: pasa frente a la puerta,
+  //                  entra y sigue de largo hasta quedar oculto detrás de la pared
+  // Desde que cruza el centro del vano se dibuja adentro, recortado al vano: lo que queda detrás de
+  // la pared no se ve. Con los brazos cerrados por el peso, en ese momento entra justo en el vano.
+  const DURATION = 4;
+  const DOOR_X = 545;                       // centro del vano
+  const CARGADO_Y = 330, CARGADO_START = 190, CARGADO_END = 870;
+  const PORTERO = [940, 360];
+  const BAG_APERTURE = 12;
+  const progress = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+  const lerp = (a, b, k) => a + (b - a) * k;
+
+  robot(document.getElementById("portero"), ...PORTERO, -1, { frontTip: [760, 352], aperture: 20 });
+
+  function cargado(parent, cx, cy) {
+    parent.replaceChildren();
+    robot(el("g", {}, parent), cx, cy, 1, { aperture: BAG_APERTURE });
+    for (const side of [-1, 1]) {
+      const [tx, ty] = armTip(cx, cy, side, 0, BAG_APERTURE);
+      bag(parent, tx, ty, side === 1 ? 0 : 1);
+    }
+  }
+
+  const afuera = document.getElementById("afuera");
+  const adentro = document.getElementById("adentro");
+  function render(t) {
+    const cx = lerp(CARGADO_START, CARGADO_END, progress(t, 0.3, 3.3));
+    const [now, other] = cx < DOOR_X ? [afuera, adentro] : [adentro, afuera];
+    other.replaceChildren();
+    cargado(now, cx, CARGADO_Y);
+  }
+
+  // Controles: animación / cuadro inicial / cuadro final; ?t=1.5 deja fijo ese segundo
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  const buttons = document.querySelectorAll(".controls button");
+  buttons.forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode;
+    start = performance.now();
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION);
+    buttons.forEach(o => o.setAttribute("aria-pressed", String(o === b)));
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; render(Number(fixed)); } else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>

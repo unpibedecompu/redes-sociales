@@ -1,0 +1,2 @@
+- https://www.axios.com/2026/10/09/ai-companies-day-after-major-attack
+- https://aiweekly.co/alerts/fired-openai-safety-trio-urges-board-to-halt-opaque-reasoning-ai

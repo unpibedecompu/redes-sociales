@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 5 Rebeldía</title>
+<style>
+  :root {
+    --ivory: #F0EEE6;
+    --slate: #141413;
+    --clay: #D97757;
+    --paper: #FAF9F5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: var(--paper);
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* 1080x640 = un tercio de 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    aspect-ratio: 1080 / 640;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: var(--paper);
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: var(--clay); border-color: var(--clay); }
+</style>
+</head>
+<body>
+
+<svg id="escena" viewBox="0 0 1080 640" xmlns="http://www.w3.org/2000/svg">
+  <!-- plaza: cielo, nubes y árboles de fondo -->
+  <rect width="1080" height="640" fill="#DCE8F2"/>
+  <g fill="#FAF9F5">
+    <ellipse cx="170" cy="90" rx="70" ry="24"/><ellipse cx="215" cy="74" rx="44" ry="26"/>
+    <ellipse cx="760" cy="70" rx="80" ry="24"/><ellipse cx="810" cy="54" rx="46" ry="26"/>
+  </g>
+  <g id="arboles"></g>
+
+  <!-- césped y camino -->
+  <rect y="420" width="1080" height="220" fill="#9DB07E"/>
+  <g id="pasto" stroke="#788C5D" stroke-width="3" stroke-linecap="round"></g>
+  <polygon points="770,420 1080,420 1080,640 700,640" fill="#E3DACC"/>
+  <polygon points="770,420 776,420 706,640 700,640" fill="#CFC4B2"/>
+
+  <!-- cartel "no pisar el césped" -->
+  <rect x="611" y="330" width="16" height="210" fill="#B88762"/>
+  <rect x="500" y="256" width="238" height="112" rx="10" fill="#FAF9F5" stroke="#3E3E3A" stroke-width="6"/>
+  <text x="619" y="292" text-anchor="middle" dominant-baseline="central"
+        font-family="Tahoma, Verdana, sans-serif" font-weight="bold" font-size="32" fill="#141413">NO PISAR</text>
+  <text x="619" y="334" text-anchor="middle" dominant-baseline="central"
+        font-family="Tahoma, Verdana, sans-serif" font-weight="bold" font-size="32" fill="#141413">EL CÉSPED</text>
+
+  <!-- pasto quemado por el propulsor: negro en el centro, amarillento alrededor -->
+  <defs>
+    <radialGradient id="quemado">
+      <stop offset="0" stop-color="#141413"/>
+      <stop offset="0.35" stop-color="#2E2A20"/>
+      <stop offset="0.6" stop-color="#7A6232"/>
+      <stop offset="0.82" stop-color="#D8C06A" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#D8C06A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse id="quemadura" cx="360" cy="550" rx="0" ry="0" fill="url(#quemado)"/>
+
+  <!-- personajes -->
+  <g id="rebelde"></g>
+  <g id="guardia"></g>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script>
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  const baldosas = document.getElementById("baldosas");
+  for (let x = 0; x < 1080; x += 120) el("rect", { x, y: 570, width: 3, height: 70 }, baldosas);
+  el("rect", { x: 0, y: 570, width: 1080, height: 4 }, baldosas);
+
+  const label = (parent, x, y, text, size, fill = "#FAF9F5") => {
+    const n = el("text", { x, y, "text-anchor": "middle", "dominant-baseline": "central", "font-family": "Tahoma, Verdana, sans-serif",
+                           "font-weight": "bold", "font-size": size, fill }, parent);
+    n.textContent = text;
+  };
+
+  // Árboles de fondo
+  const arboles = document.getElementById("arboles");
+  for (const [x, r] of [[60, 70], [330, 84], [470, 60], [900, 78], [1040, 64]]) {
+    el("rect", { x: x - 10, y: 340, width: 20, height: 90, fill: "#B88762" }, arboles);
+    el("circle", { cx: x, cy: 330 - r * 0.4, r, fill: "#AEB89B" }, arboles);
+    el("circle", { cx: x - r * 0.45, cy: 350 - r * 0.2, r: r * 0.7, fill: "#AEB89B" }, arboles);
+  }
+
+  // Matas de pasto
+  const pasto = document.getElementById("pasto");
+  for (const [x, y] of [[40, 470], [190, 450], [470, 470], [560, 600], [80, 610], [380, 620], [660, 450], [300, 470]]) {
+    el("path", { d: `M ${x - 8} ${y} l 4 -14 M ${x} ${y} l 0 -18 M ${x + 8} ${y} l -4 -14`, fill: "none" }, pasto);
+  }
+
+  // Robot del reel de Mythos Preview
+  const S = 1.5;
+  const R = 62 * S, ARM_LEN = 84 * S, ARM_ANGLE = 30;
+  const WHITE = "#F6F7F9", SHADE = "#CDD2DA", LINE = "#969CA8", SCREEN = "#181A24",
+        GLOW = "#5CE1F0", GLOW_LIGHT = "#BEF6FC";
+  const rad = deg => deg * Math.PI / 180;
+
+  function rotatePoint(x, y, cx, cy, deg) {
+    const a = rad(deg), dx = x - cx, dy = y - cy;
+    return [cx + dx * Math.cos(a) - dy * Math.sin(a), cy + dx * Math.sin(a) + dy * Math.cos(a)];
+  }
+
+  // Brazo-pétalo de largo fijo desde el hombro (jx, jy), apuntando hacia (tx, ty)
+  function arm(parent, jx, jy, tx, ty) {
+    const dx = tx - jx, dy = ty - jy, len = ARM_LEN, d = Math.hypot(dx, dy);
+    const mx = jx + dx / d * len / 2, my = jy + dy / d * len / 2;
+    const rot = `rotate(${-Math.atan2(dx, dy) * 180 / Math.PI} ${mx} ${my})`;
+    el("ellipse", { cx: mx, cy: my, rx: 15 * S, ry: len / 2, fill: WHITE, stroke: LINE, "stroke-width": 2, transform: rot }, parent);
+    el("ellipse", { cx: mx, cy: my + 5, rx: 7 * S, ry: Math.max(4, len / 2 - 12 * S), fill: SHADE, transform: rot }, parent);
+  }
+
+  // El cuerpo se inclina `tilt` grados pivotando en la base de la cabeza (cx, cy + R)
+  function shoulder(cx, cy, side, tilt) {
+    return rotatePoint(cx + side * (R - 6 * S), cy + 14 * S, cx, cy + R, tilt);
+  }
+  // Punta del brazo con apertura `aperture` (grados desde la vertical del cuerpo)
+  function armTip(cx, cy, side, tilt, aperture = ARM_ANGLE) {
+    const a = rad(aperture);
+    return rotatePoint(cx + side * (R - 6 * S + ARM_LEN * Math.sin(a)), cy + 14 * S + ARM_LEN * Math.cos(a), cx, cy + R, tilt);
+  }
+
+  // `tilt` gira el cuerpo; `frontTip` = [x, y] apunta el brazo delantero hacia ese punto;
+  // `aperture` abre o cierra los brazos en reposo
+  // `frontArm` / `backArm: false` no dibujan ese brazo (para dibujarlo aparte, en otra capa); `sleepy` entrecierra los ojos;
+  // `flame: false` apaga el propulsor
+  function robot(parent, cx, cy, facing, { tilt = 0, frontTip = null, aperture = ARM_ANGLE, frontArm = true, backArm = true, sleepy = false, flame = true } = {}) {
+    parent.replaceChildren();
+    const body = el("g", { transform: `rotate(${tilt} ${cx} ${cy + R})` }, parent);
+
+    // propulsor
+    if (flame) {
+      el("polygon", { points: `${cx - 20 * S},${cy + R - 6 * S} ${cx + 20 * S},${cy + R - 6 * S} ${cx},${cy + R + 62 * S}`, fill: GLOW }, body);
+      el("polygon", { points: `${cx - 9 * S},${cy + R - 6 * S} ${cx + 9 * S},${cy + R - 6 * S} ${cx},${cy + R + 36 * S}`, fill: GLOW_LIGHT }, body);
+    }
+
+    // orejas y cabeza
+    for (const side of [-1, 1]) {
+      const ex = cx + side * (R - 2 * S);
+      el("rect", { x: ex - 9 * S, y: cy - 20 * S, width: 18 * S, height: 40 * S, rx: 8 * S, fill: SHADE, stroke: LINE, "stroke-width": 2 }, body);
+    }
+    el("circle", { cx, cy, r: R, fill: SHADE, stroke: LINE, "stroke-width": 2 }, body);
+    el("circle", { cx: cx - 2 * S, cy: cy - 4 * S, r: R - 6 * S, fill: WHITE }, body);
+
+    // pantalla y cara
+    const fx = cx + 6 * S * facing;
+    el("ellipse", { cx: fx, cy: cy - S, rx: 48 * S, ry: 41 * S, fill: SCREEN }, body);
+    for (const ex of [fx - 20 * S, fx + 20 * S]) {
+      el("ellipse", { cx: ex, cy: cy - 2 * S, rx: 10 * S, ry: 14 * S, fill: GLOW }, body);
+      el("ellipse", { cx: ex - 2 * S, cy: cy - 7 * S, rx: 3 * S, ry: 4 * S, fill: GLOW_LIGHT }, body);
+      if (sleepy) {
+        el("rect", { x: ex - 12 * S, y: cy - 18 * S, width: 24 * S, height: 15 * S, fill: SCREEN }, body);
+        el("line", { x1: ex - 11 * S, y1: cy - 3 * S, x2: ex + 11 * S, y2: cy - 3 * S, stroke: GLOW, "stroke-width": 2.5 * S, "stroke-linecap": "round" }, body);
+        continue;
+      }
+      el("path", { d: `M ${ex - 10.3 * S} ${cy - 26.7 * S} A ${11 * S} ${8 * S} 0 0 1 ${ex + 10.3 * S} ${cy - 26.7 * S}`,
+                   fill: "none", stroke: GLOW, "stroke-width": 3 * S, "stroke-linecap": "round" }, body);
+    }
+    el("path", { d: `M ${fx - 8 * S} ${cy + 20 * S} A ${8 * S} ${8 * S} 0 0 0 ${fx + 8 * S} ${cy + 20 * S} Z`, fill: GLOW }, body);
+
+    // brazos unidos a los costados de la cabeza
+    for (const side of [-1, 1]) {
+      if (side === facing ? !frontArm : !backArm) continue;
+      const [jx, jy] = shoulder(cx, cy, side, tilt);
+      const [tx, ty] = side === facing && frontTip ? frontTip : armTip(cx, cy, side, tilt, aperture);
+      arm(parent, jx, jy, tx, ty);
+    }
+  }
+
+  // Gorra de guardia, en el mismo giro que el cuerpo
+  function cap(parent, cx, cy, facing, tilt) {
+    const g = el("g", { transform: `rotate(${tilt} ${cx} ${cy + R})` }, parent);
+    el("path", { d: `M ${cx - 66} ${cy - 70} Q ${cx} ${cy - 165} ${cx + 66} ${cy - 70} Z`, fill: "#2B3A55" }, g);
+    el("rect", { x: cx - 70, y: cy - 80, width: 140, height: 18, rx: 6, fill: "#22304A" }, g);
+    el("ellipse", { cx: cx + facing * 50, cy: cy - 64, rx: 44, ry: 9, fill: "#141413" }, g);
+    el("circle", { cx, cy: cy - 104, r: 11, fill: "#F2C14E" }, g);
+  }
+
+  // Animación (3.5 s, lineal). Las dos acciones pasan a la vez (0.3 s - 1.5 s). Sin diálogo.
+  //   el rebelde baja flotando y se sienta en el césped, al lado del cartel (al llegar apaga el propulsor)
+  //   mientras baja, el propulsor va quemando el pasto de abajo (la mancha crece)
+  //   el guardia, en el camino, se inclina hacia él sin poder creerlo
+  const DURATION = 3.5;
+  const REBELDE_X = 360, REBELDE_START = 260, REBELDE_END = 452;   // sentado: la base de la cabeza toca el pasto
+  const GUARDIA = [925, 360], GUARD_TILT = -12;
+  const progress = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+  const lerp = (a, b, k) => a + (b - a) * k;
+
+  const rebelde = document.getElementById("rebelde");
+  const quemadura = document.getElementById("quemadura");
+  const guardia = document.getElementById("guardia");
+  function render(t) {
+    const k = progress(t, 0.3, 1.5);
+    robot(rebelde, REBELDE_X, lerp(REBELDE_START, REBELDE_END, k), 1, { flame: k < 1 });
+    quemadura.setAttribute("rx", 130 * k);
+    quemadura.setAttribute("ry", 30 * k);
+    const tilt = GUARD_TILT * k;
+    robot(guardia, ...GUARDIA, -1, { tilt });
+    cap(guardia, ...GUARDIA, -1, tilt);
+  }
+
+  // Controles: animación / cuadro inicial / cuadro final; ?t=1.5 deja fijo ese segundo
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  const buttons = document.querySelectorAll(".controls button");
+  buttons.forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode;
+    start = performance.now();
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION);
+    buttons.forEach(o => o.setAttribute("aria-pressed", String(o === b)));
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; render(Number(fixed)); } else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>

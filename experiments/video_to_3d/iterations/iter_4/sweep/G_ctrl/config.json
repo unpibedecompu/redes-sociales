@@ -1,0 +1,23 @@
+{
+ "post": {
+  "clip_bottom_frac": 0.17,
+  "body_scale_xz": [
+   1.0,
+   1.0
+  ],
+  "neck_frac": 0.22,
+  "neck_ramp": 0.05,
+  "tex_gamma_front": 1.45,
+  "tex_gamma_back": 2.0,
+  "tex_sat": 0.9,
+  "tex_sharpen": 0.5,
+  "skin_protect": true,
+  "skin_head_frac": 1.0,
+  "skin_gain": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "skin_gamma": 1.0
+ }
+}

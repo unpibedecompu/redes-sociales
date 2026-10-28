@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Turntable Render</title>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+  html, body { margin: 0; background: #00ff00; }
+  #grid { display: grid; grid-template-columns: repeat(4, 360px); }
+  model-viewer { width: 360px; height: 360px; background: #00ff00; --poster-color: transparent; }
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<script>
+  // ?glb=path&yaw=offsetDeg&angles=0,45,...  Renders one model-viewer per angle (grid 4 wide, 360px cells).
+  const q = new URLSearchParams(location.search);
+  const yaw = parseFloat(q.get('yaw') || '0');
+  const angles = (q.get('angles') || '0,45,90,135,180,225,270,315').split(',').map(Number);
+  // optional per-angle yaw corrections (from camera calibration against the matching video frame)
+  const yaws = (q.get('yaws') || '').split(',').filter(Boolean).map(Number);
+  angles.forEach((a0, i) => {
+    const a = a0 + (yaws[i] || 0);
+    const mv = document.createElement('model-viewer');
+    mv.src = q.get('glb');
+    // rotate the model itself (like the video turntable) so lighting stays front-on
+    mv.orientation = `0deg 0deg ${-(a + yaw)}deg`;  // negative: matches the video's spin direction
+    mv.cameraOrbit = '0deg 85deg auto';
+    mv.fieldOfView = '25deg';
+    mv.exposure = q.get('exposure') || '1.0';
+    mv.environmentImage = 'neutral';
+    mv.shadowIntensity = 0;
+    mv.interactionPrompt = 'none';
+    document.getElementById('grid').appendChild(mv);
+  });
+</script>
+</body>
+</html>

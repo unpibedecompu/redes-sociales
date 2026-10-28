@@ -1,0 +1,16 @@
+{
+  "backend": "trellis",
+  "views": {"front": 0, "right": 90, "back": 180, "left": 270},
+  "crop_pad": 0.08,
+  "input_size": 1024,
+  "preprocess_all": true,
+  "force_multiimage": true,
+  "params": {
+    "seed": 0,
+    "multiimage_algo": "multidiffusion",
+    "slat_sampling_steps": 25,
+    "ss_sampling_steps": 25,
+    "texture_size": 2048
+  },
+  "post": {"clip_bottom_frac": 0.17}
+}

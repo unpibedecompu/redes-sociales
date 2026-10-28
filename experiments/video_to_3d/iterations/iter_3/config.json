@@ -1,0 +1,10 @@
+{
+  "note": "No new generation (ZeroGPU quota exhausted). model_raw.glb = iter_2/model.glb (TRELLIS 8-view multidiffusion, force_multiimage). Rebuild with: python -P scripts/generate.py iterations/iter_3/config.json --post-only",
+  "source_config": "iterations/iter_2/config.json",
+  "post": {
+    "clip_bottom_frac": 0.17,
+    "tex_gamma_front": 1.45,
+    "tex_gamma_back": 2.0,
+    "tex_sat": 0.85
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "backend": "hunyuan",
+  "views": {"front": 0, "right": 126, "back": 234, "left": 310},
+  "crop_pad": 0.08,
+  "input_size": 1024,
+  "params": {"space": "tencent/Hunyuan3D-2mv", "steps": 30, "guidance_scale": 5.0, "seed": 42, "octree_resolution": 384, "check_box_rembg": true}
+}

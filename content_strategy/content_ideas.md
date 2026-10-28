@@ -10,11 +10,12 @@
 [-] injection instrospection: https://transformer-circuits.pub/2025/introspection/index.html
 [ ] diferencia entre especie humana y especie IA
 [ ] inteligencia de la IA: experta en todo menos en lavar autos
-[ ] Utility Engineering
 [ ] La IA tiene sentimientos (2 de abril): https://transformer-circuits.pub/2026/emotions/index.html
 [ ] Eval awarness: intento asesinar, pero no tenia la habilidad de ocultarlo, ni la capacidad para hacerlo
 [ ] Subliminal Learning
 [ ] LLM persona: https://www.anthropic.com/research/assistant-axis
+[ ] ai systems could cover up misbehavior: https://metr.org/blog/2026-10-06-ai-systems-could-cover-up-misbehavior/
+[ ] self-replicating AI: https://www.anthropic.com/research/self-replicating-ai
 
 ## AI Safety
 [x] AI Safety
@@ -60,3 +61,5 @@
 [ ] Hunger Strike
 [ ] ChatGPT-4o phycophansy rollback
 [ ] chatGPT-6 hack HuggingFace
+[ ] OpenAI fire safety employees
+[ ] Meta muse safety risks: https://thenextweb.com/news/zuckerberg-muse-launch-safety-concerns-nyt
