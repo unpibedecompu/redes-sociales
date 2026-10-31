@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Logos IA EE.UU. vs China</title>
+<style>
+  /* 1080x1920 vertical canvas for an Instagram Reel.
+     Open normally to watch it play; add ?alpha to drop the background (for overlay capture). */
+  :root { --bg: #0e0e12; --fg: #ebebf0; }
+  html, body { margin: 0; padding: 0; background: var(--bg); overflow: hidden; }
+  body.alpha, html.alpha { background: transparent; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Arial, Helvetica, sans-serif; }
+  .head { position: absolute; top: 290px; width: 540px; transform: translateY(-50%);
+          text-align: center; color: var(--fg); font-weight: 700; font-size: 54px; letter-spacing: 2px; opacity: 0; }
+  #divider { position: absolute; left: 539px; width: 3px; top: 960px; height: 0;
+             background: rgba(255,255,255,.27); }
+  .cell { position: absolute; left: 0; top: 0; width: 440px; display: flex; flex-direction: column;
+          align-items: center; gap: 26px; will-change: transform; }
+  .cell .icon { width: 150px; height: 150px; object-fit: contain; }
+  .cell .word { max-width: 400px; max-height: 64px; object-fit: contain; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="head" id="h-us" style="left:0">EE.UU.</div>
+  <div class="head" id="h-cn" style="left:540px">CHINA</div>
+  <div id="divider"></div>
+</div>
+<script>
+const LOGOS = "../imagenes/logos_ia/";
+const W = 1080, H = 1920, DUR = 6.0;
+const COL_X = [270, 810], ROW_Y = [510, 810, 1110, 1410];
+const STAGGER = 0.32, MOVE = 0.6, US_START = 0.35;
+const CN_START = US_START + 3 * STAGGER + MOVE + 0.15;
+const LINE_START = CN_START + 3 * STAGGER + MOVE;
+
+const US = [["openai","openai"],["anthropic","anthropic"],["deepmind-color","deepmind"],["xai","xai"]];
+const CN = [["deepseek-color","deepseek"],["qwen-color","qwen"],["moonshot","moonshot"],["zhipu-color","zhipu"]];
+
+if (new URLSearchParams(location.search).has("alpha")) {
+  document.documentElement.classList.add("alpha"); document.body.classList.add("alpha");
+}
+
+const stage = document.getElementById("stage");
+const items = [];
+function addCell([icon, word], col, row, start, side) {
+  const el = document.createElement("div");
+  el.className = "cell";
+  el.innerHTML = `<img class="icon" src="${LOGOS}dark_${icon}.png"><img class="word" src="${LOGOS}dark_${word}-text.png">`;
+  stage.appendChild(el);
+  items.push({ el, col, row, start, side });
+}
+// US drops from the top, stacking bottom-up so no logo passes over an occupied cell.
+[3, 2, 1, 0].forEach((row, i) => addCell(US[row], 0, row, US_START + i * STAGGER, "top"));
+// China rises from the bottom, filling top-down for the same reason.
+[0, 1, 2, 3].forEach((row, i) => addCell(CN[row], 1, row, CN_START + i * STAGGER, "bottom"));
+
+const clamp = x => Math.max(0, Math.min(1, x));
+const easeOutBack = (t, s = 1.4) => { t -= 1; return t * t * ((s + 1) * t + s) + 1; };
+const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+// Render the scene at time t (seconds). Deterministic, so it can be captured frame by frame.
+function seek(t) {
+  document.getElementById("h-us").style.opacity = clamp((t - US_START + 0.1) / 0.4);
+  document.getElementById("h-cn").style.opacity = clamp((t - CN_START + 0.1) / 0.4);
+  const half = 650 * easeOutCubic(clamp((t - LINE_START) / 0.5));
+  const div = document.getElementById("divider");
+  div.style.top = (960 - half) + "px"; div.style.height = (2 * half) + "px";
+  for (const it of items) {
+    const w = it.el.offsetWidth, h = it.el.offsetHeight;
+    const k = (t - it.start) / MOVE;
+    const ty = ROW_Y[it.row];
+    const sy = it.side === "top" ? -h : H + h;
+    const y = k <= 0 ? sy : sy + (ty - sy) * easeOutBack(clamp(k));
+    it.el.style.transform = `translate(${COL_X[it.col] - w / 2}px, ${y - h / 2}px)`;
+  }
+}
+window.seek = seek;
+window.DURATION = DUR;
+
+// Wait for all images, then play in real time (loops) unless ?capture is set.
+window.ready = Promise.all([...document.images].map(img => img.decode().catch(() => {})))
+  .then(() => seek(0));
+if (!new URLSearchParams(location.search).has("capture")) {
+  window.ready.then(() => {
+    const t0 = performance.now();
+    const loop = now => { seek(((now - t0) / 1000) % (DUR + 1)); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  });
+}
+</script>
+</body>
+</html>

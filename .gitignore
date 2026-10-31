@@ -3,6 +3,7 @@ pilares/**/crudos/
 
 # All mp4 videos, anywhere in the repo (too large for GitHub's 100 MB limit)
 *.[mM][pP]4
+*.[mM][oO][vV]
 
 # Adobe Premiere Pro project files, auto-saves, previews and caches (anywhere in the repo)
 *.prproj
@@ -15,6 +16,7 @@ Adobe Premiere Pro Auto-Save/
 Adobe Premiere Pro Video Previews/
 Adobe Premiere Pro Audio Previews/
 Adobe Premiere Pro Captured Audio/
+Adobe Premiere Pro Captured and Generated/
 
 # Python bytecode caches
 __pycache__/

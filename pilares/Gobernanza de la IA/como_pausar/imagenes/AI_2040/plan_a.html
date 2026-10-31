@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI 2040 Plan A</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Recreation of the AI 2040 "Plan A" header: title, illustration, authors. */
+  :root { --bg: #fffff8; --fg: #111; }
+  html, body { margin: 0; background: var(--bg); }
+  /* 540x960 CSS px, rendered at 2x = 1080x1920 (Instagram Reel). Content centered vertically. */
+  #card { width: 540px; height: 960px; box-sizing: border-box; display: flex; flex-direction: column;
+          justify-content: center; padding-bottom: 50px; /* lifts content so names clear the Reels caption box (y >= 1575px) */ background: var(--bg); color: var(--fg);
+          font-family: "EB Garamond", Garamond, Georgia, serif; }
+  h1 { margin: 0 16px; font-weight: 400; font-size: 80px; line-height: 1; letter-spacing: -0.5px; }
+  h2 { margin: 4px 16px 30px; font-weight: 400; font-size: 50px; line-height: 1.05; }
+  h1, h2 { text-align: center; }
+  img { display: block; width: 470px; margin: 0 auto; }
+  /* Names kept within x 100-440 CSS (200-880 px) and above y 787 CSS (1575 px)
+     so they clear the Reels caption box and the right-hand button column. */
+  .authors { width: 470px; margin: 24px auto 0; font-size: 18.7px; line-height: 1.45; text-align: center; }
+</style>
+</head>
+<body>
+<div id="card">
+  <h1>AI 2040</h1>
+  <h2>Plan A</h2>
+  <img src="ilustracion.png" alt="">
+  <p class="authors">Thomas Larsen, Romeo Dean, Brendan Halstead, Eli Lifland,<br>Ryan Greenblatt, Daniel Kokotajlo</p>
+</div>
+</body>
+</html>

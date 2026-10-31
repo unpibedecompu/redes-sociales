@@ -11,7 +11,7 @@
 - Persona 1: Igual que con las armas nucleares, biologicas y quimicas. Con acuerdos internacionales.
 - Persona 1: Mira esto, hoy en dia las empresas que desarrollan IA de frontera no son mas de 20 [ Dos columnas mostrando los logos de 4 empresas U.S. y 4 Chinas, aparecen de arriba]. China y U.S. tiene el poder mas que suficiente para frenanlas si quieren.
 - Persona 2: okay, pero como se asegura U.S. que China no esta haciendo trampa... y viceversa?
-- Persona 1: Por ejemplo con 3 de las propuestas de AI 2040:
+- Persona 1: Por ejemplo con 3 de las propuestas de AI 2040 [imagen de pagina]:
 
 La primera: controlando a nivel mundial la cadena de suministros de chips necesarios para crear IAs. Hoy hay 5 empresas que diseñan chips y 1 que los fabrica [ imagenes logos empresas ]. Con pedirle reportes de compra y venta a estas 6 empresas ya sabes quienes tienen computo suficiente para crear IAs de frontera.
 
