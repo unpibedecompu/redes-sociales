@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cadena de chips IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  /* 1080x1920 vertical canvas (Instagram Reel), black background.
+     5 chip designers on top send "designs" along smooth splines to TSMC in the middle,
+     which sends chips down to the bottom of the frame.
+     Open normally to watch it loop; ?capture disables autoplay for frame-by-frame rendering. */
+  html, body { margin: 0; background: #000; overflow: hidden; }
+  svg { display: block; font-family: Inter, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<svg id="stage" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- "design": a small blueprint sheet -->
+    <g id="design">
+      <rect x="-14" y="-18" width="28" height="36" rx="3" fill="#0b2433" stroke="#5ac8fa" stroke-width="2.5"/>
+      <path d="M-8 -9 H8 M-8 -2 H8 M-8 5 H3" stroke="#5ac8fa" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+    <!-- "chip": a square die with pins -->
+    <g id="chip">
+      <path d="M-9 -20 V-15 M0 -20 V-15 M9 -20 V-15 M-9 15 V20 M0 15 V20 M9 15 V20
+               M-20 -9 H-15 M-20 0 H-15 M-20 9 H-15 M15 -9 H20 M15 0 H20 M15 9 H20"
+            stroke="#f5b942" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="-15" y="-15" width="30" height="30" rx="4" fill="#2a1f06" stroke="#f5b942" stroke-width="2.5"/>
+      <rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="#f5b942"/>
+    </g>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1080" height="1920" fill="#000"/>
+  <g id="paths"></g>
+  <g id="particles"></g>
+  <g id="nodes"></g>
+</svg>
+<script>
+const SVGNS = "http://www.w3.org/2000/svg";
+const LOGOS = "../imagenes/logos_chips/";
+const DUR = 10;
+
+// ---- layout ----
+const DESIGNERS = [
+  { name: "NVIDIA", logo: "dark_nvidia-color.png" },
+  { name: "Google", logo: "dark_google-color.png" },
+  { name: "Amazon", logo: "dark_amazon.png" },
+  { name: "AMD",    logo: "dark_amd.png" },
+  { name: "Huawei", logo: "dark_huawei-color.png" },
+];
+const DX = [130, 335, 540, 745, 950];
+const ICON_Y = 400, ICON = 104, LABEL_Y = 500, PATH_TOP = 535;
+const FAB = { x: 540, y: 960, w: 440, h: 200 };
+const CHIP_ENDS = [170, 355, 540, 725, 910];
+
+// ---- colors ----
+const C_DESIGN = "#5ac8fa", C_CHIP = "#f5b942";
+
+const el = (tag, attrs, parent) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+};
+const gPaths = document.getElementById("paths");
+const gParts = document.getElementById("particles");
+const gNodes = document.getElementById("nodes");
+
+// ---- splines (cubic Béziers) ----
+const designPaths = DX.map((x, i) => {
+  const ex = FAB.x + (i - 2) * 46, ey = FAB.y - FAB.h / 2;
+  const d = `M ${x} ${PATH_TOP} C ${x} ${PATH_TOP + 220}, ${ex} ${ey - 200}, ${ex} ${ey}`;
+  return el("path", { d, fill: "none", stroke: C_DESIGN, "stroke-width": 3, "stroke-opacity": 0.35, "stroke-linecap": "round" }, gPaths);
+});
+const chipPaths = CHIP_ENDS.map((x, j) => {
+  const sx = FAB.x + (j - 2) * 60, sy = FAB.y + FAB.h / 2;
+  const d = `M ${sx} ${sy} C ${sx} ${sy + 330}, ${x} ${1500}, ${x} ${1990}`;
+  return el("path", { d, fill: "none", stroke: C_CHIP, "stroke-width": 3, "stroke-opacity": 0.35, "stroke-linecap": "round" }, gPaths);
+});
+const lengths = p => p.getTotalLength();
+[...designPaths, ...chipPaths].forEach(p => { p.L = lengths(p); p.setAttribute("stroke-dasharray", p.L); });
+
+// ---- nodes ----
+const header = el("text", { x: 540, y: 270, "text-anchor": "middle", fill: "#8a8f98",
+  "font-size": 30, "font-weight": 700, "letter-spacing": 6 }, gNodes);
+header.textContent = "DISEÑAN";
+
+const designerNodes = DESIGNERS.map((d, i) => {
+  const g = el("g", {}, gNodes);
+  el("image", { href: LOGOS + d.logo, x: -ICON / 2, y: -ICON / 2, width: ICON, height: ICON,
+                preserveAspectRatio: "xMidYMid meet" }, g);
+  const t = el("text", { x: 0, y: LABEL_Y - ICON_Y, "text-anchor": "middle", fill: "#fff",
+                         "font-size": 30, "font-weight": 700 }, g);
+  t.textContent = d.name;
+  g.cx = DX[i]; g.cy = ICON_Y;
+  return g;
+});
+
+const fab = el("g", {}, gNodes);
+const fabGlow = el("rect", { x: -FAB.w / 2, y: -FAB.h / 2, width: FAB.w, height: FAB.h, rx: 28,
+                             fill: C_CHIP, filter: "url(#glow)", opacity: 0 }, fab);
+el("rect", { x: -FAB.w / 2, y: -FAB.h / 2, width: FAB.w, height: FAB.h, rx: 28,
+             fill: "#0d0d0d", stroke: "#ffffff", "stroke-opacity": 0.55, "stroke-width": 2.5 }, fab);
+el("image", { href: LOGOS + "dark_tsmc-text.png", x: -150, y: -70, width: 300, height: 75,
+              preserveAspectRatio: "xMidYMid meet" }, fab);
+const fabLabel = el("text", { x: 0, y: 62, "text-anchor": "middle", fill: "#8a8f98",
+                              "font-size": 26, "font-weight": 700, "letter-spacing": 6 }, fab);
+fabLabel.textContent = "FABRICA";
+
+// ---- timing ----
+const NODE_START = 0.25, NODE_STAGGER = 0.14, NODE_DUR = 0.55;
+const FAB_START = 1.1, FAB_DUR = 0.6;
+const DPATH_START = 1.7, DPATH_STAGGER = 0.08, PATH_DRAW = 0.9;
+const D_EMIT = 2.4, D_PERIOD = 0.95, D_TRAVEL = 1.7;
+const CPATH_START = D_EMIT + D_TRAVEL - 0.2;
+const C_EMIT = CPATH_START + 0.5, C_PERIOD = 0.62, C_TRAVEL = 2.3;
+
+// particle pools
+function pool(n, sym) { return Array.from({ length: n }, () => el("use", { href: sym, opacity: 0 }, gParts)); }
+const dPools = designPaths.map(() => pool(Math.ceil(D_TRAVEL / D_PERIOD) + 1, "#design"));
+const cPools = chipPaths.map(() => pool(Math.ceil(C_TRAVEL / C_PERIOD) + 1, "#chip"));
+
+const clamp = x => Math.max(0, Math.min(1, x));
+const easeOutBack = (t, s = 1.6) => { t -= 1; return t * t * ((s + 1) * t + s) + 1; };
+const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+const easeInOutSine = t => -(Math.cos(Math.PI * t) - 1) / 2;
+
+function drawPath(p, start, t) {
+  p.setAttribute("stroke-dashoffset", p.L * (1 - easeOutCubic(clamp((t - start) / PATH_DRAW))));
+}
+
+// Place particles flowing along a path; returns the most recent arrival time (for the glow).
+function flow(path, slots, t, emit0, period, travel, ease, fadeEnd) {
+  let lastArrival = -1e9;
+  slots.forEach(s => s.setAttribute("opacity", 0));
+  if (t < emit0) return lastArrival;
+  const kMax = Math.floor((t - emit0) / period);
+  for (let k = kMax; k >= 0 && t - (emit0 + k * period) <= travel; k--) {
+    const u = (t - (emit0 + k * period)) / travel;
+    const pt = path.getPointAtLength(path.L * ease(u));
+    const s = slots[k % slots.length];
+    let o = clamp(u / 0.08);
+    if (fadeEnd) o *= clamp((1 - u) / 0.12);
+    s.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
+    s.setAttribute("opacity", o);
+  }
+  if (kMax >= 0) {
+    const arrivedK = Math.floor((t - travel - emit0) / period);
+    if (arrivedK >= 0) lastArrival = emit0 + arrivedK * period + travel;
+  }
+  return lastArrival;
+}
+
+// Render the scene at time t (seconds). Deterministic so it can be captured frame by frame.
+function seek(t) {
+  header.setAttribute("opacity", clamp((t - NODE_START) / 0.5));
+  designerNodes.forEach((g, i) => {
+    const k = clamp((t - NODE_START - i * NODE_STAGGER) / NODE_DUR);
+    const s = k <= 0 ? 0.001 : easeOutBack(k);
+    g.setAttribute("transform", `translate(${g.cx} ${g.cy}) scale(${s})`);
+    g.setAttribute("opacity", clamp(k * 2));
+  });
+  const fk = clamp((t - FAB_START) / FAB_DUR);
+  fab.setAttribute("transform", `translate(${FAB.x} ${FAB.y}) scale(${fk <= 0 ? 0.001 : easeOutBack(fk, 1.2)})`);
+  fab.setAttribute("opacity", clamp(fk * 2));
+
+  designPaths.forEach((p, i) => drawPath(p, DPATH_START + i * DPATH_STAGGER, t));
+  chipPaths.forEach((p, j) => drawPath(p, CPATH_START + j * DPATH_STAGGER, t));
+
+  let glow = 0;
+  designPaths.forEach((p, i) => {
+    const arr = flow(p, dPools[i], t, D_EMIT + i * 0.19, D_PERIOD, D_TRAVEL, easeInOutSine, true);
+    glow += Math.exp(-Math.max(0, t - arr) / 0.3);
+  });
+  chipPaths.forEach((p, j) => flow(p, cPools[j], t, C_EMIT + j * 0.13, C_PERIOD, C_TRAVEL, x => x, false));
+  fabGlow.setAttribute("opacity", Math.min(0.55, glow * 0.3));
+}
+window.seek = seek;
+window.DURATION = DUR;
+
+window.ready = Promise.all([
+  document.fonts.ready,
+  ...[...document.querySelectorAll("image")].map(img => new Promise(r => {
+    const i = new Image(); i.onload = i.onerror = r; i.src = img.getAttribute("href");
+  })),
+]).then(() => seek(0));
+
+if (!new URLSearchParams(location.search).has("capture")) {
+  window.ready.then(() => {
+    const t0 = performance.now();
+    const loop = now => { seek(((now - t0) / 1000) % (DUR + 1)); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  });
+}
+</script>
+</body>
+</html>

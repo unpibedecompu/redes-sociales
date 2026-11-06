@@ -10,14 +10,18 @@
   html, body { margin: 0; padding: 0; background: var(--bg); overflow: hidden; }
   body.alpha, html.alpha { background: transparent; }
   #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Arial, Helvetica, sans-serif; }
-  .head { position: absolute; top: 290px; width: 540px; transform: translateY(-50%);
+  /* Everything stays between y≈180 and y≈1290 so it never collides with Instagram's
+     top bar (~0-120) or the burned-in subtitles (~1370-1540). */
+  .head { position: absolute; top: 220px; width: 540px; transform: translateY(-50%);
           text-align: center; color: var(--fg); font-weight: 700; font-size: 54px; letter-spacing: 2px; opacity: 0; }
-  #divider { position: absolute; left: 539px; width: 3px; top: 960px; height: 0;
+  #divider { position: absolute; left: 539px; width: 3px; top: 800px; height: 0;
              background: rgba(255,255,255,.27); }
+  /* Logos are clipped at y=1330, so the China fly-in and the bounce overshoot never enter the subtitle band. */
+  #grid { position: absolute; inset: 0; clip-path: inset(0 0 590px 0); }
   .cell { position: absolute; left: 0; top: 0; width: 440px; display: flex; flex-direction: column;
-          align-items: center; gap: 26px; will-change: transform; }
-  .cell .icon { width: 150px; height: 150px; object-fit: contain; }
-  .cell .word { max-width: 400px; max-height: 64px; object-fit: contain; }
+          align-items: center; gap: 22px; will-change: transform; }
+  .cell .icon { width: 140px; height: 140px; object-fit: contain; }
+  .cell .word { max-width: 400px; max-height: 60px; object-fit: contain; }
 </style>
 </head>
 <body>
@@ -25,11 +29,13 @@
   <div class="head" id="h-us" style="left:0">EE.UU.</div>
   <div class="head" id="h-cn" style="left:540px">CHINA</div>
   <div id="divider"></div>
+  <div id="grid"></div>
 </div>
 <script>
 const LOGOS = "../imagenes/logos_ia/";
 const W = 1080, H = 1920, DUR = 6.0;
-const COL_X = [270, 810], ROW_Y = [510, 810, 1110, 1410];
+const COL_X = [270, 810], ROW_Y = [415, 665, 915, 1165];
+const DIV_MID = 800, DIV_HALF = 485;   // divider spans y 315..1285
 const STAGGER = 0.32, MOVE = 0.6, US_START = 0.35;
 const CN_START = US_START + 3 * STAGGER + MOVE + 0.15;
 const LINE_START = CN_START + 3 * STAGGER + MOVE;
@@ -47,7 +53,7 @@ function addCell([icon, word], col, row, start, side) {
   const el = document.createElement("div");
   el.className = "cell";
   el.innerHTML = `<img class="icon" src="${LOGOS}dark_${icon}.png"><img class="word" src="${LOGOS}dark_${word}-text.png">`;
-  stage.appendChild(el);
+  document.getElementById("grid").appendChild(el);
   items.push({ el, col, row, start, side });
 }
 // US drops from the top, stacking bottom-up so no logo passes over an occupied cell.
@@ -63,9 +69,9 @@ const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 function seek(t) {
   document.getElementById("h-us").style.opacity = clamp((t - US_START + 0.1) / 0.4);
   document.getElementById("h-cn").style.opacity = clamp((t - CN_START + 0.1) / 0.4);
-  const half = 650 * easeOutCubic(clamp((t - LINE_START) / 0.5));
+  const half = DIV_HALF * easeOutCubic(clamp((t - LINE_START) / 0.5));
   const div = document.getElementById("divider");
-  div.style.top = (960 - half) + "px"; div.style.height = (2 * half) + "px";
+  div.style.top = (DIV_MID - half) + "px"; div.style.height = (2 * half) + "px";
   for (const it of items) {
     const w = it.el.offsetWidth, h = it.el.offsetHeight;
     const k = (t - it.start) / MOVE;

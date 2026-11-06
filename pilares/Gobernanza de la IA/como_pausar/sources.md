@@ -1,5 +1,11 @@
-- 8 companies: https://futureoflife.org/ai-safety-index-summer-2026/
-- 16 companies: https://www.infosecurity-magazine.com/news/ai-seoul-summit-safety-commitments/
-- 9 companies: https://epoch.ai/data/ai-companies?view=graph&tab=revenue
+- AI 2040: https://ai-2040.com/
+- Number of frontier AI companies: 
+    - https://futureoflife.org/ai-safety-index-summer-2026/
+    - https://www.infosecurity-magazine.com/news/ai-seoul-summit-safety-commitments/
+    - https://epoch.ai/data/ai-companies?view=graph&tab=revenue
 - datacenter images: https://epoch.ai/data/ai-data-centers
 - chips supply chain: https://epoch.ai/publications/chips-topic-overview
+- Pax Silica (US AI coordination): https://www.state.gov/pax-silica
+- WAICO (China AI coordination): http://english.scio.gov.cn/topnews/2026-07/18/content_118605932.html
+- China on AI safety: https://www.mfa.gov.cn/eng/wjbzhd/202409/t20240927_11498465.html
+- China on AI Global Governance: https://www.mfa.gov.cn/eng/zy/gb/202405/t20240531_11367503.html

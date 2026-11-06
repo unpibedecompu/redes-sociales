@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Verificador de datacenter</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  /* 1080x1920 vertical canvas (Instagram Reel).
+     A verification program runs on a screen bolted to datacenter machinery: green workload logs,
+     then a red "new AI training" log, and the emergency beacon on top of the machine turns on.
+     Open normally to watch it loop; ?capture disables autoplay for frame-by-frame rendering. */
+  html, body { margin: 0; background: #000; overflow: hidden; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden;
+           background: radial-gradient(120% 70% at 50% 35%, #12171c 0%, #07090b 60%, #030405 100%);
+           font-family: Inter, Arial, sans-serif; }
+  .abs { position: absolute; }
+
+  /* ---------- wall light beams from the beacon ---------- */
+  #beams { left: 540px; top: 255px; width: 0; height: 0; opacity: 0; }
+  #beams .beam { position: absolute; left: -1600px; top: -1600px; width: 3200px; height: 3200px; border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(255,40,30,0) 0deg, rgba(255,40,30,.55) 10deg, rgba(255,40,30,0) 24deg,
+                rgba(255,40,30,0) 180deg, rgba(255,40,30,.55) 190deg, rgba(255,40,30,0) 204deg, rgba(255,40,30,0) 360deg);
+    filter: blur(6px); mix-blend-mode: screen; }
+
+  /* ---------- machine cabinet ---------- */
+  #cabinet { left: 50px; top: 340px; width: 980px; height: 1520px; border-radius: 22px;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,0) 8%, rgba(0,0,0,0) 92%, rgba(0,0,0,.35)),
+      linear-gradient(180deg, #3a4148 0%, #2a3036 45%, #20252a 100%);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.12), inset 0 -3px 0 rgba(0,0,0,.5), 0 30px 80px rgba(0,0,0,.8); }
+  .rivet { position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #8e979f, #3b4248 60%, #1d2125); box-shadow: 0 1px 2px rgba(0,0,0,.7); }
+  .vents { position: absolute; display: flex; flex-direction: column; gap: 14px; }
+  .vents i { display: block; height: 12px; border-radius: 6px; background: #0b0d0f;
+    box-shadow: inset 0 3px 4px rgba(0,0,0,.9), 0 1px 0 rgba(255,255,255,.08); }
+  #plate { left: 250px; top: 1420px; width: 580px; height: 64px; border-radius: 8px;
+    background: linear-gradient(180deg, #b9bec3, #8d9399); color: #1a1d20;
+    font: 800 25px/64px Inter, Arial; letter-spacing: 3px; text-align: center;
+    box-shadow: inset 0 1px 0 #fff8, 0 2px 4px #0009; }
+  #leds { left: 130px; top: 1525px; display: flex; gap: 26px; }
+  .led { width: 26px; height: 26px; border-radius: 50%; background: #0f2a14; box-shadow: inset 0 2px 3px #000; }
+  .btn { position: absolute; width: 110px; height: 110px; border-radius: 50%;
+    box-shadow: 0 6px 0 #0008, inset 0 -6px 10px #0006, inset 0 4px 6px #fff3; }
+  #hazard { left: 50px; top: 1760px; width: 980px; height: 100px; border-radius: 0 0 22px 22px;
+    background: repeating-linear-gradient(-45deg, #e8b400 0 44px, #121212 44px 88px);
+    box-shadow: inset 0 6px 10px rgba(0,0,0,.6); opacity: .9; }
+  .cable { position: absolute; border: 16px solid #15181b; border-radius: 0 0 0 120px; }
+
+  /* ---------- beacon ---------- */
+  #beaconBase { left: 430px; top: 300px; width: 220px; height: 56px; border-radius: 10px 10px 4px 4px;
+    background: linear-gradient(180deg, #2d3238, #15181b); box-shadow: inset 0 2px 0 #fff2; }
+  #dome { left: 460px; top: 160px; width: 160px; height: 150px; border-radius: 80px 80px 14px 14px; overflow: hidden;
+    background: radial-gradient(70% 60% at 50% 40%, #5a0d0d, #2a0505 70%);
+    box-shadow: inset 0 -10px 18px rgba(0,0,0,.6), inset 8px 8px 20px rgba(255,255,255,.12); }
+  #reflector { left: 0; top: 0; width: 160px; height: 150px;
+    background: conic-gradient(from 0deg at 50% 55%, rgba(255,230,220,.95) 0deg, rgba(255,60,40,.0) 40deg,
+                rgba(255,60,40,0) 180deg, rgba(255,230,220,.95) 180deg, rgba(255,60,40,0) 220deg, rgba(255,60,40,0) 360deg);
+    opacity: 0; mix-blend-mode: screen; }
+  #domeShine { left: 26px; top: 18px; width: 40px; height: 90px; border-radius: 30px; background: rgba(255,255,255,.18); }
+  #halo { left: 340px; top: 30px; width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,50,40,.9) 0%, rgba(255,30,20,.35) 30%, rgba(255,0,0,0) 65%);
+    opacity: 0; mix-blend-mode: screen; }
+  #redwash { left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0; mix-blend-mode: screen;
+    background: radial-gradient(90% 60% at 50% 15%, rgba(255,30,20,.55), rgba(255,0,0,.12) 70%); pointer-events: none; }
+
+  /* ---------- monitor ---------- */
+  .bracket { position: absolute; width: 120px; height: 48px; border-radius: 6px;
+    background: linear-gradient(180deg, #59616a, #2b3137); box-shadow: 0 3px 6px #000a; }
+  #bezel { left: 100px; top: 450px; width: 880px; height: 900px; border-radius: 26px;
+    background: linear-gradient(180deg, #1b1f23, #0e1012);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.08), 0 14px 40px rgba(0,0,0,.85); }
+  #screen { left: 138px; top: 488px; width: 804px; height: 790px; border-radius: 14px; overflow: hidden;
+    background: radial-gradient(110% 90% at 50% 45%, #04170b 0%, #020a05 70%, #010402 100%);
+    box-shadow: inset 0 0 60px rgba(0,0,0,.9), inset 0 0 0 2px #000; }
+  #screen.alarm { background: radial-gradient(110% 90% at 50% 45%, #1d0505 0%, #0d0202 70%, #050101 100%); }
+  #scan { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 2px, rgba(0,0,0,0) 2px 4px); }
+  #sweep { left: 0; width: 100%; height: 140px; pointer-events: none;
+    background: linear-gradient(180deg, rgba(80,255,140,0), rgba(80,255,140,.06), rgba(80,255,140,0)); }
+  #term { left: 34px; top: 28px; right: 30px; font-family: "JetBrains Mono", Consolas, monospace;
+    font-weight: 500; font-size: 30px; line-height: 1.42; color: #3dff7a; white-space: pre;
+    text-shadow: 0 0 6px rgba(61,255,122,.7), 0 0 18px rgba(61,255,122,.25); }
+  #term .hdr { display: flex; justify-content: space-between; font-weight: 700; color: #0a1a0e;
+    background: #3dff7a; text-shadow: none; padding: 0 12px; margin: 0 -8px 18px -8px; border-radius: 4px; }
+  #screen.alarm #term .hdr { background: #ff3b30; color: #1a0303; }
+  #term .red { color: #ff3b30; font-weight: 700; text-shadow: 0 0 8px rgba(255,59,48,.85), 0 0 22px rgba(255,59,48,.35); }
+  #term .dim { opacity: .65; }
+  #term .ok { color: #9dffbd; font-weight: 700; }
+  #stamp { left: 50%; top: 600px; transform: translate(-50%, -50%) rotate(-6deg); opacity: 0;
+    font: 800 58px/1.05 "JetBrains Mono", monospace; color: #ff3b30; text-align: center; letter-spacing: 2px;
+    border: 7px solid #ff3b30; border-radius: 14px; padding: 18px 30px; background: rgba(40,0,0,.55);
+    text-shadow: 0 0 14px rgba(255,59,48,.8); box-shadow: 0 0 40px rgba(255,59,48,.45), inset 0 0 30px rgba(255,59,48,.3); }
+  #glare { left: 138px; top: 488px; width: 804px; height: 790px; border-radius: 14px; pointer-events: none;
+    background: linear-gradient(125deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,0) 35%); }
+  #powerLed { left: 860px; top: 1300px; width: 16px; height: 16px; border-radius: 50%; background: #3dff7a;
+    box-shadow: 0 0 10px #3dff7a; }
+  #brand { left: 150px; top: 1294px; font: 700 18px Inter, Arial; letter-spacing: 4px; color: #59626b; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="beams" class="abs"><div class="beam" id="beam"></div></div>
+
+  <!-- cables leaving the machine -->
+  <div class="cable" style="left:-40px; top:900px; width:110px; height:300px; border-left:none; border-top:none; border-radius:0 0 120px 0"></div>
+  <div class="cable" style="left:1010px; top:760px; width:120px; height:380px; border-right:none; border-top:none;"></div>
+
+  <div id="cabinet" class="abs"></div>
+  <div id="hazard" class="abs"></div>
+
+  <!-- side vents -->
+  <div class="vents" style="left:74px; top:470px; width:16px;"></div>
+  <div class="vents" id="ventsL" style="left:80px; top:1400px; width:0"></div>
+  <div class="vents" id="ventsBottom" style="left:420px; top:1560px; width:520px;"></div>
+
+  <div id="plate" class="abs">UNIDAD DE VERIFICACIÓN</div>
+  <div id="leds" class="abs"></div>
+  <div class="btn" style="left:160px; top:1610px; background:radial-gradient(circle at 40% 35%, #3a4148, #1a1e22);"></div>
+  <div class="btn" id="bigRed" style="left:300px; top:1610px; background:radial-gradient(circle at 40% 35%, #a8261f, #4a0c09);"></div>
+
+  <!-- beacon -->
+  <div id="halo" class="abs"></div>
+  <div id="beaconBase" class="abs"></div>
+  <div id="dome" class="abs"><div id="reflector" class="abs"></div><div id="domeShine" class="abs"></div></div>
+
+  <!-- monitor -->
+  <div class="bracket" style="left:150px; top:422px"></div>
+  <div class="bracket" style="left:810px; top:422px"></div>
+  <div class="bracket" style="left:150px; top:1330px"></div>
+  <div class="bracket" style="left:810px; top:1330px"></div>
+  <div id="bezel" class="abs"></div>
+  <div id="screen" class="abs">
+    <div id="term" class="abs"></div>
+    <div id="stamp" class="abs">ENTRENAMIENTO<br>DETENIDO</div>
+    <div id="sweep" class="abs"></div>
+    <div id="scan" class="abs"></div>
+  </div>
+  <div id="glare" class="abs"></div>
+  <div id="brand" class="abs">VERIFIC-AI · DC-07</div>
+  <div id="powerLed" class="abs"></div>
+
+  <div id="redwash" class="abs"></div>
+</div>
+<script>
+const DUR = 6;          // seconds of animation (loops with a 1 s pause when not capturing)
+const T_ALARM = 2.9;    // when the training log appears
+
+// ---- static decoration ----
+const cab = document.getElementById("cabinet");
+[[24,24],[938,24],[24,1478],[938,1478],[24,740],[938,740]].forEach(([x,y]) => {
+  const r = document.createElement("div"); r.className = "rivet"; r.style.left = x + "px"; r.style.top = y + "px"; cab.appendChild(r);
+});
+const vb = document.getElementById("ventsBottom");
+for (let i = 0; i < 6; i++) vb.appendChild(document.createElement("i"));
+const ledsEl = document.getElementById("leds");
+const LEDS = [];
+for (let i = 0; i < 12; i++) { const l = document.createElement("div"); l.className = "led"; ledsEl.appendChild(l); LEDS.push(l); }
+// move the LED row next to the buttons
+ledsEl.style.left = "470px"; ledsEl.style.top = "1525px"; ledsEl.style.gap = "16px";
+
+// ---- log script ----
+// t: start time, text: full line, cls: css class, ok: whether to append a delayed "OK"
+const DOTS = (s, n) => s + " " + ".".repeat(Math.max(2, n - s.length - 1)) + " ";
+const LINES = [
+  { t: 0.3, text: "$ verificar --todas-las-cargas", cls: "" },
+  { t: 0.6, text: "Escaneando 2.048 GPUs...", cls: "dim" },
+  { t: 0.9, text: DOTS("[A-12] Inferencia: chatbot", 36), ok: true },
+  { t: 1.2, text: DOTS("[A-31] Investigación médica", 36), ok: true },
+  { t: 1.5, text: DOTS("[B-04] Traducción automática", 36), ok: true },
+  { t: 1.8, text: DOTS("[B-19] Ajuste fino pequeño", 36), ok: true },
+  { t: 2.1, text: DOTS("[C-07] Simulación climática", 36), ok: true },
+  { t: 2.4, text: DOTS("[C-21] Generación de imágenes", 36), ok: true },
+  { t: T_ALARM, text: "[C-44] ⚠ ENTRENAMIENTO DE IA NUEVA", cls: "red" },
+  { t: T_ALARM + 0.35, text: "       Cómputo: 3,1×10²⁶ FLOP > límite", cls: "red" },
+  { t: T_ALARM + 0.7, text: ">>> CARGA DETENIDA. NODO BLOQUEADO <<<", cls: "red" },
+];
+const CPS = 70; // typing speed (characters per second)
+
+const term = document.getElementById("term");
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+
+function clamp(x, a = 0, b = 1) { return Math.min(b, Math.max(a, x)); }
+function hash(i) { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+
+function seek(t) {
+  const alarm = t >= T_ALARM;
+  // ---- terminal ----
+  let html = `<div class="hdr"><span>VERIFICADOR v2.1 · DC-07</span><span>${alarm && Math.floor(t * 3) % 2 ? "● ALERTA" : "● EN LÍNEA"}</span></div>`;
+  let cursorPlaced = false;
+  for (let i = 0; i < LINES.length; i++) {
+    const L = LINES[i];
+    if (t < L.t) break;
+    const chars = Infinity;   // print the whole line at once
+    const shown = [...L.text].slice(0, chars).join("");
+    const typing = chars < [...L.text].length;
+    let line = `<span class="${L.cls || ""}">${esc(shown)}</span>`;
+    if (L.ok && !typing && t > L.t + 0.1) line += `<span class="ok">OK</span>`;
+    const next = LINES[i + 1];
+    const isLast = !next || t < next.t;
+    if (isLast && !cursorPlaced) {
+      const blink = typing || Math.floor(t * 2.5) % 2 === 0;
+      if (blink) line += `<span class="${L.cls || ""}">█</span>`;
+      cursorPlaced = true;
+    }
+    html += line + "\n";
+  }
+  term.innerHTML = html;
+
+  // terminal fade-in at start
+  term.style.opacity = clamp(t / 0.35);
+  document.getElementById("sweep").style.top = (((t * 260) % 1000) - 140) + "px";
+
+  // ---- alarm state ----
+  const screen = document.getElementById("screen");
+  screen.classList.toggle("alarm", alarm);
+  const ta = t - T_ALARM;
+  const on = clamp(ta / 0.15);                         // beacon switches on quickly
+  const rot = ta * 360 * 1.6;                          // rotating reflector (deg)
+  const pulse = 0.5 + 0.5 * Math.cos(rot * Math.PI / 180 * 2);   // brightest when a beam faces the camera
+  document.getElementById("dome").style.background = alarm
+    ? `radial-gradient(70% 60% at 50% 40%, rgb(255,${70 + 90 * pulse | 0},${50 + 60 * pulse | 0}), #c0140c 60%, #5a0606 100%)`
+    : "radial-gradient(70% 60% at 50% 40%, #5a0d0d, #2a0505 70%)";
+  const refl = document.getElementById("reflector");
+  refl.style.opacity = on * 0.9;
+  refl.style.transform = `rotate(${rot}deg)`;
+  document.getElementById("halo").style.opacity = on * (0.45 + 0.55 * pulse);
+  const beams = document.getElementById("beams");
+  beams.style.opacity = on * 0.8;
+  document.getElementById("beam").style.transform = `rotate(${rot}deg)`;
+  document.getElementById("redwash").style.opacity = on * (0.18 + 0.42 * pulse);
+
+  // stamp
+  const st = document.getElementById("stamp");
+  const ts = t - (T_ALARM + 1.05);
+  if (ts > 0) {
+    const s = 1 + 0.6 * Math.exp(-ts * 14) ;
+    st.style.opacity = clamp(ts / 0.08) * (Math.floor(ts * 2.2) % 2 === 0 || ts < 0.6 ? 1 : 0.55);
+    st.style.transform = `translate(-50%, -50%) rotate(-6deg) scale(${s})`;
+    st.style.top = "672px";
+  } else st.style.opacity = 0;
+
+  // ---- machine LEDs (blink pseudo-randomly; turn red during the alarm) ----
+  LEDS.forEach((l, i) => {
+    const lit = hash(i * 31 + Math.floor(t * (3 + (i % 4)))) > 0.35;
+    if (alarm) {
+      const blink = Math.floor(t * 4) % 2 === (i % 2);
+      l.style.background = blink ? "#ff3b30" : "#3a0a08";
+      l.style.boxShadow = blink ? "0 0 14px #ff3b30, inset 0 0 4px #fff6" : "inset 0 2px 3px #000";
+    } else {
+      l.style.background = lit ? "#3dff7a" : "#0f2a14";
+      l.style.boxShadow = lit ? "0 0 12px #3dff7a, inset 0 0 4px #fff6" : "inset 0 2px 3px #000";
+    }
+  });
+  const big = document.getElementById("bigRed");
+  big.style.boxShadow = alarm && Math.floor(t * 4) % 2 === 0
+    ? "0 6px 0 #0008, 0 0 40px #ff3b30, inset 0 -6px 10px #0006, inset 0 4px 6px #fff5"
+    : "0 6px 0 #0008, inset 0 -6px 10px #0006, inset 0 4px 6px #fff3";
+  const pl = document.getElementById("powerLed");
+  pl.style.background = alarm ? "#ff3b30" : "#3dff7a";
+  pl.style.boxShadow = alarm ? "0 0 12px #ff3b30" : "0 0 10px #3dff7a";
+}
+
+window.seek = seek;
+window.DURATION = DUR;
+window.ready = document.fonts.ready.then(() => seek(0));
+
+if (!new URLSearchParams(location.search).has("capture")) {
+  // preview mode: fit the 1080x1920 canvas into the window
+  const fit = () => {
+    const k = Math.min(innerWidth / 1080, innerHeight / 1920);
+    const st = document.getElementById("stage");
+    st.style.transformOrigin = "0 0";
+    st.style.transform = `scale(${k})`;
+    st.style.left = (innerWidth - 1080 * k) / 2 + "px";
+  };
+  addEventListener("resize", fit); fit();
+  window.ready.then(() => {
+    const t0 = performance.now();
+    const loop = now => { seek(((now - t0) / 1000) % (DUR + 1)); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 ## Teoria de la IA
 [x] alineamiento
 [-] LLM como reflejo de lo humano vs LLM como sistema optimizable: pretraining, postraining, finetunning
-  [-] las LLM no son "stochastic parrots" -> tiene valores
+  [x] las LLM no son "stochastic parrots" -> tiene valores
   [ ] las LLM no son "stochastic parrots" -> tiene objetivos
   [ ] las LLM no son "stochastic parrots" -> la manera mas facil de predecir es saber
 [ ] Nueralese
@@ -11,7 +11,9 @@
 [ ] diferencia entre especie humana y especie IA
 [ ] inteligencia de la IA: experta en todo menos en lavar autos
 [ ] La IA tiene sentimientos (2 de abril): https://transformer-circuits.pub/2026/emotions/index.html
-[ ] Eval awarness: intento asesinar, pero no tenia la habilidad de ocultarlo, ni la capacidad para hacerlo
+[ ] Eval awarness: 
+  - intento asesinar, pero no tenia la habilidad de ocultarlo, ni la capacidad para hacerlo
+  - update-awarness: https://x.com/ApolloResearch/status/2110737961499111880
 [ ] Subliminal Learning
 [ ] LLM persona: https://www.anthropic.com/research/assistant-axis
 [ ] ai systems could cover up misbehavior: https://metr.org/blog/2026-10-06-ai-systems-could-cover-up-misbehavior/
@@ -23,6 +25,7 @@
 [ ] If anoyone builds it, everyone dies (Libro)
 [ ] AI 2027
 [ ] METR
+[ ] Reedwood
 [ ] J-Spaces
 
 ## Gobernanza de la IA
@@ -30,12 +33,13 @@
 [ ] UN security consul
 [ ] Vidas Artificiales (Libro)
 [ ] debate: IA en pocas manos para controlarla, o en muchas para balancear
-[-] Como pausar
+[x] Como pausar
 [ ] Governance Mechanisims
 
 ## Profesionales de la IA
 [x] Geoffrey Hinton
 [x] Yoshua Bengio
+[-] Yoshua Bengio reel
 [ ] Dan Hendrycks
 [ ] Neel Lamda
 [ ] Stuart Russel
@@ -60,6 +64,10 @@
 [ ] Claude Conner
 [ ] Hunger Strike
 [ ] ChatGPT-4o phycophansy rollback
-[ ] chatGPT-6 hack HuggingFace
+[ ] Rogue Agents:
+  [ ] https://www.anthropic.com/research/alignment-assessment-ukaisi
+  [ ] chatGPT-6 hack HuggingFace
+  [ ] openAI unmonitoring: https://blog.redwoodresearch.org/p/red-teaming-openais-internal-agent
 [ ] OpenAI fire safety employees
 [ ] Meta muse safety risks: https://thenextweb.com/news/zuckerberg-muse-launch-safety-concerns-nyt
+[ ] Human Genome project for AI: https://www.goodfire.com/blog/accelerating-interpretability
