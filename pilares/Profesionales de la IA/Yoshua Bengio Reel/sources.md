@@ -1,0 +1,3 @@
+- UN security counsil:
+    - https://yoshuabengio.org/en/blog/professor-yoshua-bengios-speech-un-security-council
+    - https://www.youtube.com/watch?v=KV85PFSp9DQ
