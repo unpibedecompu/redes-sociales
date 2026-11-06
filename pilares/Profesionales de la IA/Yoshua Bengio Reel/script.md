@@ -27,14 +27,20 @@ I worry about their future. [Yoshua Bengio on security counsil is shown again]
 
 - Intro
 
-Asi se expreso 
+Asi se expreso Yoshua Bengio, el cientifico mas citado de la historia y pionero de la inteligencia artificial, cuando fue consultado por el consejo de seguridad de la ONU sobre los riesgos del desarrollo acelerado de la IA.
 
-"El" es Yoshua Bengio, pionero de la inteligencia artificial, el cientifico mas citado en la historia, ganador del nobel de la computación ... y 
+- Riesgos:
 
-- lista de 3 riesgos:
+Nombro 3 riesgos principales:
 
-  1. Catastrophic misuse, for example by terrorists; 
-  2. Power concentration 
-  3. Loss of control of AI.
+  1. el riesgo del mal uso, por ejemplo, asistiendo terroristas a crear la proxima pandemia. [animación: robot con guardapolvo manipulando tuvos de ensayo con liquidos]
+  2. riesgo de concentración de poder, por ejemplo, asistiendo a un dictador vigilando 24/7 a todo el mundo. [animación: robot a contraluz de una pared de pantallas]
+  3. Y riesgo de perdida de control, donde quedariamos al merced de la voluntad de una IA. [animación: el robot acercandose a yoshua mientras el aprieta repetidamente un boton rojo de apagado sin efecto]
 
-- solución: colaboración internacional
+- Viro a safety:
+
+Con la salida de ChatGPT en 2023, Yoshua se hizo conciente de estos riesgos, dejo de investigar como hacer IA mas inteligentes, el trabajo de su vida, para dedicarse solamente a investigar como hacerlas seguras.
+
+- Outro:
+
+La persona que mas sabe sobre IA, dice que tenemos que detener su desarrollo y que teme por el futuro de sus hijos y su nieto ¿sera momento de empezar a preocuparnos? [marco con color "ocuparnos" en "preocuparnos"]

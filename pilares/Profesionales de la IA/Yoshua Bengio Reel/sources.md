@@ -1,3 +1,5 @@
 - UN security counsil:
     - https://yoshuabengio.org/en/blog/professor-yoshua-bengios-speech-un-security-council
     - https://www.youtube.com/watch?v=KV85PFSp9DQ
+- Yoshua petition to leave frontier AI companies:
+    - https://www.transformernews.ai/p/yoshua-bengio-if-you-prioritize-safety-leave-frontier-ai-companies
