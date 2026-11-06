@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900" width="400" height="900">
+<defs>
+<filter id="sombra" x="-20%" y="-20%" width="150%" height="160%"><feDropShadow dx="3" dy="4" stdDeviation="1.8" flood-color="#2b1d10" flood-opacity="0.32"/></filter>
+<filter id="sombra-chica" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="1.6" stdDeviation="0.8" flood-color="#2b1d10" flood-opacity="0.3"/></filter>
+<filter id="corte" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs>
+<style>.capa > * { filter: url(#sombra-chica); }</style>
+<g filter="url(#corte)"><g class="capa" filter="url(#sombra)"><path d="M109 318 L152 306 L139 552 L100 548 Z" fill="#788C5D"/><path d="M101 530 L139 534 L138 552 L100 548 Z" fill="#5F7247"/><path d="M291 318 L248 306 L261 552 L300 548 Z" fill="#788C5D"/><path d="M299 530 L261 534 L262 552 L300 548 Z" fill="#5F7247"/><path d="M140 306 Q200 324 260 306 L276 342 L272 558 L128 558 L124 342 Z" fill="#788C5D"/><path d="M146 302 Q200 284 254 302 Q268 320 242 334 Q200 350 158 334 Q132 320 146 302 Z" fill="#5F7247"/><path d="M170 306 Q200 296 230 306 Q224 324 200 328 Q176 324 170 306 Z" fill="#3F4D2C"/><path d="M154 470 L246 470 L258 540 L142 540 Z" fill="#5F7247"/><path d="M186 336 L191 336 L191 396 L186 396 Z" fill="#FAF9F5"/><circle cx="188.5" cy="398" r="4" fill="#FAF9F5"/><path d="M214 336 L209 336 L209 396 L214 396 Z" fill="#FAF9F5"/><circle cx="211.5" cy="398" r="4" fill="#FAF9F5"/><path d="M128 538 L272 538 L272 558 L128 558 Z" fill="#5F7247"/></g></g>
+</svg>

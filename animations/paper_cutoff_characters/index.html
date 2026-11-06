@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personajes de papel</title>
+<style>
+  :root {
+    --fondo: #2A2A28;
+    --panel: #343431;
+    --borde: #4A4A46;
+    --texto: #FAF9F5;
+    --suave: #B0AEA5;
+    --clay: #D97757;
+    --papel: #F0EEE6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px;
+    background: var(--fondo); color: var(--texto);
+    font-family: Tahoma, Verdana, sans-serif;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; font-weight: normal; letter-spacing: .5px; }
+  .sub { color: var(--suave); font-size: 13px; margin: 0 0 16px; }
+  .app { display: grid; grid-template-columns: minmax(260px, 420px) 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 760px) { .app { grid-template-columns: 1fr; } }
+
+  .escenario {
+    position: sticky; top: 16px;
+    background: var(--papel);
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 6px 24px #0006;
+  }
+  @media (max-width: 760px) { .escenario { position: static; max-width: 340px; margin: 0 auto; } }
+  #personaje { width: 100%; aspect-ratio: 400 / 900; display: block; }
+
+  .acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  button {
+    font: inherit; font-size: 14px;
+    padding: 7px 14px; border-radius: 8px;
+    border: 1px solid var(--borde); background: #3A3A37; color: var(--texto);
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--suave); }
+  button[aria-pressed="true"] { background: var(--clay); border-color: var(--clay); }
+
+  .colores { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 14px; }
+  .colores .fila { display: flex; align-items: center; gap: 6px; }
+  .colores .fila span { font-size: 13px; color: var(--suave); margin-right: 4px; }
+  .muestra {
+    width: 26px; height: 26px; padding: 0; border-radius: 50%;
+    border: 2px solid transparent; outline: 1px solid #0005;
+  }
+  .muestra[aria-pressed="true"] { border-color: var(--texto); background: inherit; }
+
+  .categorias { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
+  .cat { background: var(--panel); border: 1px solid var(--borde); border-radius: 10px; padding: 10px 12px; }
+  .cat header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .cat h2 { font-size: 14px; margin: 0; font-weight: bold; letter-spacing: .4px; }
+  .cat .nombre { font-size: 13px; color: var(--suave); }
+  .cat .flechas { display: flex; gap: 4px; align-items: center; }
+  .cat .flechas button { padding: 2px 9px; font-size: 13px; }
+  .miniaturas { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .mini {
+    padding: 2px; aspect-ratio: 1; border-radius: 8px;
+    background: var(--papel); border: 2px solid transparent;
+    display: flex; align-items: center; justify-content: center;
+    color: #73736E; font-size: 11px;
+  }
+  .mini svg { width: 100%; height: 100%; display: block; }
+  .mini[aria-pressed="true"] { background: var(--papel); border-color: var(--clay); box-shadow: 0 0 0 2px var(--clay); }
+  .mini:hover { border-color: var(--suave); }
+  .ayuda { color: var(--suave); font-size: 12px; margin-top: 14px; }
+  code { background: #0004; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Personajes de papel recortado</h1>
+<p class="sub">Combiná las piezas. Cada pieza también está como SVG suelto en <code>parts/</code>, sobre el mismo lienzo 400×900, así encajan en Premiere / After Effects.</p>
+
+<div class="app">
+  <div class="escenario">
+    <svg id="personaje" viewBox="0 0 400 900" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <div>
+    <div class="acciones">
+      <button id="azar">🎲 Al azar</button>
+      <button id="animar" aria-pressed="false">Animar papel (stop motion)</button>
+      <button id="bajar-svg">Descargar SVG</button>
+      <button id="bajar-png">Descargar PNG</button>
+    </div>
+    <div class="colores">
+      <div class="fila" id="pieles"><span>Piel</span></div>
+      <div class="fila" id="pelos"><span>Pelo</span></div>
+    </div>
+    <div class="categorias" id="categorias"></div>
+    <p class="ayuda">La combinación queda guardada en la URL, así podés volver a ella o compartirla. Para regenerar las piezas: <code>python build.py</code>.</p>
+  </div>
+</div>
+
+<!-- shared filters for the thumbnails -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" id="defs-compartidos"></svg>
+
+<script src="parts.js"></script>
+<script>
+(() => {
+  const D = window.PAPEL;
+  const cats = Object.fromEntries(D.categorias.map(c => [c.id, c]));
+
+  const PIELES = [
+    ["#F6D3B5", "#DDAE88"], ["#E8B48A", "#C98F66"], ["#C98E62", "#A56F45"],
+    ["#9C6640", "#7C4D2D"], ["#6E4429", "#53311C"], ["#9FD1B5", "#76AE90"]
+  ];
+  const PELOS = [
+    ["#3B2A20", "#24180F"], ["#141413", "#000000"], ["#8A5A2B", "#6A421C"], ["#E0B341", "#B88E22"],
+    ["#C2463C", "#962F27"], ["#D6D3CB", "#A9A59B"], ["#6A9BCC", "#4F7FB0"]
+  ];
+
+  // back → front
+  const ORDEN = ["pelo:atras", "cuerpo", "pantalon", "zapatos", "remera", "orejas", "cabeza", "cara",
+                 "boca", "cejas", "nariz", "barba", "pelo"];
+
+  const estado = { piel: 1, colorPelo: 0, pelo: 0, barba: -1, cabeza: 0, boca: 0, cejas: 0, orejas: 0,
+                   nariz: 0, remera: 0, pantalon: 0, zapatos: 0 };
+
+  // ----- state <-> URL hash -----
+  const CLAVES = ["piel", "colorPelo", ...D.categorias.map(c => c.id)];
+  function leerHash() {
+    const v = location.hash.slice(1).split(".").map(Number);
+    if (v.length !== CLAVES.length || v.some(isNaN)) return;
+    // ignore a link from an older version whose indices no longer exist
+    const max = { piel: PIELES.length, colorPelo: PELOS.length };
+    const valido = CLAVES.every((k, i) => {
+      const c = cats[k], n = c ? c.partes.length : max[k];
+      return Number.isInteger(v[i]) && v[i] >= (c && c.opcional ? -1 : 0) && v[i] < n;
+    });
+    if (!valido) return;
+    CLAVES.forEach((k, i) => estado[k] = v[i]);
+  }
+  const guardarHash = () => history.replaceState(null, "", "#" + CLAVES.map(k => estado[k]).join("."));
+
+  // ----- rendering -----
+  function capa(html) { return `<g class="capa" filter="url(#sombra)">${html}</g>`; }
+
+  // hair and beards come in one version per head shape
+  const segunCabeza = v => Array.isArray(v) ? v[estado.cabeza] : v;
+
+  function capasHTML() {
+    let s = "";
+    for (const k of ORDEN) {
+      if (k === "cuerpo") { s += capa(D.base.cuerpo); continue; }
+      if (k === "cara") { s += capa(D.base.cara); continue; }
+      const [id, sub] = k.split(":");
+      const i = estado[id];
+      if (i < 0) continue;
+      const parte = cats[id].partes[i];
+      const html = segunCabeza(sub === "atras" ? parte.atras : parte.svg);
+      if (html) s += capa(html);
+    }
+    return s;
+  }
+
+  const GRANO = `<filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.9"/></feComponentTransfer></filter>`;
+
+  function personajeSVG() {
+    return D.defs.replace("</defs>", GRANO + "</defs>")
+      + `<g id="raiz" filter="url(#corte)">${capasHTML()}</g>`
+      + `<rect width="400" height="900" filter="url(#grano)" opacity="0.14" style="mix-blend-mode:multiply" pointer-events="none"/>`;
+  }
+
+  const svg = document.getElementById("personaje");
+  function aplicarColores(el) {
+    const [p, ps] = PIELES[estado.piel], [h, hs] = PELOS[estado.colorPelo];
+    el.style.setProperty("--piel", p); el.style.setProperty("--piel-sombra", ps);
+    el.style.setProperty("--pelo", h); el.style.setProperty("--pelo-sombra", hs);
+  }
+  function dibujar() {
+    svg.innerHTML = personajeSVG();
+    aplicarColores(document.documentElement);
+    if (estado.cabeza !== cabezaMinis) pintarMinis();
+    marcarSeleccion();
+    guardarHash();
+  }
+
+  // ----- panel -----
+  document.getElementById("defs-compartidos").innerHTML = D.defs;
+  const cont = document.getElementById("categorias");
+  // thumbnails show the current head faintly behind face parts, and hair/beard fitted to it
+  let cabezaMinis = null;
+  function pintarMinis() {
+    cabezaMinis = estado.cabeza;
+    const fantasma = `<g opacity=".3">${cats.cabeza.partes[estado.cabeza].svg}</g>`;
+    for (const c of D.categorias) {
+      document.querySelectorAll(`[data-cat="${c.id}"] .mini[data-i]`).forEach(b => {
+        const i = Number(b.dataset.i); if (i < 0) return;
+        const p = c.partes[i];
+        const ghost = CON_FANTASMA.has(c.id) ? fantasma : "";
+        b.innerHTML = `<svg viewBox="${c.vista}">${ghost}<g filter="url(#corte)">${capa((segunCabeza(p.atras) || "") + segunCabeza(p.svg))}</g></svg>`;
+      });
+    }
+  }
+  const CON_FANTASMA = new Set(["pelo", "barba", "boca", "cejas", "orejas", "nariz"]);
+
+  for (const c of D.categorias) {
+    const sec = document.createElement("section");
+    sec.className = "cat";
+    sec.innerHTML = `<header><h2>${c.nombre}</h2>
+      <div class="flechas"><span class="nombre"></span>
+      <button data-paso="-1" aria-label="Anterior">‹</button><button data-paso="1" aria-label="Siguiente">›</button></div></header>
+      <div class="miniaturas"></div>`;
+    const minis = sec.querySelector(".miniaturas");
+    if (c.opcional) {
+      const b = document.createElement("button");
+      b.className = "mini"; b.dataset.i = -1; b.textContent = "nada"; b.title = "Sin " + c.nombre.toLowerCase();
+      minis.append(b);
+    }
+    c.partes.forEach((p, i) => {
+      const b = document.createElement("button");
+      b.className = "mini"; b.dataset.i = i; b.title = p.nombre;
+      minis.append(b);
+    });
+    minis.addEventListener("click", e => {
+      const b = e.target.closest(".mini"); if (!b) return;
+      estado[c.id] = Number(b.dataset.i); dibujar();
+    });
+    sec.querySelector(".flechas").addEventListener("click", e => {
+      const b = e.target.closest("button"); if (!b) return;
+      const min = c.opcional ? -1 : 0, n = c.partes.length - min;
+      estado[c.id] = ((estado[c.id] - min + Number(b.dataset.paso)) % n + n) % n + min;
+      dibujar();
+    });
+    sec.dataset.cat = c.id;
+    cont.append(sec);
+  }
+
+  function muestras(id, lista, clave) {
+    const fila = document.getElementById(id);
+    lista.forEach(([col], i) => {
+      const b = document.createElement("button");
+      b.className = "muestra"; b.style.background = col; b.dataset.i = i; b.title = col;
+      b.addEventListener("click", () => { estado[clave] = i; dibujar(); });
+      fila.append(b);
+    });
+  }
+  muestras("pieles", PIELES, "piel");
+  muestras("pelos", PELOS, "colorPelo");
+
+  function marcarSeleccion() {
+    for (const sec of cont.children) {
+      const c = cats[sec.dataset.cat], i = estado[c.id];
+      sec.querySelectorAll(".mini").forEach(b => b.setAttribute("aria-pressed", Number(b.dataset.i) === i));
+      sec.querySelector(".nombre").textContent = i < 0 ? "nada" : c.partes[i].nombre;
+    }
+    document.querySelectorAll("#pieles .muestra").forEach(b => b.setAttribute("aria-pressed", +b.dataset.i === estado.piel));
+    document.querySelectorAll("#pelos .muestra").forEach(b => b.setAttribute("aria-pressed", +b.dataset.i === estado.colorPelo));
+  }
+
+  // ----- actions -----
+  const azar = n => Math.floor(Math.random() * n);
+  document.getElementById("azar").addEventListener("click", () => {
+    for (const c of D.categorias) {
+      estado[c.id] = c.opcional && Math.random() < 0.3 ? -1 : azar(c.partes.length);
+    }
+    estado.piel = azar(PIELES.length - 1); // the green one only on purpose
+    estado.colorPelo = azar(PELOS.length);
+    dibujar();
+  });
+
+  // stop motion: re-seed the rough-cut noise 12 times per second (3 seeds, like the loro "papel" style)
+  let reloj = null, semilla = 0;
+  document.getElementById("animar").addEventListener("click", e => {
+    const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
+    e.currentTarget.setAttribute("aria-pressed", on);
+    clearInterval(reloj);
+    if (on) reloj = setInterval(() => {
+      semilla = (semilla + 1) % 3;
+      const t = svg.querySelector("#corte feTurbulence");
+      if (t) t.setAttribute("seed", [7, 19, 42][semilla]);
+      const r = svg.querySelector("#raiz");
+      if (r) r.setAttribute("transform", `rotate(${[0, 0.4, -0.3][semilla]} 200 450)`);
+    }, 1000 / 12);
+  });
+
+  // standalone SVG with the current colours baked in
+  function svgExportable() {
+    const [p, ps] = PIELES[estado.piel], [h, hs] = PELOS[estado.colorPelo];
+    const vals = { "--piel": p, "--piel-sombra": ps, "--pelo": h, "--pelo-sombra": hs };
+    const body = personajeSVG().replace(/var\((--[a-z-]+),#[0-9A-Fa-f]+\)/g, (m, v) => vals[v] || m);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900" width="400" height="900">${body}</svg>`;
+  }
+  const nombreArchivo = () => "personaje_" + CLAVES.map(k => estado[k]).join("_");
+  function bajar(url, nombre) {
+    const a = document.createElement("a"); a.href = url; a.download = nombre; a.click();
+  }
+  document.getElementById("bajar-svg").addEventListener("click", () => {
+    const url = URL.createObjectURL(new Blob([svgExportable()], { type: "image/svg+xml" }));
+    bajar(url, nombreArchivo() + ".svg");
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  document.getElementById("bajar-png").addEventListener("click", () => {
+    const img = new Image();
+    const url = URL.createObjectURL(new Blob([svgExportable()], { type: "image/svg+xml" }));
+    img.onload = () => {
+      const k = 3, c = document.createElement("canvas");
+      c.width = 400 * k; c.height = 900 * k;
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(b => { const u = URL.createObjectURL(b); bajar(u, nombreArchivo() + ".png"); setTimeout(() => URL.revokeObjectURL(u), 1000); });
+    };
+    img.src = url;
+  });
+
+  leerHash();
+  dibujar();
+})();
+</script>
+</body>
+</html>

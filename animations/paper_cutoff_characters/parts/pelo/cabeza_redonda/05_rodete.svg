@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 900" width="400" height="900">
+<defs>
+<filter id="sombra" x="-20%" y="-20%" width="150%" height="160%"><feDropShadow dx="3" dy="4" stdDeviation="1.8" flood-color="#2b1d10" flood-opacity="0.32"/></filter>
+<filter id="sombra-chica" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="1.6" stdDeviation="0.8" flood-color="#2b1d10" flood-opacity="0.3"/></filter>
+<filter id="corte" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs>
+<style>.capa > * { filter: url(#sombra-chica); }</style>
+<g filter="url(#corte)"><g class="capa" filter="url(#sombra)"><circle cx="200" cy="86" r="36" style="fill:var(--pelo,#3B2A20)"/><circle cx="208" cy="78" r="14" style="fill:var(--pelo-sombra,#24180F)"/><clipPath id="pr1-c"><path d="M118 196 A82 82 0 1 1 282 196 A82 82 0 1 1 118 196 Z" transform="translate(200 196) scale(1.08 1.08) translate(-200 -196)"/></clipPath><clipPath id="pr1-r"><path d="M0 0 L400 0 L400 208 L280 208 Q276 146 230 132 Q172 156 128 166 Q122 184 120 208 L0 208 Z"/></clipPath><g><g clip-path="url(#pr1-c)"><g clip-path="url(#pr1-r)"><rect width="400" height="900" style="fill:var(--pelo,#3B2A20)"/></g></g></g><path d="M176 106 L224 106 L222 116 L178 116 Z" fill="#D97757"/></g></g>
+</svg>
