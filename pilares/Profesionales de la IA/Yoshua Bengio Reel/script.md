@@ -27,7 +27,7 @@ I worry about their future. [Yoshua Bengio on security counsil is shown again]
 
 - Intro
 
-Asi se expreso Yoshua Bengio, el cientifico mas citado de la historia y pionero de la inteligencia artificial, cuando fue consultado por el consejo de seguridad de la ONU sobre los riesgos del desarrollo acelerado de la IA.
+Asi se expreso Yoshua Bengio, el cientifico mas citado de la historia y pionero de la inteligencia artificial, cuando fue consultado por el consejo de seguridad de la ONU, sobre los riesgos del desarrollo acelerado de la IA.
 
 - Riesgos:
 
