@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 1 Auto en la niebla</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: #FAF9F5;
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* reel completo 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    max-height: calc(100vh - 90px);
+    aspect-ratio: 1080 / 1920;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: #FAF9F5;
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: #D97757; border-color: #D97757; }
+  /* para el render: ?t=... muestra solo el cuadro, sin controles */
+  body.fijo { padding: 0; }
+  body.fijo svg#escena { max-height: none; }
+  body.fijo .controls { display: none; }
+</style>
+</head>
+<body>
+
+<!--
+  Plano (referencia elegida "A"): cámara baja adelante, entre los dos asientos delanteros, mirando hacia atrás.
+  Yoshua en el asiento de atrás, en el hueco entre los asientos. A la izquierda el asiento del acompañante
+  (vacío) y a la derecha el conductor, cortado por el borde: los dos fuera de foco y a la misma altura.
+  Arriba el techo con el techo solar; atrás la luneta. Afuera, solo niebla.
+-->
+<svg id="escena" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs">
+    <linearGradient id="niebla-vidrio" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5E6670"/>
+      <stop offset="1" stop-color="#8C939B"/>
+    </linearGradient>
+    <linearGradient id="cielo-niebla" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2C333D"/>
+      <stop offset="1" stop-color="#5A626C"/>
+    </linearGradient>
+    <radialGradient id="luz-roja">
+      <stop offset="0" stop-color="#FF4A2E" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FF4A2E" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="farol">
+      <stop offset="0" stop-color="#FFD48A" stop-opacity="0.95"/>
+      <stop offset="0.25" stop-color="#FFC870" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#FFC870" stop-opacity="0"/>
+    </radialGradient>
+    <!-- luz del tablero, desde abajo y adelante (desde la cámara) -->
+    <radialGradient id="luz-tablero" cx="0.5" cy="1" r="0.9">
+      <stop offset="0" stop-color="#7FB8C9" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#7FB8C9" stop-opacity="0"/>
+    </radialGradient>
+    <!-- luz de un farol de la ruta que pasa -->
+    <linearGradient id="barrido" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFC870" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#FFC870" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#FFC870" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="vineta" cx="0.4" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.9"/></feComponentTransfer>
+    </filter>
+    <!-- fuera de foco: los asientos de adelante y el conductor -->
+    <filter id="foco-cerca" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter>
+    <clipPath id="techo-solar"><polygon points="60,60 1020,60 920,450 160,450"/></clipPath>
+    <clipPath id="luneta"><path d="M150 640 Q540 610 930 640 L975 900 L105 900 Z"/></clipPath>
+    <!-- Yoshua está sentado: de la cintura para abajo no se ve -->
+    <clipPath id="sentado"><rect x="0" y="0" width="1080" height="1720"/></clipPath>
+  </defs>
+
+  <g id="camara">
+    <rect x="-100" y="-100" width="1280" height="2120" fill="#24272D"/>
+
+    <!-- techo solar: noche con niebla y faroles que pasan por arriba -->
+    <g clip-path="url(#techo-solar)">
+      <rect x="0" y="0" width="1080" height="500" fill="url(#cielo-niebla)"/>
+      <g id="faroles"></g>
+      <g id="niebla-arriba"></g>
+    </g>
+    <!-- luneta trasera: niebla, y el resplandor rojo de nuestras luces de freno -->
+    <g clip-path="url(#luneta)">
+      <rect x="100" y="600" width="900" height="320" fill="url(#niebla-vidrio)"/>
+      <g id="niebla-atras"></g>
+      <circle cx="170" cy="900" r="170" fill="url(#luz-roja)"/>
+      <circle cx="910" cy="900" r="170" fill="url(#luz-roja)"/>
+    </g>
+
+    <g class="papel">
+      <!-- tapizado del techo alrededor del techo solar -->
+      <path d="M-20 -20 L1100 -20 L1100 660 Q540 600 -20 660 Z M60 60 L160 450 L920 450 L1020 60 Z" fill="#3A3D43" fill-rule="evenodd"/>
+      <polygon points="60,60 1020,60 1004,84 76,84" fill="#2A2D32"/>
+      <polygon points="160,450 920,450 930,474 150,474" fill="#2A2D32"/>
+      <!-- luz de techo y manijas -->
+      <rect x="470" y="530" width="140" height="34" rx="12" fill="#4A4E55"/>
+      <rect x="40" y="560" width="70" height="18" rx="8" fill="#2E3136"/>
+      <rect x="970" y="560" width="70" height="18" rx="8" fill="#2E3136"/>
+      <!-- parantes a los costados de la luneta -->
+      <path d="M-20 640 L150 640 L105 920 L-20 940 Z" fill="#2E3136"/>
+      <path d="M930 640 L1100 640 L1100 940 L975 920 Z" fill="#2E3136"/>
+      <path d="M95 900 L985 900 L1010 935 L70 935 Z" fill="#1E2025"/>
+    </g>
+
+    <!-- asiento de atrás -->
+    <g class="papel">
+      <path d="M40 930 Q540 905 1040 930 L1060 1920 L20 1920 Z" fill="#33363D"/>
+      <path d="M540 940 L540 1900" stroke="#2A2D33" stroke-width="6"/>
+      <path d="M90 1300 Q540 1280 990 1300" stroke="#2A2D33" stroke-width="5" fill="none"/>
+      <!-- apoyacabezas de atrás -->
+      <rect x="270" y="820" width="230" height="140" rx="38" fill="#3B3F46"/>
+      <rect x="640" y="820" width="230" height="140" rx="38" fill="#3B3F46"/>
+      <!-- cinturón del asiento de atrás vacío -->
+      <path d="M905 700 L860 1000 L800 1450" stroke="#4A4E55" stroke-width="34" fill="none" stroke-linejoin="round"/>
+      <rect x="888" y="690" width="40" height="40" rx="8" fill="#2A2D32"/>
+    </g>
+
+    <!-- Yoshua, sentado atrás en el hueco entre los asientos -->
+    <g clip-path="url(#sentado)"><g id="yoshua-mov"><g id="yoshua"></g></g></g>
+    <!-- borde del almohadón de atrás, donde corta Yoshua -->
+    <path class="papel" d="M20 1700 Q540 1680 1060 1700 L1060 1920 L20 1920 Z" fill="#2A2D33"/>
+
+    <!-- primer plano, fuera de foco -->
+    <g id="cerca" filter="url(#foco-cerca)">
+      <!-- consola del medio -->
+      <path d="M300 1800 Q540 1760 780 1800 L820 1960 L260 1960 Z" fill="#1A1C20"/>
+      <!-- asiento del acompañante (vacío), a la izquierda; misma altura que el del conductor -->
+      <g id="acomp-mov">
+        <rect x="20" y="1020" width="16" height="140" fill="#8C8F96"/>
+        <rect x="150" y="1020" width="16" height="140" fill="#8C8F96"/>
+        <rect x="-80" y="780" width="290" height="270" rx="60" fill="#454A53"/>
+        <path d="M-120 1150 Q90 1110 250 1160 L270 1980 L-120 1980 Z" fill="#3E424A"/>
+      </g>
+      <!-- conductor, a la derecha, cortado por el borde -->
+      <g id="conductor-mov">
+        <rect x="930" y="1020" width="16" height="140" fill="#8C8F96"/>
+        <rect x="1060" y="1020" width="16" height="140" fill="#8C8F96"/>
+        <rect x="880" y="780" width="290" height="270" rx="60" fill="#454A53"/>
+        <path d="M830 1150 Q990 1110 1200 1150 L1200 1980 L810 1980 Z" fill="#3E424A"/>
+        <g id="conductor"></g>
+        <!-- cinturón de seguridad cruzado -->
+        <path d="M1100 1300 L930 1960" stroke="#16181C" stroke-width="46" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- luz del tablero sobre todo el interior -->
+    <rect width="1080" height="1920" fill="url(#luz-tablero)" style="mix-blend-mode:screen"/>
+    <!-- farol que pasa: la luz baja por el interior -->
+    <rect id="barrido" x="-200" y="-700" width="1480" height="700" fill="url(#barrido)" style="mix-blend-mode:screen"/>
+  </g>
+
+  <!-- noche: oscurece un poco todo, viñeta y grano de papel -->
+  <rect width="1080" height="1920" fill="#0B1220" opacity="0.15" style="mix-blend-mode:multiply"/>
+  <rect width="1080" height="1920" fill="url(#vineta)"/>
+  <rect width="1080" height="1920" filter="url(#grano)" opacity="0.14" style="mix-blend-mode:multiply" pointer-events="none"/>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="personajes.js"></script>
+<script>
+  // Hook: "I often describe our situation as a car..." — adentro del auto, de noche, en la niebla.
+  const DURATION = 3.5;
+  const FPS_PAPEL = 12;        // stop motion: el papel "tiembla" 12 veces por segundo
+
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  // filtros del editor (sombra, corte irregular) dentro de nuestro <defs>
+  const tmp = document.createElementNS(NS, "svg");
+  tmp.innerHTML = PERSONAJES.defs;
+  for (const n of [...tmp.querySelectorAll("defs > *")]) $("defs").appendChild(n);
+  const estilo = tmp.querySelector("style");
+  if (estilo) $("escena").insertBefore(estilo, $("defs"));
+  document.querySelectorAll(".papel").forEach(g => g.setAttribute("filter", "url(#corte)"));
+
+  // números pseudoaleatorios fijos: cada render da lo mismo
+  let semilla = 11;
+  const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+
+  // ---- niebla en la luneta: entra por los bordes y se achica hacia el centro (nos alejamos de ella) ----
+  const manchones = [];
+  for (let i = 0; i < 14; i++) {
+    manchones.push({
+      c: el("circle", { fill: rnd() < 0.5 ? "#A3AAB2" : "#7B838C" }, $("niebla-atras")),
+      ang: rnd() * Math.PI * 2, fase: rnd(), r: 50 + rnd() * 70,
+    });
+  }
+  // por el techo solar: niebla que pasa y faroles que vienen de arriba (de atrás de la cámara) y se alejan
+  const nieblaArriba = [];
+  for (let i = 0; i < 8; i++) {
+    nieblaArriba.push({
+      c: el("ellipse", { rx: 160 + rnd() * 120, ry: 50 + rnd() * 40, fill: "#8A929B" }, $("niebla-arriba")),
+      x: 100 + rnd() * 880, fase: rnd(),
+    });
+  }
+  const farol = el("g", {}, $("faroles"));
+  el("circle", { r: 150, fill: "url(#farol)" }, farol);
+  el("rect", { x: -60, y: -6, width: 120, height: 12, fill: "#1B1F25" }, farol);
+  el("rect", { x: 54, y: -6, width: 12, height: 400, fill: "#1B1F25" }, farol);
+  const CADA_FAROL = 1.6;      // s entre faroles
+
+  // ---- personajes ----
+  // Yoshua: centro de la cara del editor (200,190) en (420,1010), entre los dos asientos de adelante
+  const ESC_Y = 1.75;
+  function dibujarYoshua(opts) {
+    $("yoshua").innerHTML =
+      `<g transform="translate(${420 - 200 * ESC_Y} ${1010 - 190 * ESC_Y}) scale(${ESC_Y})">${PERSONAJES.armar("yoshua", opts)}</g>`;
+  }
+  // conductor enorme y cortado por el borde derecho: se ve solo el costado de la cara, desenfocado
+  const ESC_C = 2.8;
+  $("conductor").innerHTML =
+    `<g transform="translate(${1160 - 200 * ESC_C} ${880 - 190 * ESC_C}) scale(${ESC_C})">${PERSONAJES.armar("conductor", { boca: 1 })}</g>`;
+
+  // ---- tiempo ----
+  const mod = (a, n) => ((a % n) + n) % n;
+  let ultimoYoshua = "";
+
+  function render(t) {
+    const cuadro = Math.floor(t * FPS_PAPEL);
+    const tp = cuadro / FPS_PAPEL;       // tiempo "a 12 fps" para lo que es de papel
+    const k = cuadro % 3;
+
+    // corte irregular que cambia de forma (stop motion)
+    const turb = document.querySelector("#corte feTurbulence");
+    if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
+
+    // cámara: se acerca despacio a Yoshua; vibración del auto
+    const z = 1 + 0.07 * (t / DURATION);
+    const vib = [0, 2, -1, 3, -2, 1][cuadro % 6];
+    $("camara").setAttribute("transform",
+      `translate(0 ${vib}) translate(420 1010) scale(${z}) translate(-420 -1010)`);
+    // atrás y adelante se sacuden distinto
+    $("yoshua-mov").setAttribute("transform", `translate(${[0, 1, -1][k]} ${[0, -3, -1, -4, 0, -2][cuadro % 6]})`);
+    $("conductor-mov").setAttribute("transform", `translate(0 ${[0, 4, 1, 5, 0, 3][cuadro % 6]})`);
+    $("acomp-mov").setAttribute("transform", `translate(0 ${[0, 3, 1, 4, 0, 2][cuadro % 6]})`);
+
+    for (const m of manchones) {
+      const p = mod(m.fase + tp * 0.35, 1);         // 0 = cerca (borde), 1 = lejos (centro)
+      const d = (1 - p) * 460;
+      m.c.setAttribute("cx", 540 + Math.cos(m.ang) * d);
+      m.c.setAttribute("cy", 780 + Math.sin(m.ang) * d * 0.35);
+      m.c.setAttribute("r", m.r * (1.2 - p));
+      m.c.setAttribute("opacity", (0.55 * Math.sin(p * Math.PI)).toFixed(3));
+    }
+    for (const n of nieblaArriba) {
+      const p = mod(n.fase + tp * 0.9, 1);
+      n.c.setAttribute("cx", 540 + (n.x - 540) * (1.3 - p * 0.6));
+      n.c.setAttribute("cy", -60 + p * 560);
+      n.c.setAttribute("opacity", (0.5 * Math.sin(p * Math.PI)).toFixed(3));
+    }
+
+    // un farol pasa por arriba cada CADA_FAROL s; cuando pasa, su luz baja por el interior
+    const pf = mod(tp / CADA_FAROL, 1);
+    const ef = 1.6 - pf * 1.1;
+    farol.setAttribute("transform", `translate(${700 - pf * 120} ${-120 + pf * 560}) scale(${ef})`);
+    $("barrido").setAttribute("y", -700 + pf * 2600);
+
+    // Yoshua: mira adelante (a cámara), parpadea; se preocupa y mira por su ventanilla
+    const opts = {
+      mirar: tp > 1.7 && tp < 2.9 ? -1 : 0,
+      parpadeo: (tp > 0.9 && tp < 1.0) || (tp > 3.0 && tp < 3.1),
+      cejas: tp > 1.5 ? 4 : 0,
+    };
+    const clave = JSON.stringify(opts);
+    if (clave !== ultimoYoshua) { dibujarYoshua(opts); ultimoYoshua = clave; }
+  }
+
+  // ---- controles / modo render ----
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  document.querySelectorAll(".controls button").forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode; start = performance.now();
+    document.querySelectorAll(".controls button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION - 0.001);
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; document.body.classList.add("fijo"); render(Number(fixed)); }
+  else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>
