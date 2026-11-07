@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 6 Riesgo poder</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: #FAF9F5;
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* reel completo 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    max-height: calc(100vh - 90px);
+    aspect-ratio: 1080 / 1920;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: #FAF9F5;
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: #D97757; border-color: #D97757; }
+  /* para el render: ?t=... muestra solo el cuadro, sin controles */
+  body.fijo { padding: 0; }
+  body.fijo svg#escena { max-height: none; }
+  body.fijo .controls { display: none; }
+</style>
+</head>
+<body>
+
+<!--
+  Riesgo 2, concentración de poder: "...asistiendo a un dictador vigilando 24/7 a todo el mundo."
+  El robot a contraluz, de espaldas, frente a una pared de pantallas de cámaras de seguridad.
+  En cada pantalla gente cualquiera (armada con el editor de personajes) y un recuadro que le reconoce la cara.
+-->
+<svg id="escena" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs">
+    <radialGradient id="resplandor" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#9FD8FF" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#9FD8FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="piso" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22303C"/>
+      <stop offset="1" stop-color="#07090C"/>
+    </linearGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.45" r="0.75">
+      <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.7"/>
+    </radialGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.9"/></feComponentTransfer>
+    </filter>
+    <!-- look de cámara de seguridad: casi sin color, corrido a verde azulado -->
+    <filter id="cctv" x="0" y="0" width="100%" height="100%">
+      <feColorMatrix type="matrix" values="0.25 0.45 0.1 0 0.02  0.25 0.55 0.12 0 0.06  0.22 0.45 0.15 0 0.07  0 0 0 1 0"/>
+    </filter>
+    <pattern id="lineas" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1.5" fill="#000" opacity="0.35"/>
+    </pattern>
+    <radialGradient id="vineta-pantalla" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0.6" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+    </radialGradient>
+    <!-- el robot a contraluz: silueta oscura con un halo de la luz de las pantallas -->
+    <filter id="silueta" x="-10%" y="-10%" width="120%" height="120%">
+      <feFlood flood-color="#06090E"/><feComposite in2="SourceAlpha" operator="in"/>
+    </filter>
+    <filter id="halo" x="-30%" y="-30%" width="160%" height="160%">
+      <feFlood flood-color="#BFE6FF"/><feComposite in2="SourceAlpha" operator="in"/><feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+
+  <g id="camara">
+    <rect x="-100" y="-100" width="1280" height="2120" fill="#0B1016"/>
+    <!-- pared de pantallas -->
+    <g class="papel"><rect x="14" y="88" width="1052" height="1252" fill="#151B22"/></g>
+    <g id="pantallas"></g>
+    <rect x="-100" y="-100" width="1280" height="1600" fill="url(#resplandor)" style="mix-blend-mode:screen"/>
+    <!-- piso con el reflejo de las pantallas -->
+    <rect x="-100" y="1360" width="1280" height="700" fill="url(#piso)"/>
+    <g id="reflejo" opacity="0.18" transform="translate(0 2720) scale(1 -1)"></g>
+
+    <!-- robot -->
+    <g id="robot-halo" filter="url(#halo)"></g>
+    <g id="robot" filter="url(#silueta)"></g>
+  </g>
+
+  <rect width="1080" height="1920" fill="url(#vineta)"/>
+  <rect width="1080" height="1920" filter="url(#grano)" opacity="0.14" style="mix-blend-mode:multiply" pointer-events="none"/>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="personajes.js"></script>
+<script src="robot.js"></script>
+<script>
+  // "riesgo de concentración de poder, por ejemplo, asistiendo a un dictador vigilando 24/7 a todo el mundo."
+  const DURATION = 4.5;
+  const FPS_PAPEL = 12;
+
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  // filtros del editor (sombra, corte irregular) dentro de nuestro <defs>
+  const tmp = document.createElementNS(NS, "svg");
+  tmp.innerHTML = PERSONAJES.defs;
+  for (const n of [...tmp.querySelectorAll("defs > *")]) $("defs").appendChild(n);
+  const estilo = tmp.querySelector("style");
+  if (estilo) $("escena").insertBefore(estilo, $("defs"));
+  document.querySelectorAll(".papel").forEach(g => g.setAttribute("filter", "url(#corte)"));
+
+  let semilla = 59;
+  const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+  const clamp01 = x => Math.min(1, Math.max(0, x));
+  const tramo = (t, a, b) => clamp01((t - a) / (b - a));
+  const suave = x => x * x * (3 - 2 * x);
+
+  // ---- fondos de las cámaras ----
+  const LUGARES = [
+    // calle: pared, vereda
+    () => `<rect width="320" height="220" fill="#8A8F96"/><rect y="150" width="320" height="70" fill="#5E6268"/>` +
+          `<rect x="${20 + rnd() * 160}" y="30" width="70" height="90" fill="#6E747C"/>`,
+    // plaza: árboles
+    () => `<rect width="320" height="220" fill="#9BB58A"/><rect y="160" width="320" height="60" fill="#7E9A6C"/>` +
+          `<circle cx="${40 + rnd() * 240}" cy="60" r="55" fill="#5F8050"/><rect x="0" y="0" width="0" height="0"/>`,
+    // oficina: ventana
+    () => `<rect width="320" height="220" fill="#D8CCB4"/><rect x="${30 + rnd() * 150}" y="25" width="120" height="80" fill="#AFC4CF"/>` +
+          `<rect y="170" width="320" height="50" fill="#B49E80"/>`,
+    // subte: azulejos
+    () => `<rect width="320" height="220" fill="#C9D3D6"/><g stroke="#AEBBBF" stroke-width="3">` +
+          [40, 80, 120, 160, 200, 240, 280].map(x => `<line x1="${x}" y1="0" x2="${x}" y2="220"/>`).join("") +
+          [40, 80, 120].map(y => `<line x1="0" y1="${y}" x2="320" y2="${y}"/>`).join("") + `</g>`,
+  ];
+
+  // ---- pared de pantallas: 3 x 5 ----
+  const COLS = 3, FILAS = 5, W = 320, H = 220, X0 = 36, Y0 = 110, GAP = 24;
+  const ESC = 0.5;            // escala de la gente adentro de la pantalla
+  const pantallas = [];
+  for (let f = 0; f < FILAS; f++) for (let c = 0; c < COLS; c++) {
+    const n = f * COLS + c;
+    const x = X0 + c * (W + GAP), y = Y0 + f * (H + GAP);
+    const s = el("svg", { x, y, width: W, height: H, viewBox: `0 0 ${W} ${H}` }, $("pantallas"));
+    // dos tomas por pantalla: cambia de una a la otra en algún momento
+    const tomas = [0, 1].map(() => {
+      const g = el("g", {}, s);
+      const gente = 1 + (rnd() < 0.45 ? 1 : 0);
+      let html = LUGARES[Math.floor(rnd() * LUGARES.length)]();
+      const caras = [];
+      for (let i = 0; i < gente; i++) {
+        const fx = gente === 1 ? 110 + rnd() * 100 : (i === 0 ? 80 : 230) + rnd() * 20, fy = 92 + rnd() * 16;
+        html += `<g transform="translate(${fx - 200 * ESC} ${fy - 190 * ESC}) scale(${ESC})">${PERSONAJES.armar(PERSONAJES.alAzar(rnd), { mirar: (rnd() - 0.5) * 2 })}</g>`;
+        caras.push([fx, fy]);
+      }
+      g.innerHTML = `<g filter="url(#cctv)">${html}</g>`;
+      // recuadro de reconocimiento sobre una de las caras
+      const [cx, cy] = caras[Math.floor(rnd() * caras.length)];
+      const caja = el("g", {}, g);
+      const w = 50, h = 58, l = 16;
+      caja.innerHTML =
+        `<path d="M${-w} ${-h + l} L${-w} ${-h} L${-w + l} ${-h} M${w - l} ${-h} L${w} ${-h} L${w} ${-h + l}
+                  M${w} ${h - l} L${w} ${h} L${w - l} ${h} M${-w + l} ${h} L${-w} ${h} L${-w} ${h - l}" fill="none" stroke-width="5"/>` +
+        `<text x="${-w}" y="${-h - 8}" font-family="Courier New, monospace" font-size="15" font-weight="bold">ID ${String(Math.floor(rnd() * 9000 + 1000))}</text>`;
+      return { g, caja, cx, cy, fija: 0.3 + rnd() * 3.4 };
+    });
+    // encima: líneas de barrido, viñeta y textos de la cámara
+    el("rect", { width: W, height: H, fill: "url(#lineas)" }, s);
+    el("rect", { width: W, height: H, fill: "url(#vineta-pantalla)" }, s);
+    const cam = el("text", { x: 10, y: 22, "font-family": "Courier New, monospace", "font-size": 15, fill: "#E8F4EC" }, s);
+    cam.textContent = "CAM " + String(n + 1).padStart(2, "0");
+    const rec = el("g", {}, s);
+    el("circle", { cx: W - 62, cy: 17, r: 6, fill: "#FF3B30" }, rec);
+    el("text", { x: W - 52, y: 22, "font-family": "Courier New, monospace", "font-size": 15, fill: "#E8F4EC" }, rec).textContent = "REC";
+    const hora = el("text", { x: 10, y: H - 10, "font-family": "Courier New, monospace", "font-size": 14, fill: "#E8F4EC" }, s);
+    const estatica = el("rect", { width: W, height: H, fill: "#DDE6E2", opacity: 0 }, s);
+    pantallas.push({ tomas, rec, hora, estatica, cambia: 0.8 + rnd() * 2.6, base: 4 * 3600 + 17 * 60 + Math.floor(rnd() * 3000) });
+  }
+  // marcos de las pantallas (papel)
+  const marcos = el("g", { class: "papel", filter: "url(#corte)" }, $("pantallas"));
+  for (let f = 0; f < FILAS; f++) for (let c = 0; c < COLS; c++)
+    el("rect", { x: X0 + c * (W + GAP) - 8, y: Y0 + f * (H + GAP) - 8, width: W + 16, height: H + 16, rx: 6,
+                 fill: "none", stroke: "#2A323C", "stroke-width": 12 }, marcos);
+  // reflejo en el piso: una copia simple de los rectángulos de las pantallas
+  for (let f = 0; f < FILAS; f++) for (let c = 0; c < COLS; c++)
+    el("rect", { x: X0 + c * (W + GAP), y: Y0 + f * (H + GAP), width: W, height: H, fill: "#9FD8FF" }, $("reflejo"));
+
+  const reloj = s => [Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60].map(v => String(v).padStart(2, "0")).join(":");
+
+  function render(t) {
+    const cuadro = Math.floor(t * FPS_PAPEL);
+    const tp = cuadro / FPS_PAPEL;
+    const k = cuadro % 3;
+
+    const turb = document.querySelector("#corte feTurbulence");
+    if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
+
+    // cámara: se acerca al robot
+    const z = 1 + 0.12 * suave(t / DURATION);
+    $("camara").setAttribute("transform", `translate(540 1150) scale(${z}) translate(-540 -1150)`);
+
+    for (const p of pantallas) {
+      const cual = tp < p.cambia ? 0 : 1;
+      p.tomas.forEach((tm, i) => {
+        tm.g.setAttribute("display", i === cual ? "inline" : "none");
+        // el recuadro baja de grande a la cara y, al fijarse, se pone rojo
+        const desde = i === 0 ? 0 : p.cambia;
+        const q = tramo(tp, desde + tm.fija * 0.5, desde + tm.fija * 0.5 + 0.3);
+        const fija = q >= 1;
+        tm.caja.setAttribute("transform", `translate(${tm.cx} ${tm.cy}) scale(${1.8 - 0.8 * suave(q)})`);
+        tm.caja.setAttribute("opacity", q > 0 ? 1 : 0);
+        tm.caja.setAttribute("stroke", fija ? "#FF3B30" : "#E8F4EC");
+        tm.caja.setAttribute("fill", fija ? "#FF3B30" : "#E8F4EC");
+      });
+      // un cuadro de estática cuando cambia la toma
+      p.estatica.setAttribute("opacity", Math.abs(tp - p.cambia) < 0.09 ? 0.85 : 0);
+      p.rec.setAttribute("opacity", Math.floor(tp * 2) % 2 ? 0.3 : 1);
+      p.hora.textContent = "06/11/2026  " + reloj(p.base + Math.floor(tp));
+    }
+
+    // robot de espaldas, mirando de una pantalla a otra
+    const mira = Math.sin(tp * 1.6) * 24;
+    const robot = ROBOT.svg({ cx: 540 + mira, cy: 1330 + [0, -3, -1, -4, 0, -2][cuadro % 6], S: 3.2, llama: [1, 0.8, 0.9][k] });
+    $("robot").innerHTML = robot;
+    $("robot-halo").innerHTML = robot;
+  }
+
+  // ---- controles / modo render ----
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  document.querySelectorAll(".controls button").forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode; start = performance.now();
+    document.querySelectorAll(".controls button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION - 0.001);
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; document.body.classList.add("fijo"); render(Number(fixed)); }
+  else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>

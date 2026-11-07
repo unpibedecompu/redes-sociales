@@ -50,11 +50,12 @@
 
   /**
    * SVG (sin <svg> exterior) del personaje en el lienzo 400x900 del editor.
+   * nombre: uno de PERSONAJES, o una combinación suelta como la que da alAzar().
    * opts: { espalda, mirar (-1..1), parpadeo, cejas, boca, nino }  (cejas/boca: índice de pieza, para gestos;
    *         nino: achica el cuerpo debajo del cuello para que lea como chico)
    */
   function armar(nombre, opts = {}) {
-    const e = { ...PERSONAJES[nombre] };
+    const e = { ...(typeof nombre === "string" ? PERSONAJES[nombre] : nombre) };
     if (opts.cejas !== undefined) e.cejas = opts.cejas;
     if (opts.boca !== undefined) e.boca = opts.boca;
     const [p, ps] = PIELES[e.piel], [h, hs] = PELOS[e.colorPelo];
@@ -79,5 +80,13 @@
     return `<g style="--piel:${p};--piel-sombra:${ps};--pelo:${h};--pelo-sombra:${hs}">${s}</g>`;
   }
 
-  window.PERSONAJES = { armar, defs: D.defs, lista: PERSONAJES };
+  // una persona cualquiera (para multitudes, cámaras de seguridad...). rnd: función 0..1 para que sea reproducible
+  function alAzar(rnd = Math.random) {
+    const n = k => Math.floor(rnd() * k);
+    const e = { piel: n(PIELES.length - 1), colorPelo: n(PELOS.length) };   // la piel verde, solo a propósito
+    for (const c of D.categorias) e[c.id] = c.opcional && rnd() < 0.3 ? -1 : n(c.partes.length);
+    return e;
+  }
+
+  window.PERSONAJES = { armar, alAzar, defs: D.defs, lista: PERSONAJES };
 })();
