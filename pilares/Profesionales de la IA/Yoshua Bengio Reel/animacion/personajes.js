@@ -24,7 +24,15 @@
     yoshua: desdeHash("1.5.5.1.0.1.0.0.1.5.5.2"),
     // el que maneja: no se le ve la cara. Pelo corto castaño oscuro, sin barba, cabeza cuadrada, buzo y jean
     conductor: desdeHash("2.0.0.-1.2.1.2.1.3.3.0.0"),
+    // los chicos (se dibujan con { nino: true }: cuerpo más chico bajo la misma cabeza)
+    // hija: pelo largo castaño claro, suéter
+    hija: desdeHash("0.2.1.-1.0.1.0.1.0.1.0.0"),
+    // hijo: pelo corto castaño, cabeza redonda, remera
+    hijo: desdeHash("1.0.0.-1.1.1.0.0.0.0.0.0"),
+    // nieto: el más chico, rulos rubios, buzo
+    nieto: desdeHash("0.3.5.-1.1.0.1.1.0.3.1.0"),
   };
+  const CUERPO = new Set(["cuerpo", "pantalon", "zapatos", "remera"]);
 
   const ORDEN = ["pelo:atras", "cuerpo", "pantalon", "zapatos", "remera", "orejas", "cabeza", "cara",
                  "boca", "cejas", "nariz", "barba", "pelo"];
@@ -42,7 +50,8 @@
 
   /**
    * SVG (sin <svg> exterior) del personaje en el lienzo 400x900 del editor.
-   * opts: { espalda, mirar (-1..1), parpadeo, cejas, boca }  (cejas/boca: índice de pieza, para gestos)
+   * opts: { espalda, mirar (-1..1), parpadeo, cejas, boca, nino }  (cejas/boca: índice de pieza, para gestos;
+   *         nino: achica el cuerpo debajo del cuello para que lea como chico)
    */
   function armar(nombre, opts = {}) {
     const e = { ...PERSONAJES[nombre] };
@@ -51,8 +60,9 @@
     const [p, ps] = PIELES[e.piel], [h, hs] = PELOS[e.colorPelo];
     const segunCabeza = v => Array.isArray(v) ? v[e.cabeza] : v;
     let s = "";
+    const cuerpo = html => opts.nino && html ? `<g transform="translate(200 300) scale(0.72) translate(-200 -300)">${html}</g>` : html;
     for (const k of (opts.espalda ? ORDEN_ESPALDA : ORDEN)) {
-      if (k === "cuerpo") { s += capa(D.base.cuerpo); continue; }
+      if (k === "cuerpo") { s += cuerpo(capa(D.base.cuerpo)); continue; }
       if (k === "cara") { s += capa(ojos(opts)); continue; }
       if (k === "nuca") {
         s += capa(cats.cabeza.partes[e.cabeza].svg.replace(/var\(--piel(-sombra)?,#[0-9A-Fa-f]+\)/g, "var(--pelo)"));
@@ -63,7 +73,7 @@
       if (i < 0) continue;
       const parte = cats[id].partes[i];
       const html = segunCabeza(sub === "atras" ? parte.atras : parte.svg);
-      if (html) s += capa(html);
+      if (html) s += CUERPO.has(id) ? cuerpo(capa(html)) : capa(html);
     }
     // los colores van como variables CSS en el grupo, así dos personajes conviven en la misma escena
     return `<g style="--piel:${p};--piel-sombra:${ps};--pelo:${h};--pelo-sombra:${hs}">${s}</g>`;

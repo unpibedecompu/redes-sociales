@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 3 Los chicos</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: #FAF9F5;
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* reel completo 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    max-height: calc(100vh - 90px);
+    aspect-ratio: 1080 / 1920;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: #FAF9F5;
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: #D97757; border-color: #D97757; }
+  /* para el render: ?t=... muestra solo el cuadro, sin controles */
+  body.fijo { padding: 0; }
+  body.fijo svg#escena { max-height: none; }
+  body.fijo .controls { display: none; }
+</style>
+</head>
+<body>
+
+<!--
+  Plano: asiento de atrás visto de frente, cerrado (plano medio corto). Es una tira ancha (panorama)
+  y la cámara la recorre: Yoshua -> hija e hijo -> nieto en su butaca.
+-->
+<svg id="escena" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs">
+    <linearGradient id="niebla-vidrio" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5E6670"/>
+      <stop offset="1" stop-color="#8C939B"/>
+    </linearGradient>
+    <radialGradient id="luz-roja">
+      <stop offset="0" stop-color="#FF4A2E" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#FF4A2E" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="luz-tablero" cx="0.5" cy="1" r="0.9">
+      <stop offset="0" stop-color="#7FB8C9" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#7FB8C9" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="barrido" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFC870" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#FFC870" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#FFC870" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.9"/></feComponentTransfer>
+    </filter>
+    <filter id="niebla-suave" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="18"/></filter>
+    <clipPath id="luneta"><path d="M60 420 Q1300 360 2540 420 L2600 830 L0 830 Z"/></clipPath>
+    <!-- sentados: de la cintura para abajo no se ve -->
+    <clipPath id="sentados"><rect x="-100" y="0" width="2800" height="1760"/></clipPath>
+  </defs>
+
+  <g id="camara">
+    <g id="panorama">
+      <rect x="-200" y="-100" width="3000" height="2120" fill="#24272D"/>
+
+      <!-- luneta: niebla y el resplandor rojo de las luces de freno -->
+      <g clip-path="url(#luneta)">
+        <rect x="0" y="350" width="2600" height="500" fill="url(#niebla-vidrio)"/>
+        <g id="niebla" filter="url(#niebla-suave)"></g>
+        <circle cx="120" cy="830" r="220" fill="url(#luz-roja)"/>
+        <circle cx="2480" cy="830" r="220" fill="url(#luz-roja)"/>
+      </g>
+
+      <g class="papel">
+        <!-- techo -->
+        <path d="M-200 -100 L2800 -100 L2800 430 L2540 420 Q1300 360 60 420 L-200 430 Z" fill="#3A3D43"/>
+        <path d="M-200 430 L60 420 L0 840 L-200 860 Z" fill="#2E3136"/>
+        <path d="M2800 430 L2540 420 L2600 840 L2800 860 Z" fill="#2E3136"/>
+        <path d="M-10 830 L2610 830 L2640 870 L-40 870 Z" fill="#1E2025"/>
+        <!-- respaldo del asiento de atrás -->
+        <path d="M-200 860 Q1300 830 2800 860 L2800 2100 L-200 2100 Z" fill="#33363D"/>
+        <path d="M880 870 L880 2000 M1920 870 L1920 2000" stroke="#2A2D33" stroke-width="6"/>
+        <path d="M-200 1330 Q1300 1300 2800 1330" stroke="#2A2D33" stroke-width="5" fill="none"/>
+        <!-- apoyacabezas -->
+        <rect x="380" y="780" width="320" height="170" rx="50" fill="#3B3F46"/>
+        <rect x="1090" y="800" width="300" height="160" rx="48" fill="#3B3F46"/>
+        <rect x="1560" y="800" width="300" height="160" rx="48" fill="#3B3F46"/>
+        <!-- butaca del nieto -->
+        <path d="M2150 860 Q2350 800 2550 860 L2590 1760 L2110 1760 Z" fill="#5A4A6A"/>
+        <path d="M2190 900 Q2350 850 2510 900 L2530 1700 L2170 1700 Z" fill="#6E5C80"/>
+        <rect x="2130" y="1300" width="60" height="300" rx="28" fill="#5A4A6A"/>
+        <rect x="2510" y="1300" width="60" height="300" rx="28" fill="#5A4A6A"/>
+      </g>
+
+      <!-- los cuatro, sentados -->
+      <g clip-path="url(#sentados)">
+        <g id="yoshua"></g>
+        <g id="hija"></g>
+        <g id="hijo"></g>
+        <g id="nieto"></g>
+        <!-- cinturones -->
+        <g stroke="#1F2125" stroke-width="30" stroke-linecap="round" opacity="0.95">
+          <path d="M760 1250 L420 1760"/>
+          <path d="M1370 1330 L1130 1760"/>
+          <path d="M1820 1340 L1590 1760"/>
+        </g>
+        <!-- arnés de la butaca -->
+        <g stroke="#2A2230" stroke-width="22" stroke-linecap="round">
+          <path d="M2270 1400 L2330 1640 M2430 1400 L2370 1640"/>
+        </g>
+        <rect x="2318" y="1610" width="64" height="40" rx="8" fill="#B0AEA5"/>
+      </g>
+      <!-- borde del almohadón -->
+      <path class="papel" d="M-200 1740 Q1300 1720 2800 1740 L2800 2100 L-200 2100 Z" fill="#2A2D33"/>
+    </g>
+
+    <rect width="1080" height="1920" fill="url(#luz-tablero)" style="mix-blend-mode:screen"/>
+    <rect id="barrido" x="-200" y="-700" width="1480" height="700" fill="url(#barrido)" style="mix-blend-mode:screen"/>
+  </g>
+
+  <rect width="1080" height="1920" fill="#0B1220" opacity="0.15" style="mix-blend-mode:multiply"/>
+  <rect width="1080" height="1920" fill="url(#vineta)"/>
+  <rect width="1080" height="1920" filter="url(#grano)" opacity="0.14" style="mix-blend-mode:multiply" pointer-events="none"/>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="personajes.js"></script>
+<script>
+  // "Beside me in that car are my children and my grandson."
+  // Primer plano de Yoshua preocupado; la cámara se corre a dos de los chicos y después al tercero.
+  const DURATION = 4.0;
+  const FPS_PAPEL = 12;        // stop motion: el papel "tiembla" 12 veces por segundo
+
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  // filtros del editor (sombra, corte irregular) dentro de nuestro <defs>
+  const tmp = document.createElementNS(NS, "svg");
+  tmp.innerHTML = PERSONAJES.defs;
+  for (const n of [...tmp.querySelectorAll("defs > *")]) $("defs").appendChild(n);
+  const estilo = tmp.querySelector("style");
+  if (estilo) $("escena").insertBefore(estilo, $("defs"));
+  document.querySelectorAll(".papel").forEach(g => g.setAttribute("filter", "url(#corte)"));
+
+  // números pseudoaleatorios fijos: cada render da lo mismo
+  let semilla = 37;
+  const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+
+  // niebla en la luneta: se aleja hacia el centro de cada tramo
+  const manchones = [];
+  for (let i = 0; i < 30; i++) {
+    manchones.push({
+      c: el("ellipse", { fill: rnd() < 0.5 ? "#A3AAB2" : "#7B838C" }, $("niebla")),
+      x: rnd() * 2600, fase: rnd(), r: 70 + rnd() * 90,
+    });
+  }
+
+  // ---- personajes: [nombre, centro de la cara, escala, opciones fijas] ----
+  const SENTADOS = {
+    yoshua: { x: 540, y: 1010, esc: 2.15 },
+    hija:   { x: 1240, y: 1110, esc: 1.8, nino: true },
+    hijo:   { x: 1710, y: 1130, esc: 1.75, nino: true },
+    nieto:  { x: 2350, y: 1210, esc: 1.6, nino: true },
+  };
+  const ultimo = {};
+  function dibujar(nombre, opts, inclinar = 0) {
+    const p = SENTADOS[nombre];
+    const clave = JSON.stringify(opts) + inclinar;
+    if (ultimo[nombre] === clave) return;
+    ultimo[nombre] = clave;
+    $(nombre).innerHTML =
+      `<g transform="rotate(${inclinar} ${p.x} ${p.y + 60}) translate(${p.x - 200 * p.esc} ${p.y - 190 * p.esc}) scale(${p.esc})">` +
+      PERSONAJES.armar(nombre, { nino: p.nino, ...opts }) + `</g>`;
+  }
+
+  // ---- recorrido de la cámara (centro x del cuadro en el panorama) ----
+  const suave = x => x * x * (3 - 2 * x);
+  const TRAMOS = [
+    [0.0, 540], [1.0, 540],          // Yoshua
+    [1.7, 1475], [2.6, 1475],        // hija e hijo
+    [3.3, 2350], [4.0, 2350],        // nieto
+  ];
+  function camaraX(t) {
+    for (let i = 1; i < TRAMOS.length; i++) {
+      const [t0, x0] = TRAMOS[i - 1], [t1, x1] = TRAMOS[i];
+      if (t <= t1) return x0 + (x1 - x0) * suave(Math.max(0, (t - t0) / (t1 - t0)));
+    }
+    return TRAMOS[TRAMOS.length - 1][1];
+  }
+
+  const mod = (a, n) => ((a % n) + n) % n;
+
+  function render(t) {
+    const cuadro = Math.floor(t * FPS_PAPEL);
+    const tp = cuadro / FPS_PAPEL;
+    const k = cuadro % 3;
+
+    const turb = document.querySelector("#corte feTurbulence");
+    if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
+
+    // la cámara se corre por el asiento (suave), con la vibración del auto
+    const vib = [0, 2, -1, 3, -2, 1][cuadro % 6];
+    const z = 1 + 0.03 * Math.sin(t / DURATION * Math.PI);
+    $("camara").setAttribute("transform", `translate(0 ${vib}) translate(540 1100) scale(${z}) translate(-540 -1100)`);
+    $("panorama").setAttribute("transform", `translate(${540 - camaraX(t)} 0)`);
+
+    for (const m of manchones) {
+      const q = mod(m.fase + tp * 0.3, 1);
+      m.c.setAttribute("cx", m.x);
+      m.c.setAttribute("cy", 620 + (1 - q) * 160);
+      m.c.setAttribute("rx", m.r * (1.3 - q * 0.8));
+      m.c.setAttribute("ry", m.r * 0.5 * (1.3 - q * 0.8));
+      m.c.setAttribute("opacity", (0.6 * Math.sin(q * Math.PI)).toFixed(3));
+    }
+    $("barrido").setAttribute("y", -700 + mod(tp / 1.6, 1) * 2600);
+
+    // Yoshua preocupado; al final de su toma mira hacia los chicos (y la cámara lo sigue)
+    dibujar("yoshua", { cejas: 4, boca: 1, mirar: tp > 0.6 ? 1 : 0, parpadeo: tp > 0.3 && tp < 0.4 });
+    // hija mira por la ventanilla, hijo la mira a ella; los dos serios
+    dibujar("hija", { boca: 1, mirar: -1, parpadeo: tp > 2.4 && tp < 2.5 });
+    dibujar("hijo", { boca: 1, mirar: -0.8, cejas: 4, parpadeo: tp > 1.4 && tp < 1.5 });
+    // el nieto, despierto, mira hacia el abuelo
+    dibujar("nieto", { boca: 1, mirar: -1, parpadeo: tp > 3.6 && tp < 3.7 }, 4);
+  }
+
+  // ---- controles / modo render ----
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  document.querySelectorAll(".controls button").forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode; start = performance.now();
+    document.querySelectorAll(".controls button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION - 0.001);
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; document.body.classList.add("fijo"); render(Number(fixed)); }
+  else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>
