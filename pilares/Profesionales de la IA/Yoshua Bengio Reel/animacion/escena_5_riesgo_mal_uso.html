@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 5 Riesgo mal uso</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: #FAF9F5;
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* reel completo 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    max-height: calc(100vh - 90px);
+    aspect-ratio: 1080 / 1920;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: #FAF9F5;
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: #D97757; border-color: #D97757; }
+  /* para el render: ?t=... muestra solo el cuadro, sin controles */
+  body.fijo { padding: 0; }
+  body.fijo svg#escena { max-height: none; }
+  body.fijo .controls { display: none; }
+</style>
+</head>
+<body>
+
+<!--
+  Riesgo 1, mal uso: "...asistiendo a terroristas a crear la próxima pandemia."
+  El robot de loro con valores, de guardapolvo, en un laboratorio a oscuras: vuelca un tubo de ensayo en un vaso,
+  el líquido se vuelve verde, burbujea y de los vapores salen virus. Al final mira a cámara.
+-->
+<svg id="escena" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs">
+    <linearGradient id="cono" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFF1CF" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FFF1CF" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="brillo-verde">
+      <stop offset="0" stop-color="#9BE15D" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#9BE15D" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.45" r="0.75">
+      <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.9"/></feComponentTransfer>
+    </filter>
+    <filter id="vapor-suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+    <clipPath id="vaso-adentro"><path d="M812 1150 L968 1150 L962 1290 Q962 1298 954 1298 L826 1298 Q818 1298 818 1290 Z"/></clipPath>
+  </defs>
+
+  <g id="camara">
+    <!-- pared de azulejos -->
+    <rect x="-100" y="-100" width="1280" height="2120" fill="#1F2B33"/>
+    <g id="azulejos" stroke="#263640" stroke-width="4"></g>
+
+    <!-- cartel de riesgo biológico -->
+    <g class="papel" transform="translate(190 330)">
+      <polygon points="0,-120 110,80 -110,80" fill="#F2C230"/>
+      <polygon points="0,-92 86,64 -86,64" fill="none" stroke="#141413" stroke-width="10"/>
+      <g fill="none" stroke="#141413" stroke-width="9">
+        <circle cx="0" cy="-12" r="22"/><circle cx="-20" cy="22" r="22"/><circle cx="20" cy="22" r="22"/>
+      </g>
+      <circle cx="0" cy="11" r="9" fill="#141413"/>
+    </g>
+
+    <!-- estante con frascos -->
+    <g class="papel">
+      <rect x="600" y="420" width="440" height="18" fill="#3E4E57"/>
+      <rect x="630" y="330" width="56" height="90" rx="10" fill="#4F6B5A"/>
+      <rect x="646" y="310" width="24" height="24" fill="#3E4E57"/>
+      <path d="M730 420 L760 340 L760 300 L790 300 L790 340 L820 420 Z" fill="#5A6E8A"/>
+      <rect x="850" y="350" width="70" height="70" rx="8" fill="#7A5A4A"/>
+      <rect x="950" y="320" width="50" height="100" rx="20" fill="#4E6A72"/>
+      <rect x="600" y="600" width="440" height="18" fill="#3E4E57"/>
+      <rect x="640" y="520" width="80" height="80" rx="12" fill="#5C4E6E"/>
+      <path d="M760 600 L790 540 L790 500 L816 500 L816 540 L846 600 Z" fill="#4F6B5A"/>
+      <rect x="890" y="540" width="40" height="60" rx="6" fill="#6E5A3E"/>
+    </g>
+
+    <!-- lámpara colgante y su cono de luz -->
+    <polygon points="610,140 470,140 120,1310 1000,1310" fill="url(#cono)" style="mix-blend-mode:screen"/>
+    <g class="papel">
+      <rect x="586" y="-20" width="8" height="120" fill="#141413"/>
+      <path d="M520 150 Q590 70 660 150 Z" fill="#2E3D45"/>
+      <ellipse cx="590" cy="150" rx="40" ry="8" fill="#FFF1CF"/>
+    </g>
+
+    <!-- resplandor verde del vaso -->
+    <circle id="brillo" cx="890" cy="1200" r="320" fill="url(#brillo-verde)" opacity="0" style="mix-blend-mode:screen"/>
+
+    <!-- el robot -->
+    <g id="robot"></g>
+
+    <!-- mesada -->
+    <g class="papel">
+      <rect x="-40" y="1290" width="1160" height="34" fill="#C9C6BD"/>
+      <rect x="-40" y="1324" width="1160" height="700" fill="#2E3D45"/>
+      <rect x="40" y="1380" width="460" height="460" rx="10" fill="#33444D"/>
+      <rect x="580" y="1380" width="460" height="460" rx="10" fill="#33444D"/>
+      <rect x="440" y="1580" width="16" height="70" rx="6" fill="#9AA3A8"/>
+      <rect x="624" y="1580" width="16" height="70" rx="6" fill="#9AA3A8"/>
+    </g>
+
+    <!-- gradilla con tubos -->
+    <g class="papel">
+      <rect x="70" y="1170" width="270" height="20" fill="#B0AEA5"/>
+      <rect x="70" y="1250" width="270" height="40" fill="#B0AEA5"/>
+      <rect x="80" y="1190" width="12" height="60" fill="#9A988F"/>
+      <rect x="318" y="1190" width="12" height="60" fill="#9A988F"/>
+      <g id="tubos-gradilla"></g>
+    </g>
+
+    <!-- vaso de precipitados -->
+    <g id="vaso-liquido" clip-path="url(#vaso-adentro)">
+      <rect id="liquido" x="800" y="1250" width="180" height="60" fill="#5A9BD5"/>
+      <g id="burbujas" fill="#E8FFD6" opacity="0.8"></g>
+    </g>
+    <g class="papel">
+      <path d="M808 1140 L972 1140 L966 1292 Q966 1302 956 1302 L824 1302 Q814 1302 814 1292 Z" fill="#DDEFF5" opacity="0.28"/>
+      <path d="M800 1138 L980 1138" stroke="#DDEFF5" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+      <g stroke="#DDEFF5" stroke-width="4" opacity="0.6">
+        <path d="M940 1180 L960 1180 M948 1210 L960 1210 M940 1240 L960 1240 M948 1270 L960 1270"/>
+      </g>
+    </g>
+
+    <!-- chorro, tubo en la mano, vapores y virus -->
+    <path id="chorro" fill="none" stroke-width="12" stroke-linecap="round"/>
+    <g id="tubo"></g>
+    <g id="vapores" filter="url(#vapor-suave)"></g>
+    <g id="virus"></g>
+  </g>
+
+  <rect width="1080" height="1920" fill="url(#vineta)"/>
+  <rect width="1080" height="1920" filter="url(#grano)" opacity="0.14" style="mix-blend-mode:multiply" pointer-events="none"/>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="personajes.js"></script>
+<script src="robot.js"></script>
+<script>
+  // "el riesgo del mal uso, por ejemplo, asistiendo a terroristas a crear la próxima pandemia."
+  const DURATION = 4.5;
+  const FPS_PAPEL = 12;
+
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  // filtros del editor (sombra, corte irregular) dentro de nuestro <defs>
+  const tmp = document.createElementNS(NS, "svg");
+  tmp.innerHTML = PERSONAJES.defs;
+  for (const n of [...tmp.querySelectorAll("defs > *")]) $("defs").appendChild(n);
+  const estilo = tmp.querySelector("style");
+  if (estilo) $("escena").insertBefore(estilo, $("defs"));
+  document.querySelectorAll(".papel").forEach(g => g.setAttribute("filter", "url(#corte)"));
+
+  let semilla = 41;
+  const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+  const clamp01 = x => Math.min(1, Math.max(0, x));
+  const tramo = (t, a, b) => clamp01((t - a) / (b - a));
+  const suave = x => x * x * (3 - 2 * x);
+  const mezcla = (c1, c2, k) => "#" + [0, 2, 4].map(i => Math.round(
+    parseInt(c1.slice(1 + i, 3 + i), 16) * (1 - k) + parseInt(c2.slice(1 + i, 3 + i), 16) * k).toString(16).padStart(2, "0")).join("");
+
+  // azulejos
+  for (let x = 0; x <= 1080; x += 90) el("line", { x1: x, y1: 0, x2: x, y2: 1300 }, $("azulejos"));
+  for (let y = 0; y <= 1300; y += 90) el("line", { x1: 0, y1: y, x2: 1080, y2: y }, $("azulejos"));
+
+  // tubos de la gradilla
+  [["#D97757", 0.6], ["#6A9BCC", 0.4], ["#E0B341", 0.7], ["#C2463C", 0.5]].forEach(([c, n], i) => {
+    const x = 108 + i * 58;
+    el("rect", { x, y: 1100, width: 30, height: 170, rx: 15, fill: "#DDEFF5", opacity: 0.35 }, $("tubos-gradilla"));
+    el("rect", { x: x + 4, y: 1270 - 160 * n, width: 22, height: 160 * n - 4, rx: 11, fill: c }, $("tubos-gradilla"));
+  });
+
+  // ---- tubo en la mano derecha del robot: gira alrededor de la mano ----
+  const MANO = [720, 1000], LARGO = 170;      // de la mano a la boca del tubo
+  const AZUL = "#5A9BD5", VERDE = "#8BE04E";
+  function dibujarTubo(angulo, carga) {
+    const lleno = 140 * carga;
+    // el líquido se va hacia la boca cuando el tubo está dado vuelta
+    const y0 = angulo > 80 ? -LARGO + 6 : 30 - lleno;
+    $("tubo").innerHTML = `<g transform="translate(${MANO[0]} ${MANO[1]}) rotate(${angulo})" filter="url(#corte)">` +
+      `<g class="capa" filter="url(#sombra)"><rect x="-22" y="${-LARGO}" width="44" height="${LARGO + 50}" rx="22" fill="#DDEFF5" opacity="0.45"/>` +
+      (lleno > 1 ? `<rect x="-17" y="${y0}" width="34" height="${lleno}" rx="16" fill="${AZUL}"/>` : "") +
+      `<rect x="-26" y="${-LARGO - 6}" width="52" height="12" rx="6" fill="#DDEFF5" opacity="0.8"/></g></g>`;
+  }
+  function bocaTubo(angulo) {
+    const a = angulo * Math.PI / 180;
+    return [MANO[0] + LARGO * Math.sin(a), MANO[1] - LARGO * Math.cos(a)];
+  }
+
+  // burbujas dentro del vaso
+  const burbujas = [];
+  for (let i = 0; i < 12; i++) burbujas.push({ c: el("circle", { r: 4 + rnd() * 6 }, $("burbujas")), x: 830 + rnd() * 120, fase: rnd() });
+
+  // vapores y virus que salen del vaso
+  const vapores = [], virus = [];
+  for (let i = 0; i < 6; i++) vapores.push({ c: el("ellipse", { fill: "#B8F08A" }, $("vapores")), x: 850 + rnd() * 80, fase: i / 6, ancho: 50 + rnd() * 50 });
+  function virusSVG(r) {
+    let s = `<circle r="${r}" fill="#8BE04E"/>`;
+    for (let i = 0; i < 10; i++) {
+      const a = i / 10 * Math.PI * 2, x1 = Math.cos(a) * r, y1 = Math.sin(a) * r, x2 = Math.cos(a) * r * 1.45, y2 = Math.sin(a) * r * 1.45;
+      s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#4E8A2A" stroke-width="${r * 0.18}"/><circle cx="${x2}" cy="${y2}" r="${r * 0.2}" fill="#4E8A2A"/>`;
+    }
+    s += `<circle cx="${-r * 0.3}" cy="${-r * 0.2}" r="${r * 0.22}" fill="#4E8A2A"/><circle cx="${r * 0.35}" cy="${r * 0.25}" r="${r * 0.16}" fill="#4E8A2A"/>`;
+    return s;
+  }
+  for (let i = 0; i < 6; i++) {
+    const g = el("g", { filter: "url(#corte)" }, $("virus"));
+    g.innerHTML = `<g class="capa" filter="url(#sombra)">${virusSVG(18 + rnd() * 16)}</g>`;
+    virus.push({ g, sale: 2.0 + i * 0.35, dx: (rnd() - 0.5) * 500, giro: (rnd() - 0.5) * 200 });
+  }
+
+  function render(t) {
+    const cuadro = Math.floor(t * FPS_PAPEL);
+    const tp = cuadro / FPS_PAPEL;
+    const k = cuadro % 3;
+
+    const turb = document.querySelector("#corte feTurbulence");
+    if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
+
+    // cámara: se acerca al vaso de a poco
+    const z = 1 + 0.08 * (t / DURATION);
+    $("camara").setAttribute("transform", `translate(700 1150) scale(${z}) translate(-700 -1150)`);
+
+    // tubo: inclina (0.4-1.1), vuelca (1.1-3.0), lo endereza (3.0-3.5)
+    const ang = 120 * suave(tramo(tp, 0.4, 1.1)) - 90 * suave(tramo(tp, 3.0, 3.5));
+    const vuelca = tramo(tp, 1.1, 3.0);
+    const carga = 1 - vuelca;
+    dibujarTubo(ang, tp < 3.0 ? carga : 0);
+
+    // vaso: se llena y se vuelve verde
+    const nivel = 0.3 + 0.45 * vuelca;
+    const color = mezcla(AZUL, VERDE, suave(tramo(tp, 1.3, 2.6)));
+    $("liquido").setAttribute("y", 1298 - 150 * nivel);
+    $("liquido").setAttribute("height", 150 * nivel + 10);
+    $("liquido").setAttribute("fill", color);
+
+    // chorro
+    const [bx, by] = bocaTubo(ang);
+    if (tp > 1.1 && tp < 3.0) {
+      const sup = 1298 - 150 * nivel, ondula = [0, 3, -3][k];
+      $("chorro").setAttribute("d", `M${bx} ${by} Q${bx + 10 + ondula} ${(by + sup) / 2} ${bx + 4} ${sup}`);
+      $("chorro").setAttribute("stroke", mezcla(AZUL, VERDE, suave(tramo(tp, 1.6, 2.6)) * 0.6));
+      $("chorro").setAttribute("opacity", 1);
+    } else $("chorro").setAttribute("opacity", 0);
+
+    // burbujas: empiezan cuando se pone verde
+    const hierve = tramo(tp, 1.8, 2.4);
+    for (const b of burbujas) {
+      const q = (b.fase + tp * 1.2) % 1;
+      b.c.setAttribute("cx", b.x + Math.sin(q * 9 + b.fase * 6) * 4);
+      b.c.setAttribute("cy", 1295 - q * 150 * nivel);
+      b.c.setAttribute("opacity", hierve);
+    }
+    $("brillo").setAttribute("opacity", (suave(tramo(tp, 1.6, 2.8)) * (0.85 + [0, 0.1, -0.05][k])).toFixed(3));
+
+    // vapor verde
+    for (const v of vapores) {
+      const q = (v.fase + tp * 0.5) % 1;
+      v.c.setAttribute("cx", v.x + Math.sin(q * 4 + v.fase * 9) * 30);
+      v.c.setAttribute("cy", 1140 - q * 420);
+      v.c.setAttribute("rx", v.ancho * (0.6 + q));
+      v.c.setAttribute("ry", v.ancho * 0.5 * (0.6 + q));
+      v.c.setAttribute("opacity", (0.45 * hierve * Math.sin(q * Math.PI)).toFixed(3));
+    }
+    // virus que salen del vaso y suben flotando
+    for (const v of virus) {
+      const q = tramo(tp, v.sale, v.sale + 2.2);
+      if (q <= 0) { v.g.setAttribute("opacity", 0); continue; }
+      const x = 890 + v.dx * q * 0.6 + Math.sin(q * 6) * 20, y = 1130 - q * 700;
+      const e = 0.3 + q * 0.9;
+      v.g.setAttribute("transform", `translate(${x} ${y}) rotate(${v.giro * q}) scale(${e})`);
+      v.g.setAttribute("opacity", Math.min(1, q * 4));
+    }
+
+    // robot: mira el vaso mientras trabaja, y al final mira a cámara
+    const aCamara = suave(tramo(tp, 3.5, 3.9));
+    $("robot").innerHTML = ROBOT.svg({
+      cx: 430, cy: 760 + [0, -4, -2, -5, 0, -3][cuadro % 6], S: 2.6, guardapolvo: true,
+      mirarX: 1 - aCamara, mirarY: 1 - aCamara,
+      manoDer: MANO, manoIzq: [250, 1060],
+      llama: [1, 0.8, 0.9][k],
+    });
+  }
+
+  // ---- controles / modo render ----
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  document.querySelectorAll(".controls button").forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode; start = performance.now();
+    document.querySelectorAll(".controls button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION - 0.001);
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; document.body.classList.add("fijo"); render(Number(fixed)); }
+  else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>
