@@ -22,8 +22,8 @@
   const PERSONAJES = {
     // pelo ondulado canoso, barba corta, cabeza ovalada, cejas rectas, nariz triangular, traje azul
     yoshua: desdeHash("1.5.5.1.0.1.0.0.1.5.5.2"),
-    // el que maneja: no se le ve la cara. Pelo corto negro, sin barba, cabeza cuadrada, buzo y jean
-    conductor: desdeHash("2.1.0.-1.2.1.2.1.3.3.0.0"),
+    // el que maneja: no se le ve la cara. Pelo corto castaño oscuro, sin barba, cabeza cuadrada, buzo y jean
+    conductor: desdeHash("2.0.0.-1.2.1.2.1.3.3.0.0"),
   };
 
   const ORDEN = ["pelo:atras", "cuerpo", "pantalon", "zapatos", "remera", "orejas", "cabeza", "cara",
@@ -55,7 +55,7 @@
       if (k === "cuerpo") { s += capa(D.base.cuerpo); continue; }
       if (k === "cara") { s += capa(ojos(opts)); continue; }
       if (k === "nuca") {
-        s += capa(cats.cabeza.partes[e.cabeza].svg.replace(/var\(--piel(-sombra)?,#[0-9A-Fa-f]+\)/g, "var(--pelo-sombra)"));
+        s += capa(cats.cabeza.partes[e.cabeza].svg.replace(/var\(--piel(-sombra)?,#[0-9A-Fa-f]+\)/g, "var(--pelo)"));
         continue;
       }
       const [id, sub] = k.split(":");

@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escena 2 POV Yoshua</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: #FAF9F5;
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* reel completo 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    max-height: calc(100vh - 90px);
+    aspect-ratio: 1080 / 1920;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: #FAF9F5;
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: #D97757; border-color: #D97757; }
+  /* para el render: ?t=... muestra solo el cuadro, sin controles */
+  body.fijo { padding: 0; }
+  body.fijo svg#escena { max-height: none; }
+  body.fijo .controls { display: none; }
+</style>
+</head>
+<body>
+
+<!--
+  Plano: lo que ve Yoshua desde el asiento de atrás, detrás del acompañante.
+  Adelante a la izquierda el conductor de espaldas con su asiento; a la derecha el asiento vacío del acompañante.
+  Entre los dos: volante y velocímetro que sube sin parar. Por el parabrisas solo niebla iluminada por los faros.
+-->
+<svg id="escena" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs">
+    <!-- niebla iluminada por los faros: más clara abajo al centro, donde pega la luz -->
+    <radialGradient id="niebla-faros" cx="0.5" cy="0.85" r="0.75">
+      <stop offset="0" stop-color="#D9DCD8"/>
+      <stop offset="0.45" stop-color="#9AA0A4"/>
+      <stop offset="1" stop-color="#4C535B"/>
+    </radialGradient>
+    <radialGradient id="tablero-luz" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7FE0F0" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#7FE0F0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.9"/></feComponentTransfer>
+    </filter>
+    <!-- los respaldos están muy cerca de la cámara: un poco fuera de foco -->
+    <filter id="foco-cerca" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="niebla-suave" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="haz-suave" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter>
+    <linearGradient id="haz" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFF6DE" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#FFF6DE" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+    <clipPath id="parabrisas"><path d="M120 330 Q540 290 960 330 L1080 900 L0 900 Z"/></clipPath>
+  </defs>
+
+  <g id="camara">
+    <rect x="-100" y="-100" width="1280" height="2120" fill="#1F2227"/>
+
+    <!-- parabrisas: niebla con la luz de los faros, que se viene encima -->
+    <g clip-path="url(#parabrisas)">
+      <rect x="0" y="280" width="1080" height="640" fill="url(#niebla-faros)"/>
+      <g id="ruta"></g>
+      <g id="haces" filter="url(#haz-suave)" style="mix-blend-mode:screen">
+        <polygon points="250,920 470,920 560,640 500,640" fill="url(#haz)"/>
+        <polygon points="610,920 830,920 580,640 520,640" fill="url(#haz)"/>
+      </g>
+      <g id="niebla" filter="url(#niebla-suave)"></g>
+    </g>
+
+    <g class="papel">
+      <!-- techo y parantes -->
+      <path d="M-20 -20 L1100 -20 L1100 340 L960 330 Q540 290 120 330 L-20 340 Z" fill="#33363C"/>
+      <path d="M-20 340 L120 330 L0 900 L-20 900 Z" fill="#2A2D32"/>
+      <path d="M1100 340 L960 330 L1080 900 L1100 900 Z" fill="#2A2D32"/>
+      <!-- parasoles -->
+      <path d="M160 322 L470 304 L466 360 L170 380 Z" fill="#3D4046"/>
+      <path d="M610 304 L920 322 L910 380 L614 360 Z" fill="#3D4046"/>
+      <!-- espejo retrovisor -->
+      <rect x="575" y="290" width="14" height="60" fill="#26292E"/>
+      <rect x="480" y="340" width="200" height="62" rx="16" fill="#26292E"/>
+      <rect x="492" y="350" width="176" height="42" rx="10" fill="#4A515A"/>
+    </g>
+
+    <!-- tablero -->
+    <g class="papel">
+      <path d="M-20 880 Q540 820 1100 880 L1100 1240 L-20 1240 Z" fill="#202328"/>
+      <path d="M-20 880 Q540 820 1100 880 L1100 905 Q540 845 -20 905 Z" fill="#2C2F35"/>
+      <!-- limpiaparabrisas -->
+      <path d="M150 872 L470 842" stroke="#15171A" stroke-width="10" stroke-linecap="round"/>
+      <path d="M560 840 L880 860" stroke="#15171A" stroke-width="10" stroke-linecap="round"/>
+      <!-- pantalla del medio -->
+      <rect x="560" y="960" width="170" height="110" rx="10" fill="#14171B"/>
+      <rect x="570" y="970" width="150" height="90" rx="6" fill="#1D3A44"/>
+      <path d="M582 1040 L620 1005 L650 1025 L706 985" stroke="#7FE0F0" stroke-width="4" fill="none" opacity="0.7"/>
+      <!-- salidas de aire -->
+      <rect x="760" y="990" width="110" height="40" rx="10" fill="#15171A"/>
+      <!-- consola y palanca de cambios -->
+      <path d="M480 1240 L780 1240 L820 1500 L440 1500 Z" fill="#191B1F"/>
+      <rect x="610" y="1220" width="26" height="110" rx="10" fill="#2A2D32"/>
+      <circle cx="623" cy="1215" r="30" fill="#33363C"/>
+    </g>
+
+    <!-- tablero de instrumentos: el velocímetro -->
+    <g id="instrumentos" transform="translate(50 0)">
+      <ellipse cx="420" cy="1010" rx="210" ry="150" fill="url(#tablero-luz)"/>
+      <circle cx="420" cy="1010" r="132" fill="#0E1114"/>
+      <circle cx="420" cy="1010" r="132" fill="none" stroke="#3A3F46" stroke-width="8"/>
+      <g id="marcas"></g>
+      <g id="numeros" font-family="Tahoma, Verdana, sans-serif" font-size="20" fill="#CFEFF5" text-anchor="middle" dominant-baseline="central"></g>
+      <g id="aguja">
+        <path d="M-5 0 L-2 -112 L2 -112 L5 0 Z" fill="#FF6A3D" filter="url(#brillo)" opacity="0.8"/>
+        <path d="M-4 0 L-1.5 -110 L1.5 -110 L4 0 Z" fill="#FF6A3D"/>
+      </g>
+      <circle cx="420" cy="1010" r="16" fill="#2A2D32"/>
+      <text id="vel" x="420" y="1068" font-family="Tahoma, Verdana, sans-serif" font-size="30" font-weight="bold"
+            fill="#FAF9F5" text-anchor="middle" dominant-baseline="central">80</text>
+      <text x="420" y="1096" font-family="Tahoma, Verdana, sans-serif" font-size="14" fill="#9FB7BD" text-anchor="middle">km/h</text>
+    </g>
+
+    <!-- volante: el aro rodea el velocímetro -->
+    <g id="volante-pos" transform="translate(50 0)"><g class="papel" id="volante">
+      <ellipse cx="400" cy="1080" rx="250" ry="190" fill="none" stroke="#121417" stroke-width="44"/>
+      <path d="M220 1150 Q400 1210 580 1150 L560 1230 L240 1230 Z" fill="#121417"/>
+    </g></g>
+
+    <!-- conductor de espaldas, detrás de su respaldo -->
+    <g id="conductor-mov">
+      <g id="conductor"></g>
+    </g>
+
+    <!-- respaldos de adelante, muy cerca -->
+    <g id="cerca" filter="url(#foco-cerca)">
+      <!-- conductor: a la izquierda -->
+      <g id="asiento-cond">
+        <rect x="120" y="1020" width="18" height="120" fill="#8C8F96"/>
+        <rect x="262" y="1020" width="18" height="120" fill="#8C8F96"/>
+        <rect x="40" y="880" width="320" height="170" rx="56" fill="#3A3E45"/>
+        <path d="M-80 1120 Q200 1070 440 1130 L470 1960 L-80 1960 Z" fill="#33373E"/>
+        <path d="M20 1260 Q200 1230 400 1270" stroke="#2A2D33" stroke-width="6" fill="none"/>
+      </g>
+      <!-- acompañante (vacío): a la derecha, justo adelante de Yoshua -->
+      <g id="asiento-acomp">
+        <rect x="770" y="1040" width="18" height="120" fill="#8C8F96"/>
+        <rect x="922" y="1040" width="18" height="120" fill="#8C8F96"/>
+        <rect x="680" y="890" width="350" height="180" rx="60" fill="#3A3E45"/>
+        <path d="M600 1150 Q860 1090 1160 1140 L1160 1960 L590 1960 Z" fill="#33373E"/>
+        <path d="M650 1290 Q860 1250 1100 1280" stroke="#2A2D33" stroke-width="6" fill="none"/>
+        <!-- bolsillo del respaldo -->
+        <path d="M680 1560 Q880 1530 1080 1560 L1080 1760 L680 1760 Z" fill="#2B2E34"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- noche: viñeta y grano de papel -->
+  <rect width="1080" height="1920" fill="url(#vineta)"/>
+  <rect width="1080" height="1920" filter="url(#grano)" opacity="0.14" style="mix-blend-mode:multiply" pointer-events="none"/>
+</svg>
+
+<div class="controls" role="group" aria-label="Vista">
+  <button data-mode="anim" aria-pressed="true">Animación</button>
+  <button data-mode="inicio" aria-pressed="false">Cuadro inicial</button>
+  <button data-mode="final" aria-pressed="false">Cuadro final</button>
+</div>
+
+<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="personajes.js"></script>
+<script>
+  // "...speeding blindly into dense fog." — lo que ve Yoshua desde atrás.
+  const DURATION = 2.8;
+  const FPS_PAPEL = 12;        // stop motion: el papel "tiembla" 12 veces por segundo
+  const VEL_INICIO = 90, VEL_FIN = 190;   // km/h: el velocímetro sube durante toda la toma
+
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  // filtros del editor (sombra, corte irregular) dentro de nuestro <defs>
+  const tmp = document.createElementNS(NS, "svg");
+  tmp.innerHTML = PERSONAJES.defs;
+  for (const n of [...tmp.querySelectorAll("defs > *")]) $("defs").appendChild(n);
+  const estilo = tmp.querySelector("style");
+  if (estilo) $("escena").insertBefore(estilo, $("defs"));
+  document.querySelectorAll(".papel").forEach(g => g.setAttribute("filter", "url(#corte)"));
+
+  // números pseudoaleatorios fijos: cada render da lo mismo
+  let semilla = 23;
+  const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+
+  // ---- velocímetro: 0 a 240 km/h en 240° ----
+  const CX = 470, CY = 1010;
+  const angulo = v => -120 + v;    // 1 km/h = 1°
+  for (let v = 0; v <= 240; v += 10) {
+    const a = angulo(v) * Math.PI / 180, grande = v % 20 === 0;
+    const r1 = grande ? 100 : 108, r2 = 120;
+    el("line", {
+      x1: 420 + Math.sin(a) * r1, y1: CY - Math.cos(a) * r1, x2: 420 + Math.sin(a) * r2, y2: CY - Math.cos(a) * r2,
+      stroke: v >= 180 ? "#FF6A3D" : "#CFEFF5", "stroke-width": grande ? 4 : 2,
+    }, $("marcas"));
+    if (v % 40 === 0) {
+      const t = el("text", { x: 420 + Math.sin(a) * 80, y: CY - Math.cos(a) * 80 }, $("numeros"));
+      t.textContent = v;
+    }
+  }
+
+  // ---- niebla: manchones que salen del punto de fuga y se nos vienen encima ----
+  const FUGA = { x: 540, y: 640 };
+  const manchones = [];
+  for (let i = 0; i < 22; i++) {
+    manchones.push({
+      c: el("ellipse", { fill: rnd() < 0.5 ? "#E4E6E2" : "#B9BEC1" }, $("niebla")),
+      ang: -Math.PI * (0.05 + rnd() * 0.9) + (rnd() < 0.5 ? 0 : Math.PI * 0.9), fase: rnd(), r: 40 + rnd() * 60,
+    });
+  }
+  // marcas de la ruta que apenas se ven, viniendo hacia nosotros
+  const marcas = [];
+  for (let i = 0; i < 5; i++) marcas.push({ r: el("polygon", { fill: "#E8E6DC" }, $("ruta")), fase: i / 5 });
+
+  // ---- conductor de espaldas: la nuca asoma sobre el apoyacabezas ----
+  const ESC_C = 1.45;
+  $("conductor").innerHTML =
+    `<g transform="translate(${205 - 200 * ESC_C} ${830 - 190 * ESC_C}) scale(${ESC_C})">${PERSONAJES.armar("conductor", { espalda: true })}</g>`;
+
+  // ---- tiempo ----
+  const mod = (a, n) => ((a % n) + n) % n;
+  const suave = x => x * x * (3 - 2 * x);
+
+  function render(t) {
+    const cuadro = Math.floor(t * FPS_PAPEL);
+    const tp = cuadro / FPS_PAPEL;
+    const k = cuadro % 3;
+
+    const turb = document.querySelector("#corte feTurbulence");
+    if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
+
+    // velocidad: sube toda la toma (la aguja va fluida, no a 12 fps, para que se lea el movimiento)
+    const p = Math.min(t / DURATION, 1);
+    const v = VEL_INICIO + (VEL_FIN - VEL_INICIO) * suave(p) + Math.sin(t * 40) * 1.5;
+    $("aguja").setAttribute("transform", `translate(${CX - 50} ${CY}) rotate(${angulo(v)})`);
+    $("vel").textContent = Math.round(v);
+
+    // cuanto más rápido, más tiembla el auto
+    const fuerza = 0.6 + p * 1.2;
+    const vib = [0, 2, -1, 3, -2, 1][cuadro % 6] * fuerza;
+    // cámara: se acerca de a poco al velocímetro y al parabrisas
+    const z = 1 + 0.08 * p;
+    $("camara").setAttribute("transform",
+      `translate(${[0, 1, -1][k] * fuerza} ${vib}) translate(480 900) scale(${z}) translate(-480 -900)`);
+    $("conductor-mov").setAttribute("transform", `translate(0 ${[0, 2, 0, 3, 1, 2][cuadro % 6]})`);
+    $("volante").setAttribute("transform", `rotate(${Math.sin(tp * 3) * 1.5} 400 1080)`);
+
+    // la niebla se viene encima más rápido a medida que acelera
+    const recorrido = tp * (0.55 + p * 0.5);
+    for (const m of manchones) {
+      const q = mod(m.fase + recorrido, 1);          // 0 = lejos (punto de fuga), 1 = encima nuestro
+      const e = q * q;
+      const d = e * 900;
+      m.c.setAttribute("cx", FUGA.x + Math.cos(m.ang) * d);
+      m.c.setAttribute("cy", FUGA.y - Math.sin(m.ang) * d * 0.45);
+      m.c.setAttribute("rx", m.r * (0.3 + e * 4));
+      m.c.setAttribute("ry", m.r * (0.2 + e * 2.2));
+      m.c.setAttribute("opacity", (0.6 * Math.sin(q * Math.PI)).toFixed(3));
+    }
+    for (const mk of marcas) {
+      const q = mod(mk.fase + tp * 1.6, 1), e = q * q;
+      const y = FUGA.y + 20 + e * 280, w = 2 + e * 26, h = 4 + e * 70;
+      mk.r.setAttribute("points", `${540 - w * 0.4},${y} ${540 + w * 0.4},${y} ${540 + w},${y + h} ${540 - w},${y + h}`);
+      mk.r.setAttribute("opacity", (0.5 * Math.min(1, q * 3)).toFixed(3));
+    }
+  }
+
+  // ---- controles / modo render ----
+  let mode = "anim", start = performance.now();
+  function loop(now) {
+    if (mode === "anim") render(((now - start) / 1000) % DURATION);
+    requestAnimationFrame(loop);
+  }
+  document.querySelectorAll(".controls button").forEach(b => b.addEventListener("click", () => {
+    mode = b.dataset.mode; start = performance.now();
+    document.querySelectorAll(".controls button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    if (mode === "inicio") render(0);
+    if (mode === "final") render(DURATION - 0.001);
+  }));
+  const fixed = new URLSearchParams(location.search).get("t");
+  if (fixed !== null) { mode = "fijo"; document.body.classList.add("fijo"); render(Number(fixed)); }
+  else { render(0); requestAnimationFrame(loop); }
+</script>
+</body>
+</html>
