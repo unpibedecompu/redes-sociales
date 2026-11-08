@@ -49,7 +49,7 @@
 
 ## Historias de los riesgos existenciales
 [x] nuclear weapons
-[ ] biological weapons
+[-] biological weapons
 [ ] chemical weapons
 [ ] second world war
 [ ] ozone layer

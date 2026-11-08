@@ -1,0 +1,12 @@
+- Matthew Meselson (bio):
+    - https://www.britannica.com/biography/Matthew-Stanley-Meselson
+    - https://en.wikipedia.org/wiki/Matthew_Meselson
+    - https://meselsonarchive.hsites.harvard.edu/meselson-bio-and-cv
+- How Meselson learned about the US anthrax program (1963, ACDA, Fort Detrick): https://www.statecraft.pub/p/how-to-ban-biological-weapons
+- Meselson lobby with Kissinger and Nixon:
+    - https://www.statecraft.pub/p/how-to-ban-biological-weapons
+    - https://nsarchive2.gwu.edu/NSAEBB/NSAEBB58/
+    - https://meselsonarchive.hsites.harvard.edu/nixon-decisions-1969-1970
+- Nixon decision (NSDM 35, November 25, 1969): https://history.state.gov/historicaldocuments/frus1969-76ve02/d165
+- Biological Weapons Convention (from the idea to the treaty): https://en.wikipedia.org/wiki/Biological_Weapons_Convention
+- Countries in the BWC: https://en.wikipedia.org/wiki/List_of_parties_to_the_Biological_Weapons_Convention
