@@ -3,9 +3,7 @@
 - Las armas biologicas son un riesgo existencial que se pudo controlar.
 - ¿Por que?¿Comó se controlo?¿Comó es esto aplicable a la IA?
 
-# Script
-
-- Muchas veces evaluamos la historia por lo que paso, pero lo que no paso tambien es igual importante
+# Notes
 
 - Meselson worked with Henry Kissinger under the Nixon administration to convince President Richard Nixon to renounce biological weapons, suspend chemical weapons production, and support an international treaty prohibiting the acquisition of biological agents for hostile purposes, which in 1972 became known as the Biological Weapons Convention.
 
@@ -39,3 +37,13 @@
 - on the convention
   - The Biological Weapons Convention (BWC), or Biological and Toxin Weapons Convention (BTWC), is a disarmament treaty that effectively bans biological and toxin weapons by prohibiting their development, production, acquisition, transfer, stockpiling and use.
   - 189 estados parte
+
+# Script:
+
+- Muchas veces evaluamos la historia por lo que paso, pero lo que no paso tambien es igual importante
+
+- We don't want to make 1 dollar nuclear bombs -> with AI we are doing exactly that
+
+- ¡Bombas nuclear por 1 dolar! (te juro que esta vez no estoy hablando de IA)
+
+- Corria el verano de 1963 cuando un tal Dr. Messelson fue invitado a un complejo militar de EEUU como parte de la agencia de control de armas y desarme. El coronel que lo guiaba fue breve "aca nos dedicamos al desarrollo de antrax, un arma biologica equivalente a una ojiva nuclear, pero mas barata"
