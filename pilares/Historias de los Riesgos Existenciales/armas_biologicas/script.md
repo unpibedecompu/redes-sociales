@@ -3,47 +3,23 @@
 - Las armas biologicas son un riesgo existencial que se pudo controlar.
 - ¿Por que?¿Comó se controlo?¿Comó es esto aplicable a la IA?
 
-# Notes
-
-- Meselson worked with Henry Kissinger under the Nixon administration to convince President Richard Nixon to renounce biological weapons, suspend chemical weapons production, and support an international treaty prohibiting the acquisition of biological agents for hostile purposes, which in 1972 became known as the Biological Weapons Convention.
-
-- In 1963 Meselson served as a resident consultant in the US Arms Control and Disarmament Agency, where he became interested in chemical and biological weapons programs and policies.
-
-- Concluding that biological weapons served no substantial military purpose for the US and that their proliferation would pose a serious threat and that, in years ahead, the exploitation of advanced biology for hostile purposes would be inimical to society generally, he worked to persuade members of the Executive Branch, the Congress and the public that the US had no need for such weapons and that there would be benefits in renouncing them and working for worldwide prohibition.
-
-- ¿funciono? sus investigaciones on-site:
-  - 1970: on behalf of the American Association for the Advancement of Science, Meselson led a team in the Republic of Vietnam in a pilot study of the ecological and health effects of the military use of herbicides. In December 1970, President Richard Nixon ordered a "rapid but orderly" phase-out of herbicide operations in Vietnam.
-  - 1980: Meselson investigated allegations that "yellow rain" was a Soviet toxin weapon being used against Hmong tribespeople in Laos. Meselson and his colleagues argued that the allegations were mistaken.
-  - 1980: Meselson served as a resident consultant to the CIA investigating a major outbreak of anthrax among people in the Soviet city of Sverdlovsk. After the collapse of the Soviet Union, he was allowed to bring a team to Sverdlovsk in 1992 and again in 1993. Their reports conclusively showed that the official Soviet explanation was wrong and that the outbreak was caused by the release of an anthrax aerosol at a military biological facility in the city.
-
-- On messelson lobby:
-  - But the idea that you could introduce a strategic weapon that anybody could have? What if you could make hydrogen bombs for a dollar a piece? Oh my God! 
-  - All that I'd have to do is get to the person who could stop it. Who's that? It was only one person, that's President Johnson. (1963)
-  - The German ask for US chemical weapons, then the topic and Messelson paper went from niche to the committe of principals
-  - Messelson was friends with Kissiger
-  - Kissiger is named national security advisor by Nixon
-  - Messelson gave a book to Kissiger about orrible organism that comes back from some planet, then he gave it to the president. That got him interested on bioweapons
-  - Messelson talk to senator Fulbright, then to an entire commite
-  - There was a proposal from the UK and work on Chemical weapons convetions "which had a verification annex, with real inspection. Russian guys could come and watch us destroy our chemical weapons."
-  - "What do you do when you come to a chemical manufacturer's facility to show that it's not making chemical weapons? Do you allow them to take samples? What kind of samples? Do you allow them to look at everything? What kind of information do you give them? These details are all in the treaty, but those details were partly worked out with help, because what do the diplomats know about chemistry? "
-  - Nixon read Messelson paper on toxin to decide to prohibit them, wheter chemical or biological.
-  - “The only thing that mattered to the president was that section, the authority and credibility of the president. Because of that, President Nixon decided, okay, prohibit them in all occasions. Besides, who gives a shit about them anyway?”
-  - on how easy is to create bioweapons: keep the incentive low, by making it clear that there would be bad consequences if you did it, that they're not very predictable and might backfire, all of that.
-  - On public communication:
-    - "In a sense, the best thing is: don't talk about it."
-    - "Yes. Most of the things I wrote were for private circulation. I never wrote an article or any kind of paper saying they're terrible, let's worry about them. Never."
-  - What lessons are there from chemical and biological deterrence for more contemporary proliferation worries about AI and other threats? -> You used the word deterrence. I've never had anything to do with deterrence. Nothing I ever wrote said, “Here's how to deter it.” What I was writing is, don't have it in the first place.
-  - The one advice I would give, I'm not sure is possible, it's very simple: Go to the top.
-- on the convention
-  - The Biological Weapons Convention (BWC), or Biological and Toxin Weapons Convention (BTWC), is a disarmament treaty that effectively bans biological and toxin weapons by prohibiting their development, production, acquisition, transfer, stockpiling and use.
-  - 189 estados parte
-
 # Script:
 
-- Muchas veces evaluamos la historia por lo que paso, pero lo que no paso tambien es igual importante
+[Tirado en el pasto, toma desde arriba plano medio]
 
-- We don't want to make 1 dollar nuclear bombs -> with AI we are doing exactly that
-
-- ¡Bombas nuclear por 1 dolar! (te juro que esta vez no estoy hablando de IA)
-
-- Corria el verano de 1963 cuando un tal Dr. Messelson fue invitado a un complejo militar de EEUU como parte de la agencia de control de armas y desarme. El coronel que lo guiaba fue breve "aca nos dedicamos al desarrollo de antrax, un arma biologica equivalente a una ojiva nuclear, pero mas barata"
+- Persona 2: ¿Por que no tenemos bombas nucleares por 1 dolar?
+- Persona 1: por el Dr. Messelson [imagen de Messelson]
+- Persona 2: ¿Comó?
+- Persona 1: En el verano del 63' [disco fito?] lo invitaron a un complejo militar de EEUU. El coronel que lo guiaba le comento muy relajadamente:
+- Coronel: "aca nos dedicamos al desarrollo de armas biologicas que puedan causar el mismo daño que una bomba nuclear, pero a muy bajo costo". [animación hablando con el fondo del pasto]
+- Persona 1: Messelson rapidamente se dio cuenta que un factor importante de las armas de destrucción masiva, es que sean costosas de hacer, para que pocos puedan desarrollarlas.
+- Persona 2: Ademas de que las armas biologicas no distiguen nacionalidad, cuando la usas atacan a todos.
+- Persona 1: exacto, en pocas palabras, el desarrollo de armas biologicas es un riego existencial.
+- Persona 2: Y como hizo Messelson para evitar que se creen?
+- Persona 1: Era amigo de Kissinger, concejero del presidente Nixon. Despues de años de idas y vuelta, logro convencerlo de frenar.
+- Persona 2: Y los demas paises?
+- Persona 1: Esa es la parte interesante, en plena guerra fria, EEUU y la URSS acordaron no desarrollarlas, junto con otros 20 paises. [imagen del BWC]
+- Persona 2: claro, se dieron cuenta que no le convenia a nadie.
+- Persona 1: Algo asi, [imagen de Biopreparat]. Lo importante es que al dia de hoy 198 paises firmaron la convención de armas biologicas, y desarrollarlas se considera ilegal e inmoral a nivel mundial.
+- Persona 2: Y con el tema este de la IA se podria hacer lo mismo, no?
+- Persona 1: si el mundo se da cuenta que el desarrollo acelerado de la IA es un riesgo existencial, si, por supuesto que si. [en el primer si se abre el plano para mostrar a las dos personas a la vez (y al coronel?)]
