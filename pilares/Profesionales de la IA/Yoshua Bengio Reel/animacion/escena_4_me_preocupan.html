@@ -146,13 +146,13 @@
     <g clip-path="url(#sentado)">
       <!-- los chicos, a la derecha de Yoshua: el nieto en su butaca queda casi tapado por el conductor -->
       <g id="chicos-mov" clip-path="url(#sentados-chicos)">
-        <path class="papel" d="M890 960 Q1010 920 1130 960 L1150 1720 L870 1720 Z" fill="#5A4A6A"/>
+        <path class="papel" d="M815 960 Q935 920 1055 960 L1075 1720 L795 1720 Z" fill="#5A4A6A"/>
         <g id="nieto"></g>
         <g id="hijo"></g>
         <g id="hija"></g>
         <g stroke="#1F2125" stroke-width="22" stroke-linecap="round" opacity="0.95">
-          <path d="M720 1250 L590 1500"/>
-          <path d="M900 1260 L780 1500"/>
+          <path d="M690 1250 L560 1500"/>
+          <path d="M845 1260 L725 1500"/>
         </g>
       </g>
       <g id="yoshua-mov"><g id="yoshua"></g></g>
@@ -207,7 +207,8 @@
 <script src="personajes.js"></script>
 <script>
   // "I worry about them." — mismo plano que la escena 1, con los chicos.
-  const DURATION = 3.0;
+  // tiempos de edición/intro_crudo.mp4 (palabras con vosk): "I worry about them." 9.60-11.27 s
+  const DURATION = 1.67;
   const FPS_PAPEL = 12;        // stop motion: el papel "tiembla" 12 veces por segundo
 
   const NS = "http://www.w3.org/2000/svg";
@@ -263,9 +264,10 @@
   }
   // los chicos: los mismos de la escena 3
   const CHICOS = {
-    hija:  { x: 650, y: 1110, esc: 1.3 },
-    hijo:  { x: 835, y: 1120, esc: 1.25 },
-    nieto: { x: 1000, y: 1190, esc: 1.1 },
+    // un poco más juntos que en la escena 3: el hijo y el nieto no quedan abajo de los botones de Instagram
+    hija:  { x: 620, y: 1110, esc: 1.3 },
+    hijo:  { x: 780, y: 1120, esc: 1.25 },
+    nieto: { x: 925, y: 1190, esc: 1.1 },
   };
   const ultimoChico = {};
   function dibujarChico(nombre, opts) {
@@ -294,7 +296,7 @@
     if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
 
     // cámara: se acerca despacio a Yoshua; vibración del auto
-    const z = 1 + 0.07 * (t / DURATION);
+    const z = 1 + 0.04 * (t / DURATION);
     const vib = [0, 2, -1, 3, -2, 1][cuadro % 6];
     $("camara").setAttribute("transform",
       `translate(0 ${vib}) translate(540 1050) scale(${z}) translate(-540 -1050)`);
@@ -331,8 +333,8 @@
     dibujarChico("nieto", { boca: 1, mirar: -1 });
     // Yoshua preocupado desde el principio: mira a cámara, después a los chicos, y vuelve a cámara
     const opts = {
-      mirar: tp > 1.0 && tp < 2.0 ? 1 : 0,
-      parpadeo: (tp > 0.6 && tp < 0.7) || (tp > 2.5 && tp < 2.6),
+      mirar: tp > 0.45 && tp < 1.15 ? 1 : 0,
+      parpadeo: (tp > 0.25 && tp < 0.35) || (tp > 1.35 && tp < 1.45),
       cejas: 4,
       boca: 1,
     };

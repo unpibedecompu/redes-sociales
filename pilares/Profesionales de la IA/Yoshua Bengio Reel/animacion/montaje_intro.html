@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Montaje intro</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px; background: #2A2A28; color: #FAF9F5;
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  #cuadro {
+    position: relative; width: min(100%, 1080px, calc((100vh - 150px) * 1080 / 1920)); aspect-ratio: 1080 / 1920;
+    overflow: hidden; background: #000;
+  }
+  /* 1080x1920 escalado al cuadro */
+  #lienzo { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+  #lienzo > iframe, #lienzo > video, #lienzo > img { position: absolute; inset: 0; width: 1080px; height: 1920px; border: 0; }
+  #lienzo video { object-fit: cover; }
+  #overlay { opacity: 0.6; pointer-events: none; display: none; }
+  .con-overlay #overlay { display: block; }
+  #subtitulo {
+    position: absolute; left: 0; right: 0; bottom: 380px; text-align: center; pointer-events: none;
+    font: bold 46px Tahoma, Verdana, sans-serif; color: #fff; text-shadow: 0 3px 8px #000; padding: 0 140px 0 80px;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; width: 100%; max-width: 1080px; }
+  .controls button {
+    font: inherit; padding: 6px 14px; border-radius: 8px; border: 1px solid #555;
+    background: #3A3A37; color: #FAF9F5; cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: #D97757; border-color: #D97757; }
+  #linea { position: relative; flex: 1; min-width: 200px; height: 34px; }
+  #linea input { width: 100%; accent-color: #D97757; margin: 0; }
+  #tramos { position: relative; height: 12px; display: flex; }
+  #tramos span { height: 100%; border-right: 2px solid #2A2A28; }
+  #reloj { font-family: "Courier New", monospace; font-size: 13px; color: #A8A69E; min-width: 120px; }
+</style>
+</head>
+<body>
+
+<!--
+  Montaje del hook: el video crudo (edición/intro_crudo.mp4) con las escenas animadas cortando arriba
+  en los tiempos de cada frase (palabras sacadas del audio con vosk). Sirve para chequear sincro, no es el render final.
+-->
+<div id="cuadro">
+  <div id="lienzo">
+    <video id="video" src="../edición/intro_crudo.mp4" playsinline preload="auto"></video>
+    <img id="overlay" src="../../../recursos/IG-Reels-Overlay-1080x1920.png" alt="">
+    <div id="subtitulo"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button id="play">▶ Reproducir</button>
+  <div id="linea">
+    <div id="tramos"></div>
+    <input id="t" type="range" min="0" max="13.13" step="0.01" value="0" aria-label="Tiempo">
+  </div>
+  <span id="reloj">0.00 s</span>
+  <button id="b-overlay" aria-pressed="false">Overlay IG</button>
+  <button id="b-subs" aria-pressed="true">Subtítulos</button>
+</div>
+
+<script>
+  // [inicio, fin, escena (null = video real), color en la línea de tiempo]
+  const TRAMOS = [
+    [0.00, 2.16, null, "#5A6E8A"],                                  // "I often describe our situation"
+    [2.16, 2.97, "escena_1_auto_en_la_niebla.html", "#D97757"],     // "as a car"
+    [2.97, 5.58, "escena_2_pov_yoshua.html", "#E0B341"],           // "speeding blindly into dense fog."
+    [5.58, 9.60, "escena_3_los_chicos.html", "#6A9BCC"],           // "Beside me in that car are my children and my grandson."
+    [9.60, 11.27, "escena_4_me_preocupan.html", "#9BE15D"],         // "I worry about them."
+    [11.27, 13.14, null, "#5A6E8A"],                                // "I worry about their future."
+  ];
+  const FRASES = [
+    [0.00, 2.16, "I often describe our situation"], [2.16, 5.58, "as a car speeding blindly into dense fog."],
+    [5.58, 7.10, "Beside me in that car"], [7.10, 9.60, "are my children and my grandson."],
+    [9.60, 11.27, "I worry about them."], [11.27, 13.14, "I worry about their future."],
+  ];
+  const $ = id => document.getElementById(id);
+  const video = $("video");
+  const FIN = 13.13;
+
+  // un iframe por escena, en modo cuadro fijo (?t=), y se dibuja llamando a su render(t)
+  const marcos = {};
+  for (const [, , src] of TRAMOS) {
+    if (!src || marcos[src]) continue;
+    const f = document.createElement("iframe");
+    f.src = src + "?t=0";
+    f.style.visibility = "hidden";
+    $("lienzo").insertBefore(f, $("overlay"));
+    marcos[src] = f;
+  }
+  for (const [a, b, , c] of TRAMOS) {
+    const s = document.createElement("span");
+    s.style.width = ((b - a) / FIN * 100) + "%";
+    s.style.background = c;
+    $("tramos").appendChild(s);
+  }
+
+  function escalar() { $("lienzo").style.transform = `scale(${$("cuadro").clientWidth / 1080})`; }
+  new ResizeObserver(escalar).observe($("cuadro"));
+
+  let arrastrando = false;
+  function dibujar(t) {
+    const tramo = TRAMOS.find(([a, b]) => t >= a && t < b) || TRAMOS[TRAMOS.length - 1];
+    const [a, b, src] = tramo;
+    for (const [s, f] of Object.entries(marcos)) f.style.visibility = s === src ? "visible" : "hidden";
+    video.style.visibility = src ? "hidden" : "visible";
+    if (src) {
+      const w = marcos[src].contentWindow;
+      try { w.render(Math.min(t - a, w.eval("DURATION") - 0.001)); } catch (e) {}
+    }
+    const fr = FRASES.find(([x, y]) => t >= x && t < y);
+    $("subtitulo").textContent = fr ? fr[2] : "";
+    $("reloj").textContent = `${t.toFixed(2)} s` + (src ? `  ·  ${src.replace(/^escena_(\d).*/, "escena $1")} ${(t - a).toFixed(2)}` : "  ·  video");
+    if (!arrastrando) $("t").value = t;
+  }
+  function loop() { dibujar(video.currentTime); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+
+  $("play").addEventListener("click", () => video.paused ? video.play() : video.pause());
+  video.addEventListener("play", () => $("play").textContent = "⏸ Pausa");
+  video.addEventListener("pause", () => $("play").textContent = "▶ Reproducir");
+  $("t").addEventListener("input", () => { arrastrando = true; video.currentTime = Number($("t").value); });
+  $("t").addEventListener("change", () => { arrastrando = false; });
+  for (const [id, cls, el] of [["b-overlay", "con-overlay", $("cuadro")]]) {
+    $(id).addEventListener("click", () => {
+      const on = $(id).getAttribute("aria-pressed") !== "true";
+      $(id).setAttribute("aria-pressed", on);
+      el.classList.toggle(cls, on);
+    });
+  }
+  $("b-subs").addEventListener("click", () => {
+    const on = $("b-subs").getAttribute("aria-pressed") !== "true";
+    $("b-subs").setAttribute("aria-pressed", on);
+    $("subtitulo").style.display = on ? "" : "none";
+  });
+</script>
+</body>
+</html>

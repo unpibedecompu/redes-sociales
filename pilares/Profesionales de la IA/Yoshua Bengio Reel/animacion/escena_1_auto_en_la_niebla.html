@@ -192,7 +192,8 @@
 <script src="personajes.js"></script>
 <script>
   // Hook: "I often describe our situation as a car..." — adentro del auto, de noche, en la niebla.
-  const DURATION = 3.5;
+  // tiempos de edición/intro_crudo.mp4 (palabras con vosk): "as a car" 2.16-2.97 s
+  const DURATION = 0.85;
   const FPS_PAPEL = 12;        // stop motion: el papel "tiembla" 12 veces por segundo
 
   const NS = "http://www.w3.org/2000/svg";
@@ -264,7 +265,7 @@
     if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
 
     // cámara: se acerca despacio a Yoshua; vibración del auto
-    const z = 1 + 0.07 * (t / DURATION);
+    const z = 1 + 0.03 * (t / DURATION);
     const vib = [0, 2, -1, 3, -2, 1][cuadro % 6];
     $("camara").setAttribute("transform",
       `translate(0 ${vib}) translate(420 1010) scale(${z}) translate(-420 -1010)`);
@@ -296,9 +297,9 @@
 
     // Yoshua: mira adelante (a cámara), parpadea; se preocupa y mira por su ventanilla
     const opts = {
-      mirar: tp > 1.7 && tp < 2.9 ? -1 : 0,
-      parpadeo: (tp > 0.9 && tp < 1.0) || (tp > 3.0 && tp < 3.1),
-      cejas: tp > 1.5 ? 4 : 0,
+      mirar: 0,
+      parpadeo: tp > 0.15 && tp < 0.25,
+      cejas: tp > 0.45 ? 4 : 0,
     };
     const clave = JSON.stringify(opts);
     if (clave !== ultimoYoshua) { dibujarYoshua(opts); ultimoYoshua = clave; }

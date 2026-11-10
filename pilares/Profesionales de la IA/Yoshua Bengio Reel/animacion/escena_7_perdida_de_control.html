@@ -89,19 +89,19 @@
 
     <!-- columna de la pared con el botón de emergencia -->
     <g class="papel">
-      <rect x="-40" y="-100" width="220" height="1660" fill="#3A444E"/>
-      <rect x="160" y="-100" width="20" height="1660" fill="#2A323A"/>
+      <rect x="-40" y="-100" width="245" height="1660" fill="#3A444E"/>
+      <rect x="185" y="-100" width="20" height="1660" fill="#2A323A"/>
       <!-- cartel -->
-      <rect x="20" y="880" width="140" height="56" rx="4" fill="#E0B341"/>
+      <rect x="45" y="880" width="140" height="56" rx="4" fill="#E0B341"/>
       <!-- caja del botón -->
-      <rect x="15" y="980" width="150" height="170" rx="8" fill="#E0B341"/>
-      <rect x="15" y="1135" width="150" height="15" rx="4" fill="#B88E22"/>
+      <rect x="40" y="980" width="150" height="170" rx="8" fill="#E0B341"/>
+      <rect x="40" y="1135" width="150" height="15" rx="4" fill="#B88E22"/>
       <!-- baliza -->
-      <rect x="55" y="640" width="70" height="22" rx="4" fill="#2E3740"/>
+      <rect x="80" y="640" width="70" height="22" rx="4" fill="#2E3740"/>
     </g>
-    <text x="90" y="918" text-anchor="middle" font-family="Courier New, monospace" font-weight="bold" font-size="30" fill="#141413">STOP</text>
-    <path id="baliza-domo" d="M63 640 Q63 586 90 586 Q117 586 117 640 Z" fill="#FF6B5E"/>
-    <circle id="baliza-brillo" cx="90" cy="620" r="560" fill="url(#baliza-luz)" style="mix-blend-mode:screen"/>
+    <text x="115" y="918" text-anchor="middle" font-family="Courier New, monospace" font-weight="bold" font-size="30" fill="#141413">STOP</text>
+    <path id="baliza-domo" d="M88 640 Q88 586 115 586 Q142 586 142 640 Z" fill="#FF6B5E"/>
+    <circle id="baliza-brillo" cx="115" cy="620" r="560" fill="url(#baliza-luz)" style="mix-blend-mode:screen"/>
     <!-- el botón rojo -->
     <g id="boton"></g>
 
@@ -162,7 +162,7 @@
   // ---- pared de racks (de frente) con leds ----
   const leds = [];
   for (let i = 0; i < 5; i++) {
-    const x = 190 + i * 196, y = 100, w = 180, h = 1460;
+    const x = 215 + i * 196, y = 100, w = 180, h = 1460;
     el("rect", { x, y, width: w, height: h, fill: "#161C22" }, $("racks"));
     for (let u = 0; u < 25; u++) {
       const yy = y + 24 + u * 57;
@@ -177,7 +177,7 @@
   for (let i = -3; i <= 7; i++) el("line", { x1: 540 + (i - 2) * 200, y1: 1560, x2: 540 + (i - 2) * 420, y2: 1920 }, $("baldosas"));
 
   // ---- botón rojo de la pared, de frente: al apretarlo se achica y se oscurece ----
-  const BX = 90, BY = 1060;
+  const BX = 115, BY = 1060;
   function dibujarBoton(hundido) {
     const r = hundido ? 46 : 54;
     $("boton").innerHTML = `<g filter="url(#corte)">` +
@@ -249,7 +249,7 @@
     // cámara: se acerca de a poco; un sacudón chico en cada apretón
     const z = 1 + 0.08 * suave(t / DURATION);
     const sx = golpe ? [5, -4, 3][k] : 0;
-    $("camara").setAttribute("transform", `translate(${sx} 0) translate(60 1200) scale(${z}) translate(-60 -1200)`);
+    $("camara").setAttribute("transform", `translate(${sx} 0) translate(115 1200) scale(${z}) translate(-115 -1200)`);
 
     // leds y baliza
     for (const l of leds) {
@@ -264,7 +264,7 @@
     // Yoshua camina para atrás (hacia la pared), cada vez más despacio; balanceo de papel al dar cada paso
     const anda = 1 - Math.pow(1 - tp / DURATION, 2);
     const paso = Math.floor(tp * 3) % 2;                      // un paso cada 1/3 s
-    const yx = lerp(590, 490, anda);
+    const yx = lerp(590, 470, anda);
     const inclina = (paso ? 2 : -2) + (hundido ? -3 : 0);    // se tira para atrás al apretar
     const sube = (Math.floor(tp * 6) % 2) * -8;
     dibujarYoshua({ cejas: 4, boca: tp > 2.6 ? 2 : 1, mirar: 1, parpadeo: tp > 1.7 && tp < 1.8 });
@@ -287,8 +287,8 @@
     // robot: entra por la derecha y se acerca de costado, despacio y a los tirones (stop motion),
     // con los brazos quietos; se frena sin tocar a Yoshua
     const q = tramo(tp, 0, 4.6);
-    const S = 1.75;
-    const cx = lerp(1260, 900, 1 - Math.pow(1 - q, 1.6)), cy = 960 + [0, -3, -1, -4, 0, -2][cuadro % 6] * S;
+    const S = 1.45;     // más chico que Yoshua y lejos del borde: no se mete abajo de los botones de Instagram
+    const cx = lerp(1200, 840, 1 - Math.pow(1 - q, 1.6)), cy = 900 + [0, -3, -1, -4, 0, -2][cuadro % 6] * S;
     $("robot").innerHTML = ROBOT.svg({ cx, cy, S, mirarX: -1, mirarY: 0.3, llama: [1, 0.8, 0.9][k] });
     $("robot-brillo").setAttribute("cx", cx);
     $("robot-brillo").setAttribute("cy", cy);

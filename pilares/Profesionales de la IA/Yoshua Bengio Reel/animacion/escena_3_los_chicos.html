@@ -157,7 +157,9 @@
 <script>
   // "Beside me in that car are my children and my grandson."
   // Primer plano de Yoshua preocupado; la cámara se corre a dos de los chicos y después al tercero.
-  const DURATION = 4.0;
+  // tiempos de edición/intro_crudo.mp4 (palabras con vosk): "Beside me in that car" 5.58-7.05, "are my children" 7.14-8.46,
+  // "and my grandson" 8.55-9.54 s
+  const DURATION = 4.02;
   const FPS_PAPEL = 12;        // stop motion: el papel "tiembla" 12 veces por segundo
 
   const NS = "http://www.w3.org/2000/svg";
@@ -211,9 +213,9 @@
   // ---- recorrido de la cámara (centro x del cuadro en el panorama) ----
   const suave = x => x * x * (3 - 2 * x);
   const TRAMOS = [
-    [0.0, 540], [1.0, 540],          // Yoshua
-    [1.7, 1475], [2.6, 1475],        // hija e hijo
-    [3.3, 2350], [4.0, 2350],        // nieto
+    [0.0, 540], [1.35, 540],         // Yoshua: "Beside me in that car"
+    [1.9, 1545], [2.85, 1545],       // hija e hijo: "are my children"
+    [3.3, 2350], [4.02, 2350],       // nieto: "and my grandson"
   ];
   function camaraX(t) {
     for (let i = 1; i < TRAMOS.length; i++) {
@@ -250,10 +252,10 @@
     $("barrido").setAttribute("y", -700 + mod(tp / 1.6, 1) * 2600);
 
     // Yoshua preocupado; al final de su toma mira hacia los chicos (y la cámara lo sigue)
-    dibujar("yoshua", { cejas: 4, boca: 1, mirar: tp > 0.6 ? 1 : 0, parpadeo: tp > 0.3 && tp < 0.4 });
+    dibujar("yoshua", { cejas: 4, boca: 1, mirar: tp > 1.0 ? 1 : 0, parpadeo: tp > 0.3 && tp < 0.4 });
     // hija mira por la ventanilla, hijo la mira a ella; los dos serios
     dibujar("hija", { boca: 1, mirar: -1, parpadeo: tp > 2.4 && tp < 2.5 });
-    dibujar("hijo", { boca: 1, mirar: -0.8, cejas: 4, parpadeo: tp > 1.4 && tp < 1.5 });
+    dibujar("hijo", { boca: 1, mirar: -0.8, cejas: 4, parpadeo: tp > 2.2 && tp < 2.3 });
     // el nieto, despierto, mira hacia el abuelo
     dibujar("nieto", { boca: 1, mirar: -1, parpadeo: tp > 3.6 && tp < 3.7 }, 4);
   }

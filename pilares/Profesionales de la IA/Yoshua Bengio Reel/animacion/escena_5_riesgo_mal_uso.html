@@ -72,13 +72,15 @@
     <clipPath id="vaso-adentro"><path d="M812 1150 L968 1150 L962 1290 Q962 1298 954 1298 L826 1298 Q818 1298 818 1290 Z"/></clipPath>
   </defs>
 
+  <!-- todo corrido 130 px a la izquierda: el vaso y los virus quedan fuera de la columna de botones de Instagram -->
+  <g transform="translate(-130 0)">
   <g id="camara">
     <!-- pared de azulejos -->
-    <rect x="-100" y="-100" width="1280" height="2120" fill="#1F2B33"/>
+    <rect x="-100" y="-100" width="1500" height="2120" fill="#1F2B33"/>
     <g id="azulejos" stroke="#263640" stroke-width="4"></g>
 
     <!-- cartel de riesgo biológico -->
-    <g class="papel" transform="translate(190 330)">
+    <g class="papel" transform="translate(330 330)">
       <polygon points="0,-120 110,80 -110,80" fill="#F2C230"/>
       <polygon points="0,-92 86,64 -86,64" fill="none" stroke="#141413" stroke-width="10"/>
       <g fill="none" stroke="#141413" stroke-width="9">
@@ -117,8 +119,8 @@
 
     <!-- mesada -->
     <g class="papel">
-      <rect x="-40" y="1290" width="1160" height="34" fill="#C9C6BD"/>
-      <rect x="-40" y="1324" width="1160" height="700" fill="#2E3D45"/>
+      <rect x="-40" y="1290" width="1380" height="34" fill="#C9C6BD"/>
+      <rect x="-40" y="1324" width="1380" height="700" fill="#2E3D45"/>
       <rect x="40" y="1380" width="460" height="460" rx="10" fill="#33444D"/>
       <rect x="580" y="1380" width="460" height="460" rx="10" fill="#33444D"/>
       <rect x="440" y="1580" width="16" height="70" rx="6" fill="#9AA3A8"/>
@@ -152,6 +154,7 @@
     <g id="tubo"></g>
     <g id="vapores" filter="url(#vapor-suave)"></g>
     <g id="virus"></g>
+  </g>
   </g>
 
   <rect width="1080" height="1920" fill="url(#vineta)"/>
@@ -198,8 +201,8 @@
     parseInt(c1.slice(1 + i, 3 + i), 16) * (1 - k) + parseInt(c2.slice(1 + i, 3 + i), 16) * k).toString(16).padStart(2, "0")).join("");
 
   // azulejos
-  for (let x = 0; x <= 1080; x += 90) el("line", { x1: x, y1: 0, x2: x, y2: 1300 }, $("azulejos"));
-  for (let y = 0; y <= 1300; y += 90) el("line", { x1: 0, y1: y, x2: 1080, y2: y }, $("azulejos"));
+  for (let x = 0; x <= 1260; x += 90) el("line", { x1: x, y1: 0, x2: x, y2: 1300 }, $("azulejos"));
+  for (let y = 0; y <= 1300; y += 90) el("line", { x1: 0, y1: y, x2: 1260, y2: y }, $("azulejos"));
 
   // tubos de la gradilla
   [["#D97757", 0.6], ["#6A9BCC", 0.4], ["#E0B341", 0.7], ["#C2463C", 0.5]].forEach(([c, n], i) => {
