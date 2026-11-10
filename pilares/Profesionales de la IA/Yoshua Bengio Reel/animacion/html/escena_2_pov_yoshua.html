@@ -191,7 +191,7 @@
   <button data-mode="final" aria-pressed="false">Cuadro final</button>
 </div>
 
-<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="../../../../../animations/paper_cutoff_characters/parts.js"></script>
 <script src="personajes.js"></script>
 <script>
   // "...speeding blindly into dense fog." — lo que ve Yoshua desde atrás.
@@ -262,25 +262,25 @@
   function render(t) {
     const cuadro = Math.floor(t * FPS_PAPEL);
     const tp = cuadro / FPS_PAPEL;
-    const k = cuadro % 3;
+    const k = mod(cuadro, 3);
 
     const turb = document.querySelector("#corte feTurbulence");
     if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
 
     // velocidad: sube toda la toma (la aguja va fluida, no a 12 fps, para que se lea el movimiento)
-    const p = Math.min(t / DURATION, 1);
-    const v = VEL_INICIO + (VEL_FIN - VEL_INICIO) * suave(p) + Math.sin(t * 40) * 1.5;
+    const p = t / DURATION;                  // sin tope: el zoom y la sacudida siguen fuera de la toma (colas para editar)
+    const v = VEL_INICIO + (VEL_FIN - VEL_INICIO) * suave(Math.min(Math.max(p, 0), 1)) + Math.sin(t * 40) * 1.5;
     $("aguja").setAttribute("transform", `translate(${CX - 50} ${CY}) rotate(${angulo(v)})`);
     $("vel").textContent = Math.round(v);
 
     // cuanto más rápido, más tiembla el auto
     const fuerza = 0.6 + p * 1.2;
-    const vib = [0, 2, -1, 3, -2, 1][cuadro % 6] * fuerza;
+    const vib = [0, 2, -1, 3, -2, 1][mod(cuadro, 6)] * fuerza;
     // cámara: se acerca de a poco al velocímetro y al parabrisas
     const z = 1 + 0.08 * p;
     $("camara").setAttribute("transform",
       `translate(${[0, 1, -1][k] * fuerza} ${vib}) translate(480 900) scale(${z}) translate(-480 -900)`);
-    $("conductor-mov").setAttribute("transform", `translate(0 ${[0, 2, 0, 3, 1, 2][cuadro % 6]})`);
+    $("conductor-mov").setAttribute("transform", `translate(0 ${[0, 2, 0, 3, 1, 2][mod(cuadro, 6)]})`);
     $("volante").setAttribute("transform", `rotate(${Math.sin(tp * 3) * 1.5} 400 1080)`);
 
     // la niebla se viene encima más rápido a medida que acelera

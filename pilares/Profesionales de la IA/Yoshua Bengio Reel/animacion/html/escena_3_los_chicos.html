@@ -152,7 +152,7 @@
   <button data-mode="final" aria-pressed="false">Cuadro final</button>
 </div>
 
-<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="../../../../../animations/paper_cutoff_characters/parts.js"></script>
 <script src="personajes.js"></script>
 <script>
   // "Beside me in that car are my children and my grandson."
@@ -230,13 +230,13 @@
   function render(t) {
     const cuadro = Math.floor(t * FPS_PAPEL);
     const tp = cuadro / FPS_PAPEL;
-    const k = cuadro % 3;
+    const k = mod(cuadro, 3);
 
     const turb = document.querySelector("#corte feTurbulence");
     if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
 
     // la cámara se corre por el asiento (suave), con la vibración del auto
-    const vib = [0, 2, -1, 3, -2, 1][cuadro % 6];
+    const vib = [0, 2, -1, 3, -2, 1][mod(cuadro, 6)];
     const z = 1 + 0.03 * Math.sin(t / DURATION * Math.PI);
     $("camara").setAttribute("transform", `translate(0 ${vib}) translate(540 1100) scale(${z}) translate(-540 -1100)`);
     $("panorama").setAttribute("transform", `translate(${540 - camaraX(t)} 0)`);

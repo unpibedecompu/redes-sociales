@@ -113,7 +113,7 @@
   <button data-mode="final" aria-pressed="false">Cuadro final</button>
 </div>
 
-<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="../../../../../animations/paper_cutoff_characters/parts.js"></script>
 <script src="personajes.js"></script>
 <script src="robot.js"></script>
 <script>
@@ -141,6 +141,7 @@
   let semilla = 59;
   const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
   const clamp01 = x => Math.min(1, Math.max(0, x));
+  const mod = (a, n) => ((a % n) + n) % n;   // módulo que no da negativo (t < 0 en las colas para editar)
   const tramo = (t, a, b) => clamp01((t - a) / (b - a));
   const suave = x => x * x * (3 - 2 * x);
 
@@ -217,13 +218,13 @@
   function render(t) {
     const cuadro = Math.floor(t * FPS_PAPEL);
     const tp = cuadro / FPS_PAPEL;
-    const k = cuadro % 3;
+    const k = mod(cuadro, 3);
 
     const turb = document.querySelector("#corte feTurbulence");
     if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
 
     // cámara: se acerca al robot
-    const z = 1 + 0.12 * suave(t / DURATION);
+    const z = 1 + 0.12 * suave(clamp01(t / DURATION));
     $("camara").setAttribute("transform", `translate(540 1150) scale(${z}) translate(-540 -1150)`);
 
     for (const p of pantallas) {
@@ -241,13 +242,13 @@
       });
       // un cuadro de estática cuando cambia la toma
       p.estatica.setAttribute("opacity", Math.abs(tp - p.cambia) < 0.09 ? 0.85 : 0);
-      p.rec.setAttribute("opacity", Math.floor(tp * 2) % 2 ? 0.3 : 1);
+      p.rec.setAttribute("opacity", mod(Math.floor(tp * 2), 2) ? 0.3 : 1);
       p.hora.textContent = "06/11/2026  " + reloj(p.base + Math.floor(tp));
     }
 
     // robot de espaldas, mirando de una pantalla a otra
     const mira = Math.sin(tp * 1.6) * 24;
-    const robot = ROBOT.svg({ cx: 540 + mira, cy: 1330 + [0, -3, -1, -4, 0, -2][cuadro % 6], S: 3.2, llama: [1, 0.8, 0.9][k] });
+    const robot = ROBOT.svg({ cx: 540 + mira, cy: 1330 + [0, -3, -1, -4, 0, -2][mod(cuadro, 6)], S: 3.2, llama: [1, 0.8, 0.9][k] });
     $("robot").innerHTML = robot;
     $("robot-halo").innerHTML = robot;
   }

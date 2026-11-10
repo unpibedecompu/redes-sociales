@@ -21,7 +21,3 @@ Adobe Premiere Pro Captured and Generated/
 # Python bytecode caches
 __pycache__/
 *.py[cod]
-
-# Explorador: dependencias de node y mp4 renderizados
-explorador/node_modules/
-explorador/renders/

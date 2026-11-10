@@ -1,8 +1,0 @@
-{
-  "name": "explorador",
-  "private": true,
-  "description": "Render de animaciones a mp4 para el explorador (Playwright Firefox: Chromium se cae en proot)",
-  "dependencies": {
-    "playwright": "1.65.0"
-  }
-}

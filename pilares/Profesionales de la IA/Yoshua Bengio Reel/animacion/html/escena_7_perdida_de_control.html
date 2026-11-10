@@ -126,7 +126,7 @@
   <button data-mode="final" aria-pressed="false">Cuadro final</button>
 </div>
 
-<script src="../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="../../../../../animations/paper_cutoff_characters/parts.js"></script>
 <script src="personajes.js"></script>
 <script src="robot.js"></script>
 <script>
@@ -154,6 +154,7 @@
   let semilla = 73;
   const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
   const clamp01 = x => Math.min(1, Math.max(0, x));
+  const mod = (a, n) => ((a % n) + n) % n;   // módulo que no da negativo (t < 0 en las colas para editar)
   const tramo = (t, a, b) => clamp01((t - a) / (b - a));
   const suave = x => x * x * (3 - 2 * x);
   const lerp = (a, b, k) => a + (b - a) * k;
@@ -237,7 +238,7 @@
   function render(t) {
     const cuadro = Math.floor(t * FPS_PAPEL);
     const tp = cuadro / FPS_PAPEL;
-    const k = cuadro % 3;
+    const k = mod(cuadro, 3);
 
     const turb = document.querySelector("#corte feTurbulence");
     if (turb) turb.setAttribute("seed", [7, 19, 42][k]);
@@ -247,7 +248,7 @@
     const golpe = hundido && tp - ap < 1 / FPS_PAPEL;
 
     // cámara: se acerca de a poco; un sacudón chico en cada apretón
-    const z = 1 + 0.08 * suave(t / DURATION);
+    const z = 1 + 0.08 * suave(clamp01(t / DURATION));
     const sx = golpe ? [5, -4, 3][k] : 0;
     $("camara").setAttribute("transform", `translate(${sx} 0) translate(115 1200) scale(${z}) translate(-115 -1200)`);
 
@@ -262,11 +263,11 @@
     $("flash").setAttribute("opacity", (0.06 * pulso).toFixed(3));
 
     // Yoshua camina para atrás (hacia la pared), cada vez más despacio; balanceo de papel al dar cada paso
-    const anda = 1 - Math.pow(1 - tp / DURATION, 2);
-    const paso = Math.floor(tp * 3) % 2;                      // un paso cada 1/3 s
+    const anda = 1 - Math.pow(1 - Math.min(tp / DURATION, 1), 2);   // después del final se queda contra la pared
+    const paso = mod(Math.floor(tp * 3), 2);                      // un paso cada 1/3 s
     const yx = lerp(590, 470, anda);
     const inclina = (paso ? 2 : -2) + (hundido ? -3 : 0);    // se tira para atrás al apretar
-    const sube = (Math.floor(tp * 6) % 2) * -8;
+    const sube = mod(Math.floor(tp * 6), 2) * -8;
     dibujarYoshua({ cejas: 4, boca: tp > 2.6 ? 2 : 1, mirar: 1, parpadeo: tp > 1.7 && tp < 1.8 });
     $("yoshua").setAttribute("transform", `translate(${yx} ${PIES + sube}) rotate(${inclina})`);
     $("yoshua-sombra").setAttribute("cx", yx);
@@ -288,7 +289,7 @@
     // con los brazos quietos; se frena sin tocar a Yoshua
     const q = tramo(tp, 0, 4.6);
     const S = 1.45;     // más chico que Yoshua y lejos del borde: no se mete abajo de los botones de Instagram
-    const cx = lerp(1200, 840, 1 - Math.pow(1 - q, 1.6)), cy = 900 + [0, -3, -1, -4, 0, -2][cuadro % 6] * S;
+    const cx = lerp(1200, 840, 1 - Math.pow(1 - q, 1.6)), cy = 900 + [0, -3, -1, -4, 0, -2][mod(cuadro, 6)] * S;
     $("robot").innerHTML = ROBOT.svg({ cx, cy, S, mirarX: -1, mirarY: 0.3, llama: [1, 0.8, 0.9][k] });
     $("robot-brillo").setAttribute("cx", cx);
     $("robot-brillo").setAttribute("cy", cy);
