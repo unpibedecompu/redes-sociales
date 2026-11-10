@@ -248,7 +248,7 @@
 
     // robot de espaldas, mirando de una pantalla a otra
     const mira = Math.sin(tp * 1.6) * 24;
-    const robot = ROBOT.svg({ cx: 540 + mira, cy: 1330 + [0, -3, -1, -4, 0, -2][mod(cuadro, 6)], S: 3.2, llama: [1, 0.8, 0.9][k] });
+    const robot = ROBOT.svg({ cx: 540 + mira, cy: 1125 + [0, -3, -1, -4, 0, -2][mod(cuadro, 6)], S: 3.2, llama: [1, 0.8, 0.9][k] });
     $("robot").innerHTML = robot;
     $("robot-halo").innerHTML = robot;
   }

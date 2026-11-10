@@ -80,17 +80,17 @@
   </defs>
 
   <g id="camara">
-    <rect x="-100" y="-100" width="1280" height="2120" fill="#0B1015"/>
+    <rect x="-400" y="-400" width="2000" height="3100" fill="#0B1015"/>
     <!-- pared de racks y piso -->
     <g id="racks" class="papel"></g>
     <g id="leds"></g>
-    <rect x="-100" y="1560" width="1280" height="460" fill="url(#piso)"/>
+    <rect x="-400" y="1560" width="2000" height="1140" fill="url(#piso)"/>
     <g id="baldosas" stroke="#3A4B5A" stroke-width="4"></g>
 
     <!-- columna de la pared con el botón de emergencia -->
     <g class="papel">
-      <rect x="-40" y="-100" width="245" height="1660" fill="#3A444E"/>
-      <rect x="185" y="-100" width="20" height="1660" fill="#2A323A"/>
+      <rect x="-40" y="-400" width="245" height="1960" fill="#3A444E"/>
+      <rect x="185" y="-400" width="20" height="1960" fill="#2A323A"/>
       <!-- cartel -->
       <rect x="45" y="880" width="140" height="56" rx="4" fill="#E0B341"/>
       <!-- caja del botón -->
@@ -162,7 +162,7 @@
 
   // ---- pared de racks (de frente) con leds ----
   const leds = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {     // 6 racks: el plano abierto deja ver más pared a la derecha
     const x = 215 + i * 196, y = 100, w = 180, h = 1460;
     el("rect", { x, y, width: w, height: h, fill: "#161C22" }, $("racks"));
     for (let u = 0; u < 25; u++) {
@@ -174,8 +174,8 @@
     }
   }
   // baldosas del piso técnico, en perspectiva hacia el fondo
-  for (const y of [1600, 1665, 1760, 1900]) el("line", { x1: -100, y1: y, x2: 1180, y2: y }, $("baldosas"));
-  for (let i = -3; i <= 7; i++) el("line", { x1: 540 + (i - 2) * 200, y1: 1560, x2: 540 + (i - 2) * 420, y2: 1920 }, $("baldosas"));
+  for (const y of [1600, 1665, 1760, 1900, 2090, 2350]) el("line", { x1: -400, y1: y, x2: 1600, y2: y }, $("baldosas"));
+  for (let i = -5; i <= 9; i++) el("line", { x1: 540 + (i - 2) * 200, y1: 1560, x2: 540 + (i - 2) * (200 + 220 * 1140 / 360), y2: 2700 }, $("baldosas"));
 
   // ---- botón rojo de la pared, de frente: al apretarlo se achica y se oscurece ----
   const BX = 115, BY = 1060;
@@ -248,9 +248,11 @@
     const golpe = hundido && tp - ap < 1 / FPS_PAPEL;
 
     // cámara: se acerca de a poco; un sacudón chico en cada apretón
-    const z = 1 + 0.08 * suave(clamp01(t / DURATION));
+    // plano abierto (0.8): los pies de Yoshua quedan arriba de la descripción del overlay de IG (y ≈ 1575);
+    // el zoom pivota en los pies, así no bajan al acercarse
+    const z = 0.8 * (1 + 0.08 * suave(clamp01(t / DURATION)));
     const sx = golpe ? [5, -4, 3][k] : 0;
-    $("camara").setAttribute("transform", `translate(${sx} 0) translate(115 1200) scale(${z}) translate(-115 -1200)`);
+    $("camara").setAttribute("transform", `translate(${sx} 0) translate(280 1500) scale(${z}) translate(-300 -1790)`);
 
     // leds y baliza
     for (const l of leds) {
@@ -289,7 +291,7 @@
     // con los brazos quietos; se frena sin tocar a Yoshua
     const q = tramo(tp, 0, 4.6);
     const S = 1.45;     // más chico que Yoshua y lejos del borde: no se mete abajo de los botones de Instagram
-    const cx = lerp(1200, 840, 1 - Math.pow(1 - q, 1.6)), cy = 900 + [0, -3, -1, -4, 0, -2][mod(cuadro, 6)] * S;
+    const cx = lerp(1130, 840, 1 - Math.pow(1 - q, 1.6)), cy = 900 + [0, -3, -1, -4, 0, -2][mod(cuadro, 6)] * S;
     $("robot").innerHTML = ROBOT.svg({ cx, cy, S, mirarX: -1, mirarY: 0.3, llama: [1, 0.8, 0.9][k] });
     $("robot-brillo").setAttribute("cx", cx);
     $("robot-brillo").setAttribute("cy", cy);
