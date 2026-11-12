@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coronel</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #2A2A28;
+    color: #FAF9F5;
+    font-family: Tahoma, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* reel completo 1080x1920 */
+  svg#escena {
+    width: 100%;
+    max-width: 1080px;
+    max-height: calc(100vh - 90px);
+    aspect-ratio: 1080 / 1920;
+    display: block;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .controls button {
+    font: inherit;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #3A3A37;
+    color: #FAF9F5;
+    cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: #D97757; border-color: #D97757; }
+</style>
+</head>
+<body>
+
+<!--
+  Prueba de personaje: el coronel que guía a Meselson por el complejo militar (verano del '63).
+  En el script habla "con el fondo del pasto": acá parado sobre el pasto, hablando y parpadeando.
+-->
+<svg id="escena" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs">
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9CC3D6"/>
+      <stop offset="1" stop-color="#DCE8DC"/>
+    </linearGradient>
+    <filter id="grano" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.9"/></feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#cielo)"/>
+  <g class="papel">
+    <path d="M0 1080 Q270 1020 540 1060 Q810 1100 1080 1040 L1080 1920 L0 1920 Z" fill="#8FA86A"/>
+    <path d="M0 1260 Q300 1200 600 1250 Q860 1290 1080 1230 L1080 1920 L0 1920 Z" fill="#7A9457"/>
+    <g id="matas"></g>
+  </g>
+  <g id="coronel"></g>
+  <g class="papel" id="pasto-frente"></g>
+
+  <rect width="1080" height="1920" filter="url(#grano)" opacity="0.14" style="mix-blend-mode:multiply" pointer-events="none"/>
+</svg>
+
+<div class="controls">
+  <button id="hablar" aria-pressed="true">Hablando</button>
+</div>
+
+<script src="../../../../../animations/paper_cutoff_characters/parts.js"></script>
+<script src="../../../../../animations/paper_cutoff_characters/personajes.js"></script>
+<script src="personajes.js"></script>
+<script>
+  const FPS_PAPEL = 12;        // stop motion: el papel "tiembla" 12 veces por segundo
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+
+  // filtros del editor (sombra, corte irregular) dentro de nuestro <defs>
+  const tmp = document.createElementNS(NS, "svg");
+  tmp.innerHTML = PERSONAJES.defs;
+  for (const n of [...tmp.querySelectorAll("defs > *")]) $("defs").appendChild(n);
+  const estilo = tmp.querySelector("style");
+  if (estilo) $("escena").insertBefore(estilo, $("defs"));
+  document.querySelectorAll(".papel").forEach(g => g.setAttribute("filter", "url(#corte)"));
+
+  // números pseudoaleatorios fijos
+  let semilla = 63;
+  const rnd = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+
+  // matas de pasto recortadas
+  const mata = (x, y, s, color, parent) => {
+    let d = `M${x - 30 * s} ${y}`;
+    for (let i = 0; i < 5; i++) {
+      const bx = x - 30 * s + i * 15 * s;
+      d += ` L${bx + 7 * s + (rnd() - 0.5) * 8 * s} ${y - (36 + rnd() * 30) * s} L${bx + 15 * s} ${y}`;
+    }
+    el("path", { d: d + " Z", fill: color }, parent);
+  };
+  for (let i = 0; i < 16; i++) mata(rnd() * 1080, 1120 + rnd() * 380, 0.8 + rnd() * 0.6, rnd() < 0.5 ? "#6E8A4C" : "#5F7A40", $("matas"));
+  for (let i = 0; i < 9; i++) mata(40 + i * 125 + rnd() * 40, 1920, 2.2 + rnd(), "#5A7139", $("pasto-frente"));
+
+  // coronel de cuerpo entero, dentro de la zona segura de IG (cabeza ~y 180, pies ~y 1490)
+  const ESC = 1.7, X = 540, Y = 60;
+  let hablando = true;
+  $("hablar").onclick = e => {
+    hablando = !hablando;
+    e.target.setAttribute("aria-pressed", hablando);
+    e.target.textContent = hablando ? "Hablando" : "Callado";
+  };
+
+  let ultimo = -1;
+  function cuadro(ms) {
+    const f = Math.floor(ms / 1000 * FPS_PAPEL);
+    if (f !== ultimo) {
+      ultimo = f;
+      // boca: alterna sonrisa / recta en sílabas irregulares; parpadea cada ~3 s
+      const silaba = Math.floor(f / 2);
+      const abre = hablando && ((silaba * 7919) % 5 > 1);
+      const parpadeo = f % 38 === 0 || f % 38 === 1;
+      const mirar = Math.sin(f / 30) > 0.6 ? -0.6 : 0;   // de vez en cuando mira a Meselson (a su derecha)
+      const tiembla = ((f * 2654435761) % 1000) / 1000 - 0.5;
+      $("coronel").innerHTML =
+        `<g transform="rotate(${tiembla * 0.8} ${X} 1400) translate(${X - 200 * ESC} ${Y}) scale(${ESC})">` +
+        PERSONAJES.armar("coronel", { boca: abre ? 1 : 0, parpadeo, mirar }) + `</g>`;
+    }
+    requestAnimationFrame(cuadro);
+  }
+  requestAnimationFrame(cuadro);
+</script>
+</body>
+</html>
