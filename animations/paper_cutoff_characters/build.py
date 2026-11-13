@@ -238,8 +238,28 @@ def pelo_ondulado(h):
     return "", frente + mover(rizos, dy, k)
 
 
+def pelo_gorra_militar(h):
+    """short back-and-sides (only the temples show) under a 1960s US Army officer's service cap:
+    olive crown, dark band, black visor with the gold oak leaves of a field-grade officer, eagle badge"""
+    dy, k = sube(h), CABEZAS[h][5] / 76
+    reg = (f"M0 {128+dy} L150 {128+dy} Q142 {150+dy} 136 {176+dy} L0 {176+dy} Z "
+           f"M400 {128+dy} L250 {128+dy} Q258 {150+dy} 264 {176+dy} L400 {176+dy} Z")
+    gorra = (P("M108 106 Q106 76 200 68 Q294 76 292 106 Q290 118 270 120 L130 120 Q110 118 108 106 Z", "#5E6646")
+             + P("M124 84 Q200 66 276 84 Q240 78 200 78 Q160 78 124 84 Z", "#737C57")
+             + P("M130 114 L270 114 L268 138 L132 138 Z", "#3C4230")
+             + P("M132 136 L268 136 Q270 150 252 153 Q200 158 148 153 Q130 150 132 136 Z", "#1F1E1C")
+             + P("M150 140 Q200 136 250 140 Q200 142 150 143 Z", "#fff", ' opacity=".25"')
+             + P("M134 132 L266 132 L266 137 L134 137 Z", "#C9A23A")
+             + "".join(f'<ellipse cx="{x}" cy="{146 + abs(x - 200) / 30:.1f}" rx="6" ry="2.6" fill="#C9A23A" '
+                       f'transform="rotate({(x - 200) / 6:.0f} {x} 146)"/>' for x in (154, 168, 182, 218, 232, 246))
+             + '<circle cx="200" cy="112" r="13" fill="#D4AF37"/>'
+             + P("M184 108 Q192 100 200 108 Q208 100 216 108 L210 116 Q200 112 190 116 Z", "#9C7A1E")
+             + '<circle cx="200" cy="104" r="3.5" fill="#9C7A1E"/>')
+    return "", recorte(f"pg{h}", h, 1.05, 1.05, reg) + mover(gorra, dy, k)
+
+
 pelos = [("Corto", pelo_corto), ("Largo", pelo_largo), ("Afro", pelo_afro), ("Punk", pelo_punk), ("Rodete", pelo_rodete),
-         ("Ondulado", pelo_ondulado)]
+         ("Ondulado", pelo_ondulado), ("Gorra militar", pelo_gorra_militar)]
 
 # beards: the mouth (fixed at y 250..266) stays visible through an evenodd hole
 HUECO = "M177 251 Q200 241 223 251 Q221 274 200 277 Q179 274 177 251 Z"
@@ -342,6 +362,28 @@ remeras = [
      + f'<circle cx="200" cy="474" r="4.5" fill="#12305A"/>'
      + both(P("M144 508 L180 506 L180 512 L144 514 Z", "#1A3F73"))
      + P("M222 398 L250 395 L250 400 L222 403 Z", "#1A3F73")),
+    # 1960s US Army green dress uniform (colonel): khaki shirt, black tie, brass buttons, black sleeve braid,
+    # ribbons over the left pocket, silver eagles on the shoulder loops
+    ("Uniforme militar", both(P(MANGA_LARGA, "#5E6646") + P(PUNO, "#4A5136")
+                              + P("M101 508 L139 512 L139 520 L101 516 Z", "#1F1E1C"))
+     + P("M140 306 Q200 318 260 306 L276 342 L274 566 L126 566 L124 342 Z", "#5E6646")
+     + P("M170 308 L230 308 L204 432 L196 432 Z", "#CDBE93")
+     + P("M194 322 L206 322 L203 334 L208 420 L200 432 L192 420 L197 334 Z", "#262624")
+     + both(P("M170 306 L200 322 L184 346 L164 312 Z", "#CDBE93")
+            + P("M144 306 L168 310 L198 434 L170 380 L150 362 L162 346 Z", "#4A5136")
+            + P("M138 310 L168 314 L166 326 L134 322 Z", "#4A5136")
+            + P("M146 316 L152 312 L158 316 L156 321 L148 321 Z", "#D6D3CB")
+            + '<circle cx="174" cy="350" r="5" fill="#D4AF37"/>'
+            + P("M140 394 L182 392 L182 406 L161 413 L140 406 Z", "#4A5136")
+            + '<circle cx="161" cy="404" r="3.5" fill="#D4AF37"/>'
+            + P("M136 498 L182 496 L182 512 L159 519 L136 512 Z", "#4A5136")
+            + '<circle cx="159" cy="510" r="3.5" fill="#D4AF37"/>')
+     + "".join(f'<circle cx="200" cy="{y}" r="5" fill="#D4AF37"/><circle cx="198.5" cy="{y - 1.5}" r="1.6" fill="#fff" opacity=".5"/>'
+               for y in (452, 482, 512, 542))
+     + "".join(P(f"M{220 + c * 12} {368 + r * 9} L{231 + c * 12} {368 + r * 9} L{231 + c * 12} {376 + r * 9} "
+                 f"L{220 + c * 12} {376 + r * 9} Z", col)
+               for r, fila in enumerate((("#C2463C", "#FAF9F5", "#2F4A6B"), ("#E0B341", "#3F6B3A", "#C2463C")))
+               for c, col in enumerate(fila))),
 ]
 
 # ---------- PANTS ----------
@@ -371,6 +413,9 @@ pantalones = [
     ("De traje", P(PIERNAS, "#24569A")
      + both('<path d="M160 612 L158 798" fill="none" stroke="#1A3F73" stroke-width="3"/>')
      + P("M130 546 L270 546 L270 560 L130 560 Z", "#1A3F73")),
+    ("Militar", P(PIERNAS, "#5E6646")
+     + both('<path d="M160 612 L158 798" fill="none" stroke="#4A5136" stroke-width="3"/>')
+     + P("M130 546 L270 546 L270 560 L130 560 Z", "#4A5136")),
 ]
 
 # ---------- SHOES (left drawn, mirrored) ----------
