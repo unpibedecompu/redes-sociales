@@ -1,0 +1,10 @@
+- METR report: https://metr.org/blog/2026-11-05-anthropic-ai-rd-acceleration-assessment/#our-conclusions-on-risk
+- tweet on S1 update: https://x.com/theobearman/status/2117277210570604945
+- S1 update: https://www.sec.gov/Archives/edgar/data/2130357/000162828026068676/anthropicpbc-sx1ax1.htm
+- Kokotajlo tweet: https://x.com/DKokotajlo/status/2117738240757371022
+- AIFP substack: https://open.substack.com/pub/aifutures1/p/q35-timelines-update-looks-like-the?r=7qamfw&utm_campaign=post-expanded-share&utm_medium=web
+- buck shlegeris (ReedWood Research CEO): https://x.com/bshlgrs/status/2120271165692461316
+- ControlAI report: https://substack.com/inbox/post/224665907?utm_source=email&redirect=app-store-no-desktop&inbox=true&utm_campaign=email-read-in-app&triedRedirect=true
+- RSP AI R&D threshold meet: https://x.com/eli_lifland/status/2120243481281220711
+- METR guide on how to asses AI-driven acceleration of AI R&D: https://metr.org/blog/2026-10-14-ai-rd-acceleration-assessment-proposal/#scope
+- Anthropic RSP: https://www-cdn.anthropic.com/e670587677525f28df69b59e5fb4c22cc5461a17.pdf

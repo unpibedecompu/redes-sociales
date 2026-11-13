@@ -1,6 +1,6 @@
 # checklist:
 
-## [ ] Fuentes en Doc: 
+## [x] Fuentes en Doc
 ## [x] Link a portada: https://canva.link/69reishc12hrww2
 ## [-] Guión historia pregunta difusión del mismo dia:
 
@@ -16,9 +16,9 @@ En la ultima reunión del consejo de seguridad de la ONU, dijo estar preocupado 
 
 Seguime para enterarte de más. 👇
 
-## [x] Hashtag: #AI #artificialintelligence #aisafety #airisks #agi
+## [x] Hashtag: #AI #UN #ONU #artificialintelligence #aisafety
 
 ## [-] Publicar historia pregunta difusión
 ## [-] Responder respuestas historia pregunta
 ## [-] Usar reel de prueba
-## [ ] Historia promoción
+## [x] Historia promoción

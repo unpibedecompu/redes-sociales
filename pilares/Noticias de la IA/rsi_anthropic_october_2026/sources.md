@@ -1,5 +1,0 @@
-- METR report: https://metr.org/blog/2026-11-05-anthropic-ai-rd-acceleration-assessment/#our-conclusions-on-risk
-- tweet on S1 update: https://x.com/theobearman/status/2117277210570604945
-- S1 update: https://www.sec.gov/Archives/edgar/data/2130357/000162828026068676/anthropicpbc-sx1ax1.htm
-- Kokotajlo tweet: https://x.com/DKokotajlo/status/2117738240757371022
-- AIFP substack: https://open.substack.com/pub/aifutures1/p/q35-timelines-update-looks-like-the?r=7qamfw&utm_campaign=post-expanded-share&utm_medium=web
